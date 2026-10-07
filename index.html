@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shenxiuqiang's GitHub Pages</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1b2430 0%, var(--bg) 60%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+    }
+    h1 { margin: 0 0 .5rem; font-size: 1.9rem; }
+    .sub { color: var(--muted); margin: 0 0 1.75rem; }
+    .dot { color: var(--accent); }
+    h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin: 2rem 0 .75rem;
+    }
+    ul { margin: 0; padding-left: 1.25rem; }
+    li { margin: .35rem 0; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 1.75rem 0; }
+    footer { color: var(--muted); font-size: .85rem; }
+    code {
+      background: rgba(110, 118, 129, .25);
+      padding: .15em .4em;
+      border-radius: 5px;
+      font-size: .9em;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>你好，我是 shenxiuqiang <span class="dot">·</span></h1>
+    <p class="sub">这是我在 GitHub Pages 上的第一个页面，先随便写点内容占位。</p>
+
+    <h2>关于这个站点</h2>
+    <p>
+      本页托管在 <code>shenxiuqiang.github.io</code>，由仓库
+      <a href="https://github.com/shenxiuqiang/shenxiuqiang.github.io" target="_blank" rel="noopener">shenxiuqiang.github.io</a>
+      提供内容。仓库的 <code>main</code> 分支根目录会直接发布为站点根路径。
+    </p>
+
+    <h2>接下来想做的事</h2>
+    <ul>
+      <li>把这里换成个人主页 / 作品集</li>
+      <li>写一些技术笔记和踩坑记录</li>
+      <li>放几个自己写的小工具和 Demo</li>
+    </ul>
+
+    <hr />
+    <footer>
+      Made with ❤️ and plain HTML · <span id="year"></span>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
