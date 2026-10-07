@@ -1,0 +1,58 @@
+---
+import { AUTHOR, GITHUB_URL } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer>
+	<p>
+		&copy; {year} {AUTHOR} · 由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer"
+			>Astro</a
+		> 构建，托管于 <a
+			href="https://pages.github.com"
+			target="_blank"
+			rel="noopener noreferrer">GitHub Pages</a
+		>
+	</p>
+	<p class="links">
+		<a href="/rss.xml">RSS</a>
+		<span aria-hidden="true">·</span>
+		<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
+		<span aria-hidden="true">·</span>
+		<a href="/sitemap-index.xml">Sitemap</a>
+	</p>
+</footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		padding: 2rem 1.25rem;
+		text-align: center;
+		font-size: 0.85rem;
+		color: var(--text-soft);
+	}
+
+	footer p {
+		margin: 0 0 0.4rem;
+	}
+
+	footer p:last-child {
+		margin-bottom: 0;
+	}
+
+	footer a {
+		color: var(--text-soft);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	footer a:hover {
+		color: var(--accent);
+	}
+
+	.links {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+	}
+</style>

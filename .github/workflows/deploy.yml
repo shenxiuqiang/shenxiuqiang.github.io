@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+# 什么时候触发：推送到 main 分支，或在 Actions 页面手动点按钮运行
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 允许 job 读取仓库内容、写入 Pages、以及用 OIDC token 部署
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只跑一个部署；新的推送会取消排队中的旧任务，
+# 但不会打断正在进行的部署（避免线上出现半成品）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # 官方 Action：自动识别包管理器 → 安装依赖 → 构建 → 上传产物
+      # 它会读取 package-lock.json 判断用 npm（所以 lockfile 必须提交）
+      - name: Install, build, and upload site
+        uses: withastro/action@v6
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

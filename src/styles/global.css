@@ -1,0 +1,306 @@
+/* ============================================================
+   全局样式。设计变量集中在这里，改一处就能换整站配色。
+   ============================================================ */
+
+:root {
+	--bg: #ffffff;
+	--bg-soft: #f6f8fa;
+	--border: #e4e8ee;
+	--text: #1f2328;
+	--text-soft: #656d76;
+	--accent: #2f6feb;
+	--accent-soft: rgba(47, 111, 235, 0.1);
+	--radius: 12px;
+	--shadow: 0 1px 2px rgba(27, 31, 36, 0.04), 0 8px 24px rgba(27, 31, 36, 0.06);
+	--max-width: 720px;
+	--wide-width: 960px;
+
+	/* 中文优先的系统字体栈：不下载字体文件，渲染快且中文不会掉字 */
+	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+		'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+		'Liberation Mono', monospace;
+}
+
+/* 跟随系统自动切换深色模式 */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #0d1117;
+		--bg-soft: #161b22;
+		--border: #30363d;
+		--text: #e6edf3;
+		--text-soft: #9198a1;
+		--accent: #6cb6ff;
+		--accent-soft: rgba(108, 182, 255, 0.14);
+		--shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-size: 17px;
+	line-height: 1.75;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+main {
+	width: var(--max-width);
+	max-width: calc(100% - 2.5rem);
+	margin: 0 auto;
+	padding: 3rem 0 4rem;
+	flex: 1;
+}
+
+/* ---------- 通用元素 ---------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 2em 0 0.75em;
+	line-height: 1.3;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+h1 {
+	font-size: 2rem;
+	margin-top: 0;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+h1 + h2,
+h2 + h3 {
+	margin-top: 1em;
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+p {
+	margin: 0 0 1.25em;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--radius);
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--border);
+	margin: 2.5em 0;
+}
+
+code {
+	font-family: var(--font-mono);
+	font-size: 0.875em;
+	background: var(--bg-soft);
+	border: 1px solid var(--border);
+	padding: 0.15em 0.4em;
+	border-radius: 6px;
+}
+
+/* Astro 用 Shiki 生成的高亮代码块，自带 .astro-code 类 */
+pre {
+	padding: 1.1rem 1.25rem;
+	border-radius: var(--radius);
+	overflow-x: auto;
+	line-height: 1.6;
+	margin: 0 0 1.5em;
+}
+
+pre code {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 0.875rem;
+}
+
+blockquote {
+	margin: 0 0 1.5em;
+	padding: 0.25em 0 0.25em 1.1em;
+	border-left: 3px solid var(--accent);
+	color: var(--text-soft);
+}
+
+blockquote p:last-child {
+	margin-bottom: 0;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1.5em;
+	font-size: 0.95em;
+}
+
+th,
+td {
+	border: 1px solid var(--border);
+	padding: 0.5em 0.75em;
+	text-align: left;
+	/* 表格里常有长 URL / 长代码，允许在单元格内断行，避免撑破页面 */
+	overflow-wrap: anywhere;
+}
+
+th {
+	background: var(--bg-soft);
+}
+
+ul,
+ol {
+	margin: 0 0 1.25em;
+	padding-left: 1.5em;
+}
+
+li {
+	margin: 0.3em 0;
+}
+
+li > ul,
+li > ol {
+	margin-bottom: 0;
+}
+
+/* ---------- 标签 ---------- */
+
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tag {
+	font-size: 0.75rem;
+	line-height: 1.6;
+	color: var(--text-soft);
+	background: var(--bg-soft);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	padding: 0.1rem 0.6rem;
+}
+
+/* ---------- 文章列表 ---------- */
+
+.post-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.post-list li {
+	margin: 0;
+}
+
+.post-list a {
+	display: block;
+	padding: 1.1rem 1.25rem;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	color: inherit;
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease,
+		transform 0.15s ease;
+}
+
+.post-list a:hover {
+	text-decoration: none;
+	border-color: var(--accent);
+	box-shadow: var(--shadow);
+	transform: translateY(-1px);
+}
+
+.post-list h2 {
+	margin: 0 0 0.35rem;
+	font-size: 1.15rem;
+	color: var(--text);
+}
+
+.post-list .excerpt {
+	margin: 0 0 0.6rem;
+	font-size: 0.92rem;
+	color: var(--text-soft);
+}
+
+.post-list .meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.8rem;
+	color: var(--text-soft);
+}
+
+/* ---------- 工具类 ---------- */
+
+.sr-only {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (max-width: 720px) {
+	body {
+		font-size: 16px;
+	}
+
+	main {
+		padding: 2rem 0 3rem;
+	}
+
+	h1 {
+		font-size: 1.6rem;
+	}
+
+	h2 {
+		font-size: 1.3rem;
+	}
+}

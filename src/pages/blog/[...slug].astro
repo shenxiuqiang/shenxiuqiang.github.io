@@ -1,0 +1,30 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { getPublishedPosts } from '../../utils/posts';
+
+// Astro 是静态站点生成器：构建时这里会为每篇文章执行一次，
+// 生成对应的 /blog/<文件名>/index.html。
+// 想加「上一篇 / 下一篇」，也在这个函数里算好一并传下去。
+export async function getStaticPaths() {
+	const posts = await getPublishedPosts();
+
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+
+// render() 把 Markdown 编译成可以直接渲染的 <Content /> 组件
+const { Content } = await render(post);
+---
+
+<BlogPost {...post.data} body={post.body}>
+	<Content />
+</BlogPost>

@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { AUTHOR, GITHUB_URL, SITE_TITLE } from '../consts';
+---
+
+<BaseLayout title="关于" description={`关于 ${SITE_TITLE}`}>
+	<article class="prose">
+		<h1>关于我</h1>
+		<p>
+			你好，我是 {AUTHOR}。这里是我的个人站点，主要用来写一些技术笔记、读书笔记和日常折腾的记录。
+		</p>
+
+		<h2>这个站点是怎么搭的</h2>
+		<ul>
+			<li><strong>写作</strong>：本地写 Markdown 文件，放在 <code>src/content/blog/</code></li>
+			<li><strong>生成</strong>：Astro 在构建时把 Markdown 编译成静态 HTML</li>
+			<li><strong>构建</strong>：推送到 <code>main</code> 分支后，GitHub Actions 自动跑 <code>npm run build</code></li>
+			<li><strong>发布</strong>：构建产物自动部署到 GitHub Pages</li>
+		</ul>
+		<p>整套流程不需要服务器，也没有数据库，全站就是一堆静态文件。</p>
+
+		<h2>关于评论</h2>
+		<p>
+			目前还没有加评论系统。如果之后需要，可以接入
+			<a href="https://giscus.app" target="_blank" rel="noopener noreferrer">giscus</a>
+			（基于 GitHub Discussions，免费且无需后端）。
+		</p>
+
+		<h2>联系我</h2>
+		<p>
+			可以在 <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a> 上找到我。
+		</p>
+	</article>
+</BaseLayout>

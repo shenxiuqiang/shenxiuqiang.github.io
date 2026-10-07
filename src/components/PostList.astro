@@ -1,0 +1,37 @@
+---
+// 文章卡片列表。首页和 /blog 页面共用。
+import type { CollectionEntry } from 'astro:content';
+import { getReadingTime } from '../utils/posts';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+	posts.length === 0 ? (
+		<p>还没有文章，去 <code>src/content/blog/</code> 里新建一个 Markdown 文件吧。</p>
+	) : (
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<a href={`/blog/${post.id}/`}>
+						<h2>{post.data.title}</h2>
+						<p class="excerpt">{post.data.description}</p>
+						<p class="meta">
+							<FormattedDate date={post.data.pubDate} />
+							<span aria-hidden="true">·</span>
+							<span>约 {getReadingTime(post.body)} 分钟</span>
+							{post.data.tags.map((tag) => (
+								<span class="tag">#{tag}</span>
+							))}
+						</p>
+					</a>
+				</li>
+			))}
+		</ul>
+	)
+}

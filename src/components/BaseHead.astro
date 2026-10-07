@@ -1,0 +1,45 @@
+---
+// 放在 <head> 里的所有元信息。
+// global.css 在这里引入，所以全站都会加载一次。
+import '../styles/global.css';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+interface Props {
+	title: string;
+	description?: string;
+	/** 社交分享图，传 public/ 下的绝对路径，例如 /og.png */
+	image?: string;
+}
+
+const { title, description = SITE_DESCRIPTION, image } = Astro.props;
+
+// 规范链接（canonical）：告诉搜索引擎这个页面的唯一地址
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const pageTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE_TITLE}
+	href={new URL('rss.xml', Astro.site)}
+/>
+<meta name="generator" content={Astro.generator} />
+
+<link rel="canonical" href={canonicalURL} />
+
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content={SITE_TITLE} />
+{image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+
+<meta name="twitter:card" content="summary_large_image" />

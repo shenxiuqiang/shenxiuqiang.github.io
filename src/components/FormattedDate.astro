@@ -1,0 +1,16 @@
+---
+interface Props {
+	date: Date;
+}
+
+const { date } = Astro.props;
+
+// 输出成「2026年2月14日」这样，datetime 属性保留机器可读格式
+const formatted = date.toLocaleDateString('zh-CN', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+---
+
+<time datetime={date.toISOString()}>{formatted}</time>

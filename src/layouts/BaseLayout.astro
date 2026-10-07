@@ -1,0 +1,30 @@
+---
+// 全站统一的 HTML 外壳：<head> + 顶部导航 + 页脚。
+// 所有页面都用它包一层，避免每个页面重复写 <html> 结构。
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION } from '../consts';
+
+interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+}
+
+const { title, description = SITE_DESCRIPTION, image } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} image={image} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
