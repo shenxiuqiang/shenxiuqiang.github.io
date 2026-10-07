@@ -1,0 +1,66 @@
+---
+/**
+ * 旧地址的跳转页。
+ *
+ * 站点从「中文在根路径」改成 /zh/ + /en/ 之后，
+ * 之前已经发布出去的链接（以及别人转载的链接）会失效。
+ * 这个组件生成一个带 meta refresh 和 canonical 的静态页，
+ * 让老链接平滑跳到新地址，而不是甩给访客一个 404。
+ */
+interface Props {
+	/** 目标地址，站内绝对路径，例如 /zh/blog/hello-astro/ */
+	to: string;
+}
+
+const { to } = Astro.props;
+const target = new URL(to, Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta http-equiv="refresh" content={`0; url=${to}`} />
+		<link rel="canonical" href={target} />
+		<!-- 告诉搜索引擎不要把跳转页本身收录进来 -->
+		<meta name="robots" content="noindex, follow" />
+		<title>Redirecting…</title>
+		<style>
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+					'Microsoft YaHei', sans-serif;
+				background: #fff;
+				color: #1f2328;
+			}
+
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #0d1117;
+					color: #e6edf3;
+				}
+			}
+
+			p {
+				text-align: center;
+				line-height: 1.8;
+				padding: 0 1.5rem;
+			}
+
+			a {
+				color: #2f6feb;
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			This page has moved to <a href={to}>{target.href}</a><br />
+			页面已迁移，正在跳转…
+		</p>
+	</body>
+</html>

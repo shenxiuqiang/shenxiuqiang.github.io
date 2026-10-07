@@ -1,30 +1,41 @@
 ---
 // 全站统一的 HTML 外壳：<head> + 顶部导航 + 页脚。
-// 所有页面都用它包一层，避免每个页面重复写 <html> 结构。
+// 所有页面都用它包一层，避免重复写 <html> 结构。
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION } from '../consts';
+import { HTML_LANG, type Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
 
 interface Props {
+	lang: Lang;
 	title: string;
 	description?: string;
+	/** 另一种语言下这个页面的地址 */
+	altUrl: string;
 	image?: string;
 }
 
-const { title, description = SITE_DESCRIPTION, image } = Astro.props;
+const { lang, title, description, altUrl, image } = Astro.props;
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={HTML_LANG[lang]}>
 	<head>
-		<BaseHead title={title} description={description} image={image} />
+		<BaseHead
+			lang={lang}
+			title={title}
+			description={description ?? t.siteDescription}
+			altUrl={altUrl}
+			image={image}
+		/>
 	</head>
 	<body>
-		<Header />
+		<Header lang={lang} altUrl={altUrl} />
 		<main>
 			<slot />
 		</main>
-		<Footer />
+		<Footer lang={lang} />
 	</body>
 </html>

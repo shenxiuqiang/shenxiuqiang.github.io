@@ -1,21 +1,22 @@
 ---
 import { AUTHOR, GITHUB_URL } from '../consts';
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
 
 const year = new Date().getFullYear();
 ---
 
 <footer>
-	<p>
-		&copy; {year} {AUTHOR} · 由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer"
-			>Astro</a
-		> 构建，托管于 <a
-			href="https://pages.github.com"
-			target="_blank"
-			rel="noopener noreferrer">GitHub Pages</a
-		>
-	</p>
+	<p>&copy; {year} {AUTHOR} · <span set:html={t.footer.builtWith()} /></p>
 	<p class="links">
-		<a href="/rss.xml">RSS</a>
+		<a href={localizePath(lang, '/rss.xml')}>RSS</a>
 		<span aria-hidden="true">·</span>
 		<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
 		<span aria-hidden="true">·</span>

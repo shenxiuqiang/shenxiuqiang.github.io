@@ -5,11 +5,22 @@ type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
 
-// 判断当前页面是否匹配这个链接，用来高亮导航项。
-// BASE_URL 会被替换成配置里的 base（本站是 /）。
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+// 判断当前页面是否属于这个导航项，用来高亮。
+// 因为加了 /zh、/en 语言前缀，用「前缀匹配」：
+// 访问 /zh/blog/hello-astro/ 时，/zh/blog 也应该是高亮状态。
+//
+// 但语言根路径（/zh/、/en/）必须精确匹配 ——
+// 否则每个子页面都以 /zh/ 开头，首页会永远处于高亮状态。
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/');
+const normalize = (p: string) => (p.endsWith('/') ? p : p + '/');
+
+const current = normalize(pathname);
+const target = normalize(href);
+
+// /zh/ 只有一个路径段，属于「首页」，只能精确匹配
+const isLocaleRoot = target.split('/').filter(Boolean).length <= 1;
+
+const isActive = isLocaleRoot ? current === target : current.startsWith(target);
 ---
 
 <!-- 只负责加 .active 类，外观交给 Header 统一控制 -->

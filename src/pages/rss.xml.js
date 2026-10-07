@@ -1,21 +1,7 @@
-import rss from '@astrojs/rss';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getPublishedPosts } from '../utils/posts';
+import { buildFeed } from '../utils/rss';
 
-// 访问 /rss.xml 时由构建过程生成一份静态 RSS 文件。
+// 老订阅者的地址：/rss.xml 继续提供中文订阅源，
+// 不去动它，避免已经订阅的人收不到更新。
 export async function GET(context) {
-	const posts = await getPublishedPosts();
-
-	return rss({
-		title: SITE_TITLE,
-		description: SITE_DESCRIPTION,
-		site: context.site,
-		customData: '<language>zh-cn</language>',
-		items: posts.map((post) => ({
-			title: post.data.title,
-			description: post.data.description,
-			pubDate: post.data.pubDate,
-			link: `/blog/${post.id}/`,
-		})),
-	});
+	return buildFeed(context.site, 'zh');
 }

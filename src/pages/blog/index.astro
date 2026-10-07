@@ -1,25 +1,6 @@
 ---
-import PostList from '../../components/PostList.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPublishedPosts } from '../../utils/posts';
-
-const posts = await getPublishedPosts();
+// 旧地址：/blog/ → /zh/blog/
+import Redirect from '../../components/Redirect.astro';
 ---
 
-<BaseLayout title="文章" description="全部文章列表">
-	<h1>文章</h1>
-	<p class="count">共 {posts.length} 篇</p>
-	<PostList posts={posts} />
-</BaseLayout>
-
-<style>
-	h1 {
-		margin-bottom: 0.4rem;
-	}
-
-	.count {
-		color: var(--text-soft);
-		font-size: 0.9rem;
-		margin-bottom: 2rem;
-	}
-</style>
+<Redirect to="/zh/blog/" />

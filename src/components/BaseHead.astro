@@ -1,21 +1,35 @@
 ---
-// 放在 <head> 里的所有元信息。
-// global.css 在这里引入，所以全站都会加载一次。
+// <head> 里的所有元信息。global.css 在这里引入，所以全站只加载一次。
 import '../styles/global.css';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_TITLE } from '../consts';
+import { HTML_LANG, LOCALES, type Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
 
 interface Props {
+	lang: Lang;
 	title: string;
 	description?: string;
-	/** 社交分享图，传 public/ 下的绝对路径，例如 /og.png */
+	/** 另一种语言下这个页面的地址，用于输出 hreflang */
+	altUrl: string;
+	/** 社交分享图，传 public/ 下的绝对路径 */
 	image?: string;
 }
 
-const { title, description = SITE_DESCRIPTION, image } = Astro.props;
+const { lang, title, description, altUrl, image } = Astro.props;
+const t = useTranslations(lang);
 
-// 规范链接（canonical）：告诉搜索引擎这个页面的唯一地址
+// 规范链接（canonical）：这个页面的唯一地址
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const pageTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
+const desc = description ?? t.siteDescription;
+
+// 算出两个语言各自的地址，输出 hreflang，
+// 让 Google 知道这两页是同一篇内容的不同语言版本，而不是重复内容
+const other = LOCALES.find((l) => l !== lang) ?? lang;
+const urlByLang = {
+	[lang]: canonicalURL.href,
+	[other]: new URL(altUrl, Astro.site).href,
+} as Record<Lang, string>;
 ---
 
 <meta charset="utf-8" />
@@ -25,21 +39,25 @@ const pageTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
 <link
 	rel="alternate"
 	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+	title={`${SITE_TITLE} (${HTML_LANG[lang]})`}
+	href={new URL(`/${lang}/rss.xml`, Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <link rel="canonical" href={canonicalURL} />
+<link rel="alternate" hreflang={HTML_LANG[lang]} href={urlByLang[lang]} />
+<link rel="alternate" hreflang={HTML_LANG[other]} href={urlByLang[other]} />
+<link rel="alternate" hreflang="x-default" href={urlByLang.zh ?? canonicalURL.href} />
 
 <title>{pageTitle}</title>
-<meta name="description" content={description} />
+<meta name="description" content={desc} />
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={pageTitle} />
-<meta property="og:description" content={description} />
+<meta property="og:description" content={desc} />
 <meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content={HTML_LANG[lang].replace('-', '_')} />
 {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
 
 <meta name="twitter:card" content="summary_large_image" />

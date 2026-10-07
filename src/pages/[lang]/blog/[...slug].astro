@@ -1,0 +1,52 @@
+---
+import { render } from 'astro:content';
+import { LOCALES, type Lang } from '../../../i18n/ui';
+import { localizePath } from '../../../i18n/utils';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import { getPosts } from '../../../utils/posts';
+
+/**
+ * Astro 是静态站点生成器：构建时这里会为每篇文章执行一次，
+ * 生成对应的 /<lang>/blog/<文件名>/index.html。
+ *
+ * 译文配对靠文件名：中英文目录下同名的文件被视为同一篇文章。
+ */
+export async function getStaticPaths() {
+	const [zhPosts, enPosts] = await Promise.all([getPosts('zh'), getPosts('en')]);
+	const slugs = {
+		zh: new Set(zhPosts.map((post) => post.id)),
+		en: new Set(enPosts.map((post) => post.id)),
+	};
+
+	return LOCALES.flatMap((lang) => {
+		const posts = lang === 'zh' ? zhPosts : enPosts;
+		const other: Lang = lang === 'zh' ? 'en' : 'zh';
+
+		return posts.map((post) => ({
+			params: { lang, slug: post.id },
+			props: {
+				lang,
+				post,
+				// 有译文就链到译文；还没翻译就退到对方的文章列表，
+				// 避免语言切换器指向一个 404
+				altUrl: slugs[other].has(post.id)
+					? localizePath(other, `/blog/${post.id}`)
+					: localizePath(other, '/blog'),
+			},
+		}));
+	});
+}
+
+const { lang, post, altUrl } = Astro.props as {
+	lang: Lang;
+	post: Awaited<ReturnType<typeof getPosts>>[number];
+	altUrl: string;
+};
+
+// render() 把 Markdown 编译成可以直接渲染的 <Content /> 组件
+const { Content } = await render(post);
+---
+
+<BlogPost lang={lang} {...post.data} body={post.body} altUrl={altUrl}>
+	<Content />
+</BlogPost>

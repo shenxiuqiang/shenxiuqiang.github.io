@@ -1,0 +1,76 @@
+---
+import PostList from '../../components/PostList.astro';
+import { SITE_TITLE } from '../../consts';
+import { LOCALES, type Lang } from '../../i18n/ui';
+import { localizePath, useTranslations } from '../../i18n/utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, warnMissingTranslations } from '../../utils/posts';
+
+// 一个页面文件，为两种语言各生成一份静态 HTML
+export function getStaticPaths() {
+	return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+const posts = await getPosts(lang);
+const recent = posts.slice(0, 5);
+
+// 构建时检查有没有漏翻的文章，只警告不中断
+await warnMissingTranslations();
+
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const altUrl = localizePath(other, '/');
+---
+
+<BaseLayout lang={lang} title={SITE_TITLE} description={t.siteDescription} altUrl={altUrl}>
+	<section class="intro">
+		<h1>{t.home.greeting} {SITE_TITLE} 👋</h1>
+		<p set:html={t.home.intro('https://astro.build')} />
+		{recent.length > 0 && <p set:html={t.home.latest(localizePath(lang, `/blog/${recent[0].id}`))} />}
+	</section>
+
+	<section>
+		<div class="section-head">
+			<h2>{t.blog.recent}</h2>
+			<a class="more" href={localizePath(lang, '/blog')}>
+				{t.blog.all} {posts.length} →
+			</a>
+		</div>
+		<PostList posts={recent} lang={lang} />
+	</section>
+</BaseLayout>
+
+<style>
+	.intro {
+		margin-bottom: 3rem;
+	}
+
+	.intro h1 {
+		font-size: 1.9rem;
+		margin-bottom: 1rem;
+	}
+
+	.intro p {
+		color: var(--text-soft);
+	}
+
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.section-head h2 {
+		margin: 0;
+		font-size: 1.15rem;
+	}
+
+	.more {
+		font-size: 0.85rem;
+		white-space: nowrap;
+	}
+</style>

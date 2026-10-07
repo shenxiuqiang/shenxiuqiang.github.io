@@ -11,7 +11,23 @@ export default defineConfig({
 	// 站点根路径就是 /，所以不需要再配置 base。
 	site: 'https://shenxiuqiang.github.io',
 
-	integrations: [mdx(), sitemap()],
+	integrations: [
+		mdx(),
+		sitemap({
+			// 排除旧地址的跳转占位页（/ 、/about/ 、/blog/ 、/blog/<slug>/）。
+			// 它们带 noindex，本来就不该出现在 sitemap 里；
+			// 而且 @astrojs/sitemap 的 i18n 选项假设「默认语言不带前缀」，
+			// 我们的 /zh/ + /en/ 结构会让它生成重复且指向跳转页的 hreflang。
+			// 语言互指一律以页面里的 <link rel="alternate" hreflang> 为准。
+			filter(page) {
+				const path = new URL(page).pathname;
+				if (path === '/') return false;
+				if (/^\/(about|blog)\/$/.test(path)) return false;
+				if (/^\/blog\/[^/]+\/$/.test(path)) return false;
+				return true;
+			},
+		}),
+	],
 
 	markdown: {
 		// 代码块语法高亮。Astro 内置 Shiki，不需要额外装包，

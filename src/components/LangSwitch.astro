@@ -1,0 +1,55 @@
+---
+import { HTML_LANG, LANG_LABEL, LOCALES, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+	/** 另一种语言下这个页面的地址 */
+	altUrl: string;
+}
+
+const { lang, altUrl } = Astro.props;
+const other = LOCALES.find((l) => l !== lang) ?? lang;
+---
+
+<a
+	class="lang-switch"
+	href={altUrl}
+	hreflang={HTML_LANG[other]}
+	title={LANG_LABEL[other]}
+	aria-label={`Switch to ${LANG_LABEL[other]}`}
+>
+	<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+		<circle cx="12" cy="12" r="9"></circle>
+		<path d="M3 12h18"></path>
+		<path d="M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path>
+	</svg>
+	<span>{LANG_LABEL[other]}</span>
+</a>
+
+<style>
+	.lang-switch {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0.35rem 0.6rem;
+		border-radius: 8px;
+		font-size: 0.85rem;
+		color: var(--text-soft);
+		white-space: nowrap;
+		transition:
+			color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.lang-switch:hover {
+		color: var(--text);
+		background: var(--bg-soft);
+		text-decoration: none;
+	}
+
+	@media (max-width: 520px) {
+		.lang-switch span {
+			display: none;
+		}
+	}
+</style>

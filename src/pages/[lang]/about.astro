@@ -1,0 +1,36 @@
+---
+import { getEntry, render } from 'astro:content';
+import { LOCALES, PAGES_COLLECTION, type Lang } from '../../i18n/ui';
+import { localizePath } from '../../i18n/utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+	return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+
+// 关于页也用 Markdown 写，和文章共用同一套写作体验
+const entry = await getEntry(PAGES_COLLECTION[lang], 'about');
+
+if (!entry) {
+	throw new Error(`缺少「关于」页面内容，请创建 src/content/pages/${lang}/about.md`);
+}
+
+const { Content } = await render(entry);
+
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const altUrl = localizePath(other, '/about');
+---
+
+<BaseLayout
+	lang={lang}
+	title={entry.data.title}
+	description={entry.data.description}
+	altUrl={altUrl}
+>
+	<article class="prose">
+		<h1>{entry.data.title}</h1>
+		<Content />
+	</article>
+</BaseLayout>

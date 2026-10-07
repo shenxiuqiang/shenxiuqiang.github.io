@@ -1,12 +1,15 @@
 ---
+import { DATE_LOCALE, type Lang } from '../i18n/ui';
+
 interface Props {
 	date: Date;
+	lang: Lang;
 }
 
-const { date } = Astro.props;
+const { date, lang } = Astro.props;
 
-// 输出成「2026年2月14日」这样，datetime 属性保留机器可读格式
-const formatted = date.toLocaleDateString('zh-CN', {
+// 中文输出「2026年10月7日」，英文输出「October 7, 2026」
+const formatted = date.toLocaleDateString(DATE_LOCALE[lang], {
 	year: 'numeric',
 	month: 'long',
 	day: 'numeric',

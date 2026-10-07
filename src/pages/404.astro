@@ -1,0 +1,92 @@
+---
+// GitHub Pages 会用 dist/404.html 作为全站的 404 页面。
+// 因为不确定访客当时在看哪种语言，这里中英并列显示。
+import { ui } from '../i18n/ui';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>404 · 页面不存在 / Page not found</title>
+		<style>
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+					'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+				background: #fff;
+				color: #1f2328;
+				line-height: 1.7;
+			}
+
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #0d1117;
+					color: #e6edf3;
+				}
+			}
+
+			main {
+				text-align: center;
+				padding: 2rem 1.5rem;
+				max-width: 30rem;
+			}
+
+			.code {
+				font-size: 3rem;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+				opacity: 0.25;
+				margin: 0 0 0.5rem;
+			}
+
+			h1 {
+				font-size: 1.15rem;
+				margin: 0 0 0.5rem;
+			}
+
+			p {
+				margin: 0 0 1.5rem;
+				opacity: 0.7;
+				font-size: 0.92rem;
+			}
+
+			.links {
+				display: flex;
+				justify-content: center;
+				gap: 0.75rem;
+				flex-wrap: wrap;
+			}
+
+			a {
+				color: #2f6feb;
+				text-decoration: none;
+				border: 1px solid currentColor;
+				border-radius: 8px;
+				padding: 0.4rem 0.9rem;
+				font-size: 0.9rem;
+			}
+
+			a:hover {
+				background: rgba(47, 111, 235, 0.1);
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<p class="code">404</p>
+			<h1>{ui.zh.notFound.title} · {ui.en.notFound.title}</h1>
+			<p>{ui.zh.notFound.body}<br />{ui.en.notFound.body}</p>
+			<div class="links">
+				<a href="/zh/">{ui.zh.notFound.back}</a>
+				<a href="/en/">{ui.en.notFound.back}</a>
+			</div>
+		</main>
+	</body>
+</html>

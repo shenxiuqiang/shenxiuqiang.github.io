@@ -1,10 +1,13 @@
 ---
-// 单篇文章的排版外壳。文章正文由 [...slug].astro 通过 <slot /> 塞进来。
+// 单篇文章的排版外壳。正文由 [lang]/blog/[...slug].astro 通过 <slot /> 塞进来。
 import FormattedDate from '../components/FormattedDate.astro';
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
 import { getReadingTime } from '../utils/posts';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
+	lang: Lang;
 	title: string;
 	description: string;
 	pubDate: Date;
@@ -12,26 +15,27 @@ interface Props {
 	tags?: string[];
 	/** 文章原始 Markdown 正文，用来估算阅读时间 */
 	body?: string;
+	altUrl: string;
 }
 
-const { title, description, pubDate, updatedDate, tags = [], body = '' } = Astro.props;
-const minutes = getReadingTime(body);
+const { lang, title, description, pubDate, updatedDate, tags = [], body = '', altUrl } = Astro.props;
+const t = useTranslations(lang);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl}>
 	<article>
 		<header class="post-header">
 			<h1>{title}</h1>
 			<p class="meta">
-				<FormattedDate date={pubDate} />
+				<FormattedDate date={pubDate} lang={lang} />
 				<span aria-hidden="true">·</span>
-				<span>约 {minutes} 分钟</span>
+				<span>{t.blog.minutes(getReadingTime(body, lang))}</span>
 				{
 					updatedDate && (
 						<>
 							<span aria-hidden="true">·</span>
 							<span>
-								更新于 <FormattedDate date={updatedDate} />
+								{t.blog.updatedOn} <FormattedDate date={updatedDate} lang={lang} />
 							</span>
 						</>
 					)
@@ -53,7 +57,7 @@ const minutes = getReadingTime(body);
 		</div>
 
 		<hr />
-		<p class="back"><a href="/blog">← 返回文章列表</a></p>
+		<p class="back"><a href={localizePath(lang, '/blog')}>{t.blog.backToList}</a></p>
 	</article>
 </BaseLayout>
 

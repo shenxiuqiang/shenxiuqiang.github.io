@@ -1,30 +1,19 @@
 ---
-import { render, type CollectionEntry } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { getPublishedPosts } from '../../utils/posts';
+// 旧地址：/blog/<文件名>/ → /zh/blog/<文件名>/
+// 这些链接已经发布出去了（搜索引擎、转载、书签），所以逐一生成跳转页。
+import Redirect from '../../components/Redirect.astro';
+import { getPosts } from '../../utils/posts';
 
-// Astro 是静态站点生成器：构建时这里会为每篇文章执行一次，
-// 生成对应的 /blog/<文件名>/index.html。
-// 想加「上一篇 / 下一篇」，也在这个函数里算好一并传下去。
 export async function getStaticPaths() {
-	const posts = await getPublishedPosts();
+	const posts = await getPosts('zh');
 
 	return posts.map((post) => ({
 		params: { slug: post.id },
-		props: { post },
+		props: { slug: post.id },
 	}));
 }
 
-interface Props {
-	post: CollectionEntry<'blog'>;
-}
-
-const { post } = Astro.props;
-
-// render() 把 Markdown 编译成可以直接渲染的 <Content /> 组件
-const { Content } = await render(post);
+const { slug } = Astro.props as { slug: string };
 ---
 
-<BlogPost {...post.data} body={post.body}>
-	<Content />
-</BlogPost>
+<Redirect to={`/zh/blog/${slug}/`} />

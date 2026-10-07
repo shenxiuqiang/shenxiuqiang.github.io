@@ -1,30 +1,33 @@
 ---
-// 文章卡片列表。首页和 /blog 页面共用。
-import type { CollectionEntry } from 'astro:content';
-import { getReadingTime } from '../utils/posts';
+// 文章卡片列表。首页和 /blog 页面共用，中英文共用。
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+import { getReadingTime, type BlogPost } from '../utils/posts';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
-	posts: CollectionEntry<'blog'>[];
+	posts: BlogPost[];
+	lang: Lang;
 }
 
-const { posts } = Astro.props;
+const { posts, lang } = Astro.props;
+const t = useTranslations(lang);
 ---
 
 {
 	posts.length === 0 ? (
-		<p>还没有文章，去 <code>src/content/blog/</code> 里新建一个 Markdown 文件吧。</p>
+		<p>{t.blog.empty}</p>
 	) : (
 		<ul class="post-list">
 			{posts.map((post) => (
 				<li>
-					<a href={`/blog/${post.id}/`}>
+					<a href={localizePath(lang, `/blog/${post.id}`)}>
 						<h2>{post.data.title}</h2>
 						<p class="excerpt">{post.data.description}</p>
 						<p class="meta">
-							<FormattedDate date={post.data.pubDate} />
+							<FormattedDate date={post.data.pubDate} lang={lang} />
 							<span aria-hidden="true">·</span>
-							<span>约 {getReadingTime(post.body)} 分钟</span>
+							<span>{t.blog.minutes(getReadingTime(post.body, lang))}</span>
 							{post.data.tags.map((tag) => (
 								<span class="tag">#{tag}</span>
 							))}
