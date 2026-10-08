@@ -21,17 +21,22 @@ const t = useTranslations(lang);
 		<ul class="post-list">
 			{posts.map((post) => (
 				<li>
-					<a href={localizePath(lang, `/blog/${post.id}`)}>
-						<h2>{post.data.title}</h2>
-						<p class="excerpt">{post.data.description}</p>
-						<p class="meta">
-							<FormattedDate date={post.data.pubDate} lang={lang} />
-							<span aria-hidden="true">·</span>
-							<span>{t.blog.minutes(getReadingTime(post.body, lang))}</span>
-							{post.data.tags.map((tag) => (
-								<span class="tag">#{tag}</span>
-							))}
-						</p>
+					<a href={localizePath(lang, `/blog/${post.id}`)} class:list={[{ 'has-cover': post.data.cover }]}>
+						<div class="card-body">
+							<h2>{post.data.title}</h2>
+							<p class="excerpt">{post.data.description}</p>
+							<p class="meta">
+								<FormattedDate date={post.data.pubDate} lang={lang} />
+								<span aria-hidden="true">·</span>
+								<span>{t.blog.minutes(getReadingTime(post.body, lang))}</span>
+								{post.data.tags.map((tag) => (
+									<span class="tag">#{tag}</span>
+								))}
+							</p>
+						</div>
+						{post.data.cover && (
+							<img class="thumb" src={post.data.cover} alt="" loading="lazy" />
+						)}
 					</a>
 				</li>
 			))}

@@ -233,7 +233,9 @@ li > ol {
 }
 
 .post-list a {
-	display: block;
+	display: flex;
+	align-items: flex-start;
+	gap: 1.25rem;
 	padding: 1.1rem 1.25rem;
 	border: 1px solid var(--border);
 	border-radius: var(--radius);
@@ -242,6 +244,19 @@ li > ol {
 		border-color 0.15s ease,
 		box-shadow 0.15s ease,
 		transform 0.15s ease;
+}
+
+.post-list .card-body {
+	flex: 1;
+	min-width: 0;
+}
+
+.post-list .thumb {
+	width: 200px;
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+	border-radius: 10px;
+	flex-shrink: 0;
 }
 
 .post-list a:hover {
@@ -302,5 +317,16 @@ li > ol {
 
 	h2 {
 		font-size: 1.3rem;
+	}
+
+	/* 窄屏下封面缩略图堆叠到文字上方 */
+	.post-list a.has-cover {
+		flex-direction: column;
+	}
+
+	.post-list a.has-cover .thumb {
+		width: 100%;
+		aspect-ratio: 16 / 8;
+		order: -1;
 	}
 }

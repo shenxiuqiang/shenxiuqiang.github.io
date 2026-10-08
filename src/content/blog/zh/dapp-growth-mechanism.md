@@ -3,9 +3,8 @@ title: '让 DApp 把增长还给用户：一种可复用的去中心化应用推
 description: '区块链给去中心化应用带来的改变，通常被理解为资产确权、链上交易、身份自主、智能合约和开放协议。但我认为，还有一个长期被低估的优势：区块链第一次让“应用收入的一部分自动、公开、持续地返还给用户”变得非常容易。'
 pubDate: '2026-09-07'
 tags: ['Blocklet', 'Web3', 'AI']
+cover: '/images/posts/bafkreifzxyhzk6c2acyn5durdzdjiwptakpiauosreruua5vbovsgqhbxq.webp'
 ---
-
-![Image.jpg](/images/posts/bafkreifzxyhzk6c2acyn5durdzdjiwptakpiauosreruua5vbovsgqhbxq.webp)
 
 区块链给去中心化应用带来的改变，通常被理解为资产确权、链上交易、身份自主、智能合约和开放协议。但我认为，还有一个长期被低估的优势：**区块链第一次让“应用收入的一部分自动、公开、持续地返还给用户”变得非常容易。**
 

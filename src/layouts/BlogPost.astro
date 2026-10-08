@@ -13,16 +13,18 @@ interface Props {
 	pubDate: Date;
 	updatedDate?: Date;
 	tags?: string[];
+	/** 封面图（public/ 下的路径），用于头图和社交分享图 */
+	cover?: string;
 	/** 文章原始 Markdown 正文，用来估算阅读时间 */
 	body?: string;
 	altUrl: string;
 }
 
-const { lang, title, description, pubDate, updatedDate, tags = [], body = '', altUrl } = Astro.props;
+const { lang, title, description, pubDate, updatedDate, tags = [], cover, body = '', altUrl } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl}>
+<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={cover}>
 	<article>
 		<header class="post-header">
 			<h1>{title}</h1>
@@ -52,6 +54,14 @@ const t = useTranslations(lang);
 			}
 		</header>
 
+		{
+			cover && (
+				<figure class="cover">
+					<img src={cover} alt={title} loading="eager" />
+				</figure>
+			)
+		}
+
 		<div class="prose">
 			<slot />
 		</div>
@@ -68,6 +78,17 @@ const t = useTranslations(lang);
 
 	.post-header h1 {
 		margin-bottom: 0.6rem;
+	}
+
+	.cover {
+		margin: 0 0 2rem;
+	}
+
+	.cover img {
+		width: 100%;
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		display: block;
 	}
 
 	.meta {

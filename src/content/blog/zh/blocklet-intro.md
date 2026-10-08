@@ -3,9 +3,8 @@ title: 'Blocklet 从入门到实战：理解 ARC 的应用单元与运行模型'
 description: '在 ArcBlock 的技术体系中，Blocklet 是一个非常容易被误解的概念。'
 pubDate: '2026-09-21'
 tags: ['AFS', 'AUP', 'Blocklet']
+cover: '/images/posts/bafkreibqs65o2giwkre3shg66lwot7sauwc5m7ogemyszbftnygwcloz2q.webp'
 ---
-
-![ChatGPT Image 2026年9月21日 09_35_21.jpg](/images/posts/bafkreibqs65o2giwkre3shg66lwot7sauwc5m7ogemyszbftnygwcloz2q.webp)
 
 在 ArcBlock 的技术体系中，Blocklet 是一个非常容易被误解的概念。
 

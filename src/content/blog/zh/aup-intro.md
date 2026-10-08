@@ -3,9 +3,8 @@ title: 'AUP 从入门到实战：理解 ArcBlock 的 Agentic UI Protocol'
 description: '如果第一次接触 AUP，最容易产生的误解是：AUP 是不是 ArcBlock 自己的 UI 组件库，或者是类似 React、Vue 的前端框架？'
 pubDate: '2026-09-20'
 tags: ['AUP', 'Blocklet']
+cover: '/images/posts/bafkreidtrc6jjckputpjnl262kh2e3kzxtcdf3pdv7x5xga3xuzmw54fii.webp'
 ---
-
-![ChatGPT Image 2026年9月20日 11_07_32.jpg](/images/posts/bafkreidtrc6jjckputpjnl262kh2e3kzxtcdf3pdv7x5xga3xuzmw54fii.webp)
 
 > **AUP（Agentic UI Protocol）是一种声明式 UI 模型：开发者描述界面、数据、状态和交互，而不是直接规定某一种设备应该如何渲染。运行时根据目标设备的能力，将同一个语义界面呈现为适合当前环境的形式。**
 > 

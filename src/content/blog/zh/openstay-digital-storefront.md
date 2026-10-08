@@ -3,9 +3,8 @@ title: 'OpenStay（开放宿联）：让每一家旅店拥有自己的「数字�
 description: '文档性质：社区讨论稿，征求意见与共创，不代表任何公司已承诺的开发计划。'
 pubDate: '2026-03-21'
 tags: ['Blocklet', 'OpenStay']
+cover: '/images/posts/bafkreifg5kpisbxwwlgrhubebtggo3yqkqiusv3q3sszqvvjdtfhg2jdsm.webp'
 ---
-
-![为文章生成头图.png](/images/posts/bafkreifg5kpisbxwwlgrhubebtggo3yqkqiusv3q3sszqvvjdtfhg2jdsm.webp)
 
 ![image (18).jpg](/images/posts/bafkreibzmadpp6sfqyrov2tui5yy7632xrmr3g2ebhv4vhmiu7ec3fwgia.webp)   ![image (17).jpg](/images/posts/bafkreiest44jbptprurrcsmirgvk75th2ifbuciurcehrfkvwlcck5hnlm.webp)
 

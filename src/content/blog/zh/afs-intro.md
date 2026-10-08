@@ -3,9 +3,8 @@ title: 'AFS 从入门到实战：理解 ArcBlock 面向 AI Agent 的资源世界
 description: '第一次看到 AFS，很容易产生一个直觉：它是不是类似 Linux 文件系统，只不过把文件提供给 AI Agent？'
 pubDate: '2026-09-19'
 tags: ['AFS', 'Blocklet', 'DID', 'AI']
+cover: '/images/posts/bafkreig5ot2phg5to2mow4ji7mndcgbz3mmmimyapsvnbixsvqnmymthge.webp'
 ---
-
-![ChatGPT Image 2026年9月19日 18_18_24.jpg](/images/posts/bafkreig5ot2phg5to2mow4ji7mndcgbz3mmmimyapsvnbixsvqnmymthge.webp)
 
 > **AFS（Agentic File System）并不只是一个“给 AI 用的文件系统”。它真正解决的问题，是如何让 Agent 以统一、可寻址、可发现、可控制的方式访问文件、服务、数据以及正在运行的能力。**
 > 本文从一个刚接触 AFS 的开发者视角出发，从最简单的 `arc afs` 命令开始，逐步理解 Path、Mount、Provider、Capability，再深入到 Search、Query、Exec、权限边界以及 Agent 访问。读完之后，你应该能够理解 AFS 为什么存在，以及如何把它用于自己的 AI Agent 和 ARC 应用。

@@ -23,6 +23,8 @@ const blogSchema = z.object({
 	tags: z.array(z.string()).default([]),
 	// draft: true 的文章只在本地 dev 时可见，不会发布到线上
 	draft: z.boolean().default(false),
+	// 封面图：public/ 下的路径，例如 /images/posts/xxx.webp
+	cover: z.string().optional(),
 });
 
 const pagesSchema = z.object({

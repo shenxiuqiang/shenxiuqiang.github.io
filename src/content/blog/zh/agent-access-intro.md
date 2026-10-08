@@ -3,9 +3,8 @@ title: 'Agent Access 从入门到实战：让 AI Agent 连接 ARC Blocklet'
 description: '如果说 Blocklet 解决的是“应用如何运行”，AFS 解决的是“数据和能力如何组织”，AUP 解决的是“Agent 如何理解和操作界面”，那么 Agent Access 解决的就是最后一个问题：外部 AI Agent 如何真正连接到一个运行中的 Blocklet，并按照它允…'
 pubDate: '2026-09-22'
 tags: ['AFS', 'AUP', 'Blocklet', 'AI']
+cover: '/images/posts/bafkreiettmit7betihutaezukz7t47d6kg6mwlycjj4srdlahzdp7trc7u.webp'
 ---
-
-![ChatGPT Image 2026年9月22日 08_45_37.jpg](/images/posts/bafkreiettmit7betihutaezukz7t47d6kg6mwlycjj4srdlahzdp7trc7u.webp)
 
 如果说 Blocklet 解决的是“应用如何运行”，AFS 解决的是“数据和能力如何组织”，AUP 解决的是“Agent 如何理解和操作界面”，那么 **Agent Access 解决的就是最后一个问题：外部 AI Agent 如何真正连接到一个运行中的 Blocklet，并按照它允许的范围读取和操作数据。**
 

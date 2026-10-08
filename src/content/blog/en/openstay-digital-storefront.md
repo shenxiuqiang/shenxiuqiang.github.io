@@ -3,9 +3,8 @@ title: 'OpenStay : A Digital Storefront for Every Property'
 description: 'What this is: A community discussion draft. It invites feedback and co-design; it is not a committed product roadmap from any company.'
 pubDate: '2026-03-21'
 tags: ['Blocklet', 'OpenStay']
+cover: '/images/posts/bafkreifg5kpisbxwwlgrhubebtggo3yqkqiusv3q3sszqvvjdtfhg2jdsm.webp'
 ---
-
-![为文章生成头图.png](/images/posts/bafkreifg5kpisbxwwlgrhubebtggo3yqkqiusv3q3sszqvvjdtfhg2jdsm.webp)
 
 **What this is:** A community discussion draft. It invites feedback and co-design; it is **not** a committed product roadmap from any company.
 **Version:** 1.0 (standalone reading edition)

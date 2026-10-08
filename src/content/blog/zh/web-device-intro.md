@@ -3,9 +3,8 @@ title: 'Web Device 从入门到实战：用 AFS + AUP 构建一个真正的网�
 description: '如果说 AUP 解决的是“如何用机器可以理解的方式描述界面”，那么 Web Device 解决的就是另一个更实际的问题：'
 pubDate: '2026-09-20'
 tags: ['AFS', 'AUP', 'Blocklet']
+cover: '/images/posts/bafkreiaclknjq5knsvs7qlrihu4ukoemrbn3q7a5e7t7bfvuibcmjki6qa.webp'
 ---
-
-![ChatGPT Image 2026年9月21日 08_25_10.jpg](/images/posts/bafkreiaclknjq5knsvs7qlrihu4ukoemrbn3q7a5e7t7bfvuibcmjki6qa.webp)
 
 如果说 AUP 解决的是“如何用机器可以理解的方式描述界面”，那么 Web Device 解决的就是另一个更实际的问题：
 

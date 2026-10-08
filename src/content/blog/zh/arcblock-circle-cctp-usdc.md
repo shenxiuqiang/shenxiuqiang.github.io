@@ -3,9 +3,8 @@ title: 'ArcBlock Chain 接入 Circle CCTP：让 ArcBlock 应用进入全球 USDC
 description: '最近在研究 Circle 的 CCTP、Arc App Kit、USDC 以及 ArcBlock Chain 时，我开始思考一个值得 ArcBlock 社区讨论的问题：'
 pubDate: '2026-09-16'
 tags: ['Blocklet', 'USDC']
+cover: '/images/posts/bafkreib2mz4p33ntyvxuexgqvgkhmk7rrjjd3fn7fxjilaph6raifdaqmm.webp'
 ---
-
-![ChatGPT Image 2026年9月17日 09_53_05.jpg](/images/posts/bafkreib2mz4p33ntyvxuexgqvgkhmk7rrjjd3fn7fxjilaph6raifdaqmm.webp)
 
 最近在研究 Circle 的 CCTP、Arc App Kit、USDC 以及 ArcBlock Chain 时，我开始思考一个值得 ArcBlock 社区讨论的问题：
 

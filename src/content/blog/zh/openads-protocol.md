@@ -3,9 +3,8 @@ title: 'OpenAds Protocol 去中心化广告网络产品设计文档'
 description: 'OpenAds Protocol 是一个面向去中心化应用的开放广告协议。'
 pubDate: '2026-09-09'
 tags: ['Blocklet', 'OpenAds', 'Web3']
+cover: '/images/posts/bafkreibqtfeu3afulzcquvcwia3wwp7mazqsy55v4kjtwb2rs7rni54igu.webp'
 ---
-
-![ChatGPT Image 2026年9月9日 09_16_05.jpg](/images/posts/bafkreibqtfeu3afulzcquvcwia3wwp7mazqsy55v4kjtwb2rs7rni54igu.webp)
 
 ## 去中心化广告网络产品设计文档 V0.1
 

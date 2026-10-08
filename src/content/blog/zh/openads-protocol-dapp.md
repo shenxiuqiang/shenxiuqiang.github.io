@@ -3,9 +3,8 @@ title: 'OpenAds Protocol：面向 DApp 的开放广告基础设施'
 description: '传统广告网络（Google Ads、Meta Ads 等）把广告主、流量、定价、选择权、用户数据和结算全部集中在单一平台手里。广告主只能向平台买广告，开发者也只能接受平台提供的广告源。平台同时控制广告主、库存、价格、数据与收益分配，形成强锁定。'
 pubDate: '2026-09-09'
 tags: ['Blocklet', 'OpenAds', 'Web3']
+cover: '/images/posts/bafkreibqtfeu3afulzcquvcwia3wwp7mazqsy55v4kjtwb2rs7rni54igu.webp'
 ---
-
-![ChatGPT Image 2026年9月9日 09_16_05.jpg](/images/posts/bafkreibqtfeu3afulzcquvcwia3wwp7mazqsy55v4kjtwb2rs7rni54igu.webp)
 
 传统广告网络（Google Ads、Meta Ads 等）把广告主、流量、定价、选择权、用户数据和结算全部集中在单一平台手里。广告主只能向平台买广告，开发者也只能接受平台提供的广告源。平台同时控制广告主、库存、价格、数据与收益分配，形成强锁定。
 

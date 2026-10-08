@@ -1,11 +1,12 @@
 ---
 title: '理解去中心化相册：你的照片，你做主'
-description: 'https://www.youtube.com/watch?v=0RT8TEYLW54'
+description: '每位创作者都经历过这样的痛苦：'
 pubDate: '2025-11-16'
 tags: ['Blocklet', '去中心化相册']
+cover: '/images/posts/bafkreicalom4du3w4jp4bga3pgrsztklwntmzn6gyfpjjf6cu3fkom2nfu.webp'
 ---
 
-![image (15).jpg](/images/posts/bafkreicalom4du3w4jp4bga3pgrsztklwntmzn6gyfpjjf6cu3fkom2nfu.webp)![image (14).jpg](/images/posts/bafkreicgeleue4zzt2fuqifk2pgrkkz33jzc2fql32wlpzectqdwkxjbta.webp)
+![image (14).jpg](/images/posts/bafkreicgeleue4zzt2fuqifk2pgrkkz33jzc2fql32wlpzectqdwkxjbta.webp)
 
 [https://www.youtube.com/watch?v=0RT8TEYLW54](https://www.youtube.com/watch?v=0RT8TEYLW54)
 

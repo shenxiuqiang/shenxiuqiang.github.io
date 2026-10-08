@@ -3,9 +3,8 @@ title: 'ARC Runtime / arc CLI 全架构逆向研究'
 description: '如果第一次接触 ArcBlock，很容易把 arc 理解成一个普通的命令行工具：安装之后，通过几个命令创建项目、启动服务、部署应用。'
 pubDate: '2026-09-17'
 tags: ['AFS', 'Blocklet', 'DID', 'ARC']
+cover: '/images/posts/bafkreicvcqf2b2c3hp5srrgt6jqetoppzqf5jjxez5zaufb76zf7xmdyki.webp'
 ---
-
-![ChatGPT Image 2026年9月17日 14_21_17.jpg](/images/posts/bafkreicvcqf2b2c3hp5srrgt6jqetoppzqf5jjxez5zaufb76zf7xmdyki.webp)
 
 > 从一个 CLI 命令开始，理解 ArcBlock 背后的 Runtime、AFS、DID、Vault、Space、Provider、MCP 与 Blocklet。
 > 

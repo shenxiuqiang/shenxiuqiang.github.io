@@ -1,11 +1,10 @@
 ---
 title: 'DIDMail：基于 ArcBlock 的去中心化加密邮件系统'
-description: 'https://www.youtube.com/watch?v=x2If7Ncrrc0'
+description: '在 Web3 通信需求日益增长的背景下，DIDMail 作为一款基于 ArcBlock 平台构建的去中心化加密邮件系统，为用户提供了一种更安全、更自主的数字通信方式。'
 pubDate: '2026-09-06'
 tags: ['Blocklet', 'DIDMail', 'NFT', 'DID']
+cover: '/images/posts/bafkreiegz2pkmcirofcjfemfoigtxorurctff7s5wcbqghzfdihrahz3ge.webp'
 ---
-
-![image (9).jpg](/images/posts/bafkreiegz2pkmcirofcjfemfoigtxorurctff7s5wcbqghzfdihrahz3ge.webp)
 
 ![image (10).jpg](/images/posts/bafkreif6jo4ze7nk3jnzjeyuwprykcroy7rtphbfvvz547ho7isi52hieu.webp)
 

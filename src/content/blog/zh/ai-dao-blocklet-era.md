@@ -3,9 +3,8 @@ title: 'AI + DAO + Blocklet：去中心化应用的时代可能正在到来'
 description: '过去二十年，主流互联网发展高度遵循中心化平台模式：创业公司融资、组建团队、开发产品、获取用户、扩张运营，最终形成平台。Facebook、YouTube、Airbnb、Uber、Instagram、TikTok以及大量SaaS产品，本质上都是这一路径的产物。平台掌握用户、数据、流量…'
 pubDate: '2026-06-19'
 tags: ['Blocklet', 'AI']
+cover: '/images/posts/bafkreiapryar7i4hrlhyqtt3jheillvlju2dudjenqvijvsew7og2qrtfy.webp'
 ---
-
-![image (16).jpg](/images/posts/bafkreiapryar7i4hrlhyqtt3jheillvlju2dudjenqvijvsew7og2qrtfy.webp)
 
 过去二十年，主流互联网发展高度遵循中心化平台模式：创业公司融资、组建团队、开发产品、获取用户、扩张运营，最终形成平台。Facebook、YouTube、Airbnb、Uber、Instagram、TikTok以及大量SaaS产品，本质上都是这一路径的产物。平台掌握用户、数据、流量和收益，用户成为平台的用户，开发者与运营者多半是平台的员工，价值最终回流至平台本身。
 

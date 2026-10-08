@@ -1,6 +1,6 @@
 ---
 title: '从零到一：OCAP Playground 完全指南 - 掌握 DID Wallet 开发的声明式配置艺术'
-description: '- 声明式配置深度解析'
+description: 'OCAP Playground 是一个功能丰富的演示项目，展示了如何使用 ArcBlock 的 OCAP（Open Chain Access Protocol）和 DID Wallet V2 构建去中心化应用。它包含了 60+ 个实际场景示例，涵盖了：'
 pubDate: '2025-12-31'
 tags: ['Blocklet', 'NFT', 'DID', 'OCAP']
 ---

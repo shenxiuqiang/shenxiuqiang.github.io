@@ -3,9 +3,8 @@ title: '使用 NFT 作为 Dapp 配置的实践指南'
 description: '基于 ArcBlock NFT 的去中心化配置管理模式。'
 pubDate: '2026-01-11'
 tags: ['Blocklet', 'GLOFTER', 'NFT', 'Web3']
+cover: '/images/posts/bafkreiatp55aw5k5usccfhqm65lgfvfok7v4almmkmxp3wfzlcblidvzse.webp'
 ---
-
-![image.png](/images/posts/bafkreiatp55aw5k5usccfhqm65lgfvfok7v4almmkmxp3wfzlcblidvzse.webp)
 
 基于 ArcBlock NFT 的去中心化配置管理模式。
 

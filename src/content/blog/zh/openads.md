@@ -3,9 +3,8 @@ title: 'OpenAds：让广告网络成为一种开放协议'
 description: '互联网广告可能是过去三十年最成功的商业模式之一。它让搜索、社交、新闻、视频以及大量互联网服务得以免费提供，也创造了规模惊人的广告市场。但与此同时，广告也逐渐成为互联网最中心化的基础设施之一：少数大型平台同时掌握广告主、用户流量、广告分发、用户画像和计费结算。广告主需要依赖平台寻找…'
 pubDate: '2026-09-09'
 tags: ['Blocklet', 'OpenAds', 'DID', 'Web3']
+cover: '/images/posts/bafkreiempl2yaer424gr2uxika7r3uwmhorejckgwasdowpkudlb5azz3m.webp'
 ---
-
-![ChatGPT Image 2026年9月9日 09_53_27.jpg](/images/posts/bafkreiempl2yaer424gr2uxika7r3uwmhorejckgwasdowpkudlb5azz3m.webp)
 
 互联网广告可能是过去三十年最成功的商业模式之一。它让搜索、社交、新闻、视频以及大量互联网服务得以免费提供，也创造了规模惊人的广告市场。但与此同时，广告也逐渐成为互联网最中心化的基础设施之一：少数大型平台同时掌握广告主、用户流量、广告分发、用户画像和计费结算。广告主需要依赖平台寻找用户，网站和应用需要依赖平台获得广告收入，而真正创造内容、提供服务和贡献注意力的人，对其中的定价与分配机制几乎没有影响力。
 

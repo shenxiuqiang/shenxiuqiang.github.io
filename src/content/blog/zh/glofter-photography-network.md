@@ -1,11 +1,10 @@
 ---
 title: 'GLOFTER去中心化摄影师工作室网络'
-description: 'https://www.youtube.com/watch?v=xA1dXAeHx1E'
+description: 'GLOFTER 是一个基于 ArcBlock Blocklet 构建的去中心化摄影师工作室网络（Decentralized Photographer Studio Network），定位为“独立摄影师的数字之家”和“你的数字摄影工作室”。'
 pubDate: '2026-09-04'
 tags: ['Blocklet', 'GLOFTER']
+cover: '/images/posts/bafkreia5bs4rf3wd7gvlcaqkd34h7s73vsfynm6vzwmtc342dv2hhhp35y.webp'
 ---
-
-![image (6).jpg](/images/posts/bafkreia5bs4rf3wd7gvlcaqkd34h7s73vsfynm6vzwmtc342dv2hhhp35y.webp)
 
 [https://www.youtube.com/watch?v=xA1dXAeHx1E](https://www.youtube.com/watch?v=xA1dXAeHx1E)
 

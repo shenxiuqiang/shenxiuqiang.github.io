@@ -1,6 +1,6 @@
 ---
 title: '理解差异：Web3 DApp 与中心化平'
-description: 'https://www.youtube.com/watch?v=WUE91lGlZIM'
+description: '想象一下，传统互联网就像一个巨大的购物中心。每一家店，无论大小，都必须在这个购物中心里租一个摊位，才能接触到顾客。购物中心的所有者制定规则、控制布局、决定每家店如何展示。'
 pubDate: '2025-11-08'
 tags: ['Web3']
 ---
