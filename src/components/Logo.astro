@@ -1,6 +1,7 @@
 ---
-// 字符 Logo：SHENXIU / QIANG 组成正方形徽章，S/X/Q 加粗高亮。
-// 正方形靠 width=height(aspect-ratio 1:1) 固定；两行用 space-between 贴顶/贴底把方块撑满。
+// 字符 Logo：SHENXIU / QIANG 组成直角正方形徽章，S/X/Q 加粗高亮。
+// 1px 直角边框；hover 只变色不变粗。两行 space-between 左右两端对齐；
+// QIANG 字母少，加大字号 + 拉宽间距与第一行对齐。
 import { SITE_TITLE } from '../consts';
 import { type Lang } from '../i18n/ui';
 import { localizePath } from '../i18n/utils';
@@ -13,48 +14,59 @@ const { lang } = Astro.props;
 ---
 
 <a class="logo" href={localizePath(lang, '/')} aria-label={SITE_TITLE} title={SITE_TITLE}>
-	<span class="row"
+	<span class="row row1"
 		><span class="k">S</span><span>H</span><span>E</span><span>N</span><span class="k">X</span><span>I</span
 		><span>U</span></span
 	>
-	<span class="row"><span class="k">Q</span><span>I</span><span>A</span><span>N</span><span>G</span></span>
+	<span class="row row2"><span class="k">Q</span><span>I</span><span>A</span><span>N</span><span>G</span></span>
 </a>
 
 <style>
 	.logo {
-		/* 正方形（大号） */
-		width: 62px;
-		height: 62px;
+		/* 正方形 */
+		width: 58px;
+		height: 58px;
 		aspect-ratio: 1 / 1;
 		box-sizing: border-box;
 
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between; /* 两行贴顶/贴底 */
-		padding: 9px 10px;
+		padding: 8px 9px;
 
-		border: 1.5px solid var(--border-strong);
-		border-radius: var(--radius);
+		/* 直角 + 真 1px 边框 */
+		border: 1px solid var(--border-strong);
+		border-radius: 0;
+
 		text-decoration: none;
 		line-height: 1;
-		transition:
-			border-color 0.15s ease,
-			box-shadow 0.15s ease;
+		transition: border-color 0.15s ease;
 	}
 
+	/* hover 只变色，不变粗 */
 	.logo:hover {
 		border-color: var(--accent);
-		box-shadow: 0 0 0 1px var(--accent);
 	}
 
 	.row {
 		display: flex;
-		justify-content: space-between; /* 每行字母铺满整宽，对齐成一个方块 */
+		justify-content: space-between; /* 左右两端对齐 */
 		width: 100%;
 		font-family: var(--font-mono);
 		font-weight: 500;
-		font-size: 15px;
 		color: var(--text);
+		line-height: 1;
+	}
+
+	/* 第一行 SHENXIU：7 个字母，字号保证全部收进框内 */
+	.row1 {
+		font-size: 10.5px;
+	}
+
+	/* 第二行 QIANG：字母少，字号略大 + 加间距，与第一行同宽对齐 */
+	.row2 {
+		font-size: 12px;
+		letter-spacing: 0.06em;
 	}
 
 	.row .k {
