@@ -25,6 +25,8 @@ interface Props {
 	updatedDate?: Date;
 	tags?: string[];
 	cover?: string;
+	/** 文章 slug，用于定位构建时生成的 OG 分享图 */
+	slug?: string;
 	body?: string;
 	altUrl: string;
 	headings?: Heading[];
@@ -40,12 +42,16 @@ const {
 	updatedDate,
 	tags = [],
 	cover,
+	slug,
 	body = '',
 	altUrl,
 	headings = [],
 	prev,
 	next,
 } = Astro.props;
+
+// 分享图：文章封面优先；无封面时用构建时按标题生成的 OG 图（/og/<lang>--<slug>.png）
+const ogImage = cover ?? (slug ? `/og/${lang}--${slug}.png` : undefined);
 
 const t = useTranslations(lang);
 const minutes = getReadingTime(body, lang);
@@ -61,7 +67,7 @@ const xShareHref = `/share/x/?text=${encodeURIComponent(title)}&url=${encodeURIC
 const linkedinShareHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 ---
 
-<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={cover} type="article" wide>
+<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={ogImage} type="article" wide>
 	<!-- 阅读进度条 -->
 	<div class="read-progress" aria-hidden="true"><i id="read-progress-bar"></i></div>
 

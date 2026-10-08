@@ -47,6 +47,7 @@ const { Content, headings } = await render(post);
 <BlogPost
 	lang={lang}
 	{...post.data}
+	slug={post.id}
 	body={post.body}
 	altUrl={altUrl}
 	headings={headings}
