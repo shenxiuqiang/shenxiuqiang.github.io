@@ -28,7 +28,6 @@ const altUrl = localizePath(other, '/');
 	<section class="intro">
 		<h1>{t.home.greeting} {SITE_TITLE} 👋</h1>
 		<p set:html={t.home.intro('https://astro.build')} />
-		{recent.length > 0 && <p set:html={t.home.latest(localizePath(lang, `/blog/${recent[0].id}`))} />}
 	</section>
 
 	<section>

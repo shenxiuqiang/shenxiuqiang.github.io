@@ -54,7 +54,6 @@ const zh = {
 		greeting: '你好，我是',
 		intro: (astroUrl: string) =>
 			`这里是我的个人博客。用 Markdown 写内容，由 <a href="${astroUrl}" target="_blank" rel="noopener noreferrer">Astro</a> 在构建时生成静态页面，再通过 GitHub Actions 自动发布到 GitHub Pages。`,
-		latest: (url: string) => `想了解这套流程怎么搭起来的，可以看<a href="${url}">最新一篇文章</a>。`,
 	},
 
 	blog: {
@@ -124,7 +123,6 @@ const en: typeof zh = {
 		greeting: "Hi, I'm",
 		intro: (astroUrl: string) =>
 			`This is my personal blog. I write in Markdown, <a href="${astroUrl}" target="_blank" rel="noopener noreferrer">Astro</a> turns it into static pages at build time, and GitHub Actions publishes it to GitHub Pages.`,
-		latest: (url: string) => `Curious how it all fits together? Start with <a href="${url}">the latest post</a>.`,
 	},
 
 	blog: {
