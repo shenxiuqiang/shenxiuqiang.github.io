@@ -2,6 +2,7 @@
 import type { GetStaticPathsOptions, Page } from 'astro';
 import Pagination from '../../components/Pagination.astro';
 import PostList from '../../components/PostList.astro';
+import SaveListUrl from '../../components/SaveListUrl.astro';
 import { SITE_TITLE } from '../../consts';
 import { LOCALES, type Lang } from '../../i18n/ui';
 import { localizePath, useTranslations } from '../../i18n/utils';
@@ -48,6 +49,7 @@ const altUrl = localizePath(other, '/');
 		<PostList posts={page.data} lang={lang} />
 		<Pagination page={page} lang={lang} />
 	</section>
+	<SaveListUrl lang={lang} />
 </BaseLayout>
 
 <style>

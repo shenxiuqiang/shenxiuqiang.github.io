@@ -61,7 +61,7 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 
 	<!-- 面包屑 + 元信息 -->
 	<div class="crumbs">
-		<a href={localizePath(lang, '/blog')}>{t.blog.backToList.replace('← ', '')}</a>
+		<a href={localizePath(lang, '/blog')} data-back-list data-lang={lang}>{t.blog.backToList.replace('← ', '')}</a>
 		{tags[0] && (
 			<>
 				<span class="sep">/</span>
@@ -169,6 +169,16 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 			setTimeout(() => { if (label && orig) label.textContent = orig; }, 1600);
 		} catch {}
 	});
+
+	// 返回列表：优先回到进入文章前所在的列表页（含页码 / 标签过滤），
+	// 由列表页的 SaveListUrl 组件写入 sessionStorage；没有记录时回退到列表首页。
+	const backLink = document.querySelector('[data-back-list]');
+	if (backLink) {
+		try {
+			const saved = sessionStorage.getItem('listUrl:' + backLink.getAttribute('data-lang'));
+			if (saved && saved.startsWith('/')) backLink.setAttribute('href', saved);
+		} catch {}
+	}
 
 	// 代码块加 macOS 标题栏 + 复制按钮
 	document.querySelectorAll('pre.astro-code').forEach((pre) => {

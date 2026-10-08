@@ -1,0 +1,21 @@
+---
+// 记住当前列表页地址（含页码 / 标签过滤），按语言存到 sessionStorage。
+// 文章页的「返回列表」链接会读这个值，返回到进入文章前所在的列表页，
+// 而不是永远回到第 1 页。
+import { type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<script is:inline data-lang={lang}>
+	(function () {
+		try {
+			var lang = document.currentScript.getAttribute('data-lang');
+			sessionStorage.setItem('listUrl:' + lang, window.location.pathname + window.location.search);
+		} catch (e) {}
+	})();
+</script>
