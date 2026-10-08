@@ -1,6 +1,6 @@
 ---
-// 字符 Logo：SHENXIU / QIANG 两行方块徽章，S/X/Q 加粗高亮。
-// 直角等宽字符（JetBrains Mono），细边框方块，契合「精密编辑」设计语言。
+// 字符 Logo：SHENXIU / QIANG 组成正方形徽章，S/X/Q 加粗高亮。
+// 正方形靠 width=height(aspect-ratio 1:1) 固定；两行用 space-between 贴顶/贴底把方块撑满。
 import { SITE_TITLE } from '../consts';
 import { type Lang } from '../i18n/ui';
 import { localizePath } from '../i18n/utils';
@@ -22,11 +22,17 @@ const { lang } = Astro.props;
 
 <style>
 	.logo {
-		display: inline-flex;
+		/* 正方形 */
+		width: 44px;
+		height: 44px;
+		aspect-ratio: 1 / 1;
+		box-sizing: border-box;
+
+		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		gap: 3px;
-		padding: 6px 8px;
+		justify-content: space-between; /* 两行贴顶/贴底 */
+		padding: 6px 7px;
+
 		border: 1.5px solid var(--border-strong);
 		border-radius: var(--radius-sm);
 		text-decoration: none;
@@ -43,11 +49,11 @@ const { lang } = Astro.props;
 
 	.row {
 		display: flex;
-		justify-content: space-between;
+		justify-content: space-between; /* 每行字母铺满整宽，对齐成一个方块 */
 		width: 100%;
 		font-family: var(--font-mono);
 		font-weight: 500;
-		font-size: 12.5px;
+		font-size: 10.5px;
 		color: var(--text);
 	}
 
