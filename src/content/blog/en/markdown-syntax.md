@@ -1,7 +1,7 @@
 ---
 title: 'Markdown Writing Cheat Sheet'
 description: 'Headings, lists, code blocks, tables, blockquotes — the Markdown syntax I reach for most, doubling as a typography sample.'
-pubDate: '2026-09-28'
+pubDate: '2025-04-05'
 tags: ['Markdown', 'Writing']
 ---
 

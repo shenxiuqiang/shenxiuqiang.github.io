@@ -1,7 +1,7 @@
 ---
 title: '用 Markdown + Astro + GitHub Actions 搭一个自动发布的博客'
 description: '把「写文章」和「发布网站」彻底分开：本地只写 Markdown，剩下的事交给 Astro 和 GitHub Actions。'
-pubDate: '2026-10-07'
+pubDate: '2025-04-01'
 tags: ['Astro', 'GitHub Pages', '自动化']
 ---
 

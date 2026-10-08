@@ -1,7 +1,7 @@
 ---
 title: 'Build an Auto-Publishing Blog with Markdown + Astro + GitHub Actions'
 description: 'Separate writing from publishing: you write Markdown locally, and Astro plus GitHub Actions take care of the rest.'
-pubDate: '2026-10-07'
+pubDate: '2025-04-01'
 tags: ['Astro', 'GitHub Pages', 'Automation']
 ---
 

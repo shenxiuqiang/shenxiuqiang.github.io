@@ -1,7 +1,7 @@
 ---
 title: 'Markdown 写作速查'
 description: '标题、列表、代码块、表格、引用……写文章时常用的 Markdown 语法，顺便当作排版样张。'
-pubDate: '2026-09-28'
+pubDate: '2025-04-05'
 tags: ['Markdown', '写作']
 ---
 
