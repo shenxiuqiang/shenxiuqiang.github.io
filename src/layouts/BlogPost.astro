@@ -178,9 +178,10 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 		wrap.className = 'code-block';
 		const head = document.createElement('div');
 		head.className = 'code-head';
-		head.innerHTML =
-			'<span class="code-dots"><i></i><i></i><i></i></span>' +
-			'<span class="code-lang">' + lang + '</span>';
+		const langLabel = document.createElement('span');
+		langLabel.className = 'code-lang';
+		langLabel.textContent = lang;
+		head.appendChild(langLabel);
 		const btn = document.createElement('button');
 		btn.className = 'code-copy';
 		btn.type = 'button';

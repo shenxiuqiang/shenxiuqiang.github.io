@@ -205,7 +205,7 @@ pre code {
 	color: inherit;
 }
 
-/* 代码块外层容器（由脚本包一层，加 macOS 标题栏） */
+/* 代码块外层容器（由脚本包一层，加简洁标题栏） */
 .code-block {
 	margin: 0 0 1.5em;
 	border: 1px solid var(--border);
@@ -219,25 +219,12 @@ pre code {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.75rem;
-	padding: 0.45rem 0.9rem;
-	background: var(--surface-overlay);
+	padding: 0.4rem 0.9rem;
 	border-bottom: 1px solid var(--border);
 	font-family: var(--font-mono);
-	font-size: 0.75rem;
+	font-size: 0.72rem;
+	letter-spacing: 0.02em;
 	color: var(--text-soft);
-}
-
-.code-block .code-dots {
-	display: inline-flex;
-	gap: 6px;
-}
-
-.code-block .code-dots i {
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: var(--border-strong);
-	display: inline-block;
 }
 
 .code-block .code-copy {
@@ -245,7 +232,7 @@ pre code {
 	border: none;
 	color: var(--text-soft);
 	font-family: var(--font-mono);
-	font-size: 0.75rem;
+	font-size: 0.72rem;
 	cursor: pointer;
 	padding: 2px 6px;
 	border-radius: var(--radius-sm);
@@ -261,6 +248,8 @@ pre code {
 	margin: 0;
 	border: none;
 	border-radius: 0;
+	/* 关键：给代码内容加内边距，左侧留更多 */
+	padding: 1rem 1rem 1rem 1.3rem;
 }
 
 /* 引用/标注块：左侧 3px accent 描边 */
