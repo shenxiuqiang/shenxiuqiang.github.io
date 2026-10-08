@@ -1,0 +1,37 @@
+---
+// X 分享中转页。
+// 为什么需要它：macOS / iOS 安装了 X 应用后，系统会把 x.com、twitter.com
+// 的链接直接交给 App（Universal Links），而 X App 不识别 intent/tweet
+// 网页分享路径，text/url 参数会丢失。
+// 系统只拦截「用户直接点击的 X 域名链接」，不会拦截 JS 发起的跳转，
+// 所以分享链接先指向本页，再由本页脚本跳到 X 网页发帖框，参数完整保留。
+// 本页不进入 sitemap（astro.config.mjs 里已排除 /share/）。
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>正在打开 X…</title>
+	</head>
+	<body>
+		<p>正在打开 X 分享… 如果没有自动跳转，<a id="fallback" href="#">点击这里</a>。</p>
+		<script is:inline>
+			(function () {
+				var p = new URLSearchParams(window.location.search);
+				var text = p.get('text') || '';
+				var url = p.get('url') || '';
+				var intent =
+					'https://twitter.com/intent/tweet?text=' +
+					encodeURIComponent(text) +
+					'&url=' +
+					encodeURIComponent(url);
+				var fallback = document.getElementById('fallback');
+				if (fallback) fallback.href = intent;
+				window.location.replace(intent);
+			})();
+		</script>
+	</body>
+</html>

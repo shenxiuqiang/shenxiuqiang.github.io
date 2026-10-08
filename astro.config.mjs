@@ -24,6 +24,8 @@ export default defineConfig({
 				if (path === '/') return false;
 				if (/^\/(about|blog)\/$/.test(path)) return false;
 				if (/^\/blog\/[^/]+\/$/.test(path)) return false;
+				// 分享中转页只是跳转工具，不应被搜索引擎收录
+				if (path.startsWith('/share/')) return false;
 				return true;
 			},
 		}),

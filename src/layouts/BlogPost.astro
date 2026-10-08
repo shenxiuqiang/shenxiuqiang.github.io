@@ -54,9 +54,10 @@ const cjkCount = (body.match(/[\u4e00-\u9fa5]/g) ?? []).length;
 const wordCount = lang === 'zh' ? cjkCount : (body.match(/[a-zA-Z0-9]+/g) ?? []).length;
 const initial = AUTHOR.slice(0, 2).toUpperCase();
 
-// 分享链接在构建时直接生成（渐进增强：不依赖 JS，脚本加载前点击也有效）
+// 分享链接在构建时直接生成（渐进增强：不依赖 JS，脚本加载前点击也有效）。
+// X 的链接走本站中转页 /share/x/，避免系统把链接交给本地 X 应用导致参数丢失。
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
-const xShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
+const xShareHref = `/share/x/?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
 const linkedinShareHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 ---
 
