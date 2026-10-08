@@ -14,4 +14,4 @@ export const GA_MEASUREMENT_ID = '';
 
 // Google AdSense 的发布商 ID，形如 ca-pub-XXXXXXXXXXXXXXXX
 // 在 https://adsense.google.com 注册并通过审核后获得
-export const ADSENSE_CLIENT_ID = '';
+export const ADSENSE_CLIENT_ID = 'ca-pub-9602040871004878';

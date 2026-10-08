@@ -1,4 +1,3 @@
 # ads.txt —— Google AdSense 授权声明文件。
-# 把你的发布商 ID 填到下面（与 src/consts.ts 里的 ADSENSE_CLIENT_ID 保持一致）。
-# 还没开通 AdSense 时这个文件留着也不影响站点。
-google.com, ca-pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+# 与 src/consts.ts 里的 ADSENSE_CLIENT_ID 保持一致。
+google.com, ca-pub-9602040871004878, DIRECT, f08c47fec0942fa0
