@@ -1,0 +1,64 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import Pagination from '../../../../components/Pagination.astro';
+import PostList from '../../../../components/PostList.astro';
+import TagFilter from '../../../../components/TagFilter.astro';
+import { LOCALES, type Lang } from '../../../../i18n/ui';
+import { localizePath, useTranslations } from '../../../../i18n/utils';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getAllTags, getPostsByTag, tagSlug, type BlogPost } from '../../../../utils/posts';
+
+// 每个标签生成自己的分页列表：/tags/<tag>/、/tags/<tag>/2/ …
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const paths = [];
+	for (const lang of LOCALES) {
+		const tagInfos = await getAllTags(lang);
+		for (const { tag } of tagInfos) {
+			const posts = await getPostsByTag(lang, tag);
+			paths.push(
+				...paginate(posts, {
+					pageSize: 20,
+					params: { lang, tag: tagSlug(tag) }, // URL 用安全 slug
+					props: { tag, tags: tagInfos }, // 页面用原始标签显示/过滤
+				}),
+			);
+		}
+	}
+	return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const page = Astro.props.page as Page<BlogPost>;
+const { tag, tags } = Astro.props as { tag: string; tags: Awaited<ReturnType<typeof getAllTags>> };
+const t = useTranslations(lang);
+
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const altUrl = localizePath(other, '/blog');
+---
+
+<BaseLayout
+	lang={lang}
+	title={t.tags.taggedWith(tag)}
+	description={t.tags.taggedCount(tag, page.total)}
+	altUrl={altUrl}
+	wide
+>
+	<h1>{t.tags.taggedWith(tag)}</h1>
+	<p class="count">{t.blog.count(page.total)}</p>
+	<TagFilter lang={lang} tags={tags} active={tag} />
+	<PostList posts={page.data} lang={lang} />
+	<Pagination page={page} lang={lang} />
+</BaseLayout>
+
+<style>
+	h1 {
+		margin-bottom: 0.4rem;
+		font-family: var(--font-mono);
+	}
+
+	.count {
+		color: var(--text-soft);
+		font-size: 0.9rem;
+		margin-bottom: 2rem;
+	}
+</style>

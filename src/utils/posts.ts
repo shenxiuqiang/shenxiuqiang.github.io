@@ -18,6 +18,40 @@ export async function getPosts(lang: Lang): Promise<BlogPost[]> {
 	return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
+export interface TagInfo {
+	tag: string;
+	count: number;
+}
+
+/** 某个语言下所有标签及文章数，按数量倒序 */
+export async function getAllTags(lang: Lang): Promise<TagInfo[]> {
+	const posts = await getPosts(lang);
+	const counts = new Map<string, number>();
+	for (const post of posts) {
+		for (const tag of post.data.tags) {
+			counts.set(tag, (counts.get(tag) ?? 0) + 1);
+		}
+	}
+	return [...counts.entries()]
+		.map(([tag, count]) => ({ tag, count }))
+		.sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+/** 某个语言下带指定标签的文章 */
+export async function getPostsByTag(lang: Lang, tag: string): Promise<BlogPost[]> {
+	const posts = await getPosts(lang);
+	return posts.filter((post) => post.data.tags.includes(tag));
+}
+
+/**
+ * 标签 → URL 路径段。标签里可能有空格（GitHub Pages）或斜杠（CI/CD），
+ * 斜杠会被路由当成路径分隔符、空格会变成 %20，统一换成连字符。
+ * 显示时仍用原始标签。
+ */
+export function tagSlug(tag: string): string {
+	return tag.replace(/[\s/]+/g, '-');
+}
+
 /** 取某个语言所有文章的 slug（用于配对翻译） */
 export async function getPostSlugs(lang: Lang): Promise<Set<string>> {
 	const posts = await getCollection(BLOG_COLLECTION[lang], ({ data }) =>

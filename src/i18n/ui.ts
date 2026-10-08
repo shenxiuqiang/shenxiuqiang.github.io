@@ -50,6 +50,13 @@ const zh = {
 		toggle: '切换明暗主题',
 	},
 
+	tags: {
+		filter: '按标签筛选',
+		all: '全部',
+		taggedWith: (tag: string) => `#${tag}`,
+		taggedCount: (tag: string, n: number) => `标签 #${tag} · 共 ${n} 篇`,
+	},
+
 	home: {
 		greeting: '你好，我是',
 		intro: (astroUrl: string) =>
@@ -117,6 +124,13 @@ const en: typeof zh = {
 
 	theme: {
 		toggle: 'Toggle dark mode',
+	},
+
+	tags: {
+		filter: 'Filter by tag',
+		all: 'All',
+		taggedWith: (tag: string) => `#${tag}`,
+		taggedCount: (tag: string, n: number) => `#${tag} · ${n} ${n === 1 ? 'post' : 'posts'}`,
 	},
 
 	home: {

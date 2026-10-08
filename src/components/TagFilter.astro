@@ -1,0 +1,79 @@
+---
+// 标签筛选条。「全部」+ 各标签（带文章数），点击跳到对应标签页。
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+import { tagSlug, type TagInfo } from '../utils/posts';
+
+interface Props {
+	lang: Lang;
+	tags: TagInfo[];
+	/** 当前激活的标签（标签页传入）；不传表示在「全部」列表页 */
+	active?: string;
+}
+
+const { lang, tags, active } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<nav class="tag-filter" aria-label={t.tags.filter}>
+	<a class:list={['chip', { active: !active }]} href={localizePath(lang, '/blog')}>
+		{t.tags.all}
+	</a>
+	{
+		tags.map(({ tag, count }) => (
+			<a
+				class:list={['chip', { active: active === tag }]}
+				href={localizePath(lang, `/tags/${tagSlug(tag)}`)}
+			>
+				#{tag}
+				<span class="count">{count}</span>
+			</a>
+		))
+	}
+</nav>
+
+<style>
+	.tag-filter {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+	}
+
+	.chip {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		font-weight: 500;
+		padding: 0.3rem 0.65rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		color: var(--text-soft);
+		background: var(--surface-raised);
+		text-decoration: none;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.chip:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	.chip .count {
+		opacity: 0.55;
+		font-size: 0.72em;
+		margin-left: 0.25em;
+	}
+
+	.chip.active {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--on-accent);
+	}
+
+	.chip.active .count {
+		opacity: 0.8;
+	}
+</style>
