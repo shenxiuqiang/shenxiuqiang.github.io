@@ -6,7 +6,7 @@ import { useTranslations } from '../i18n/utils';
 interface PageLike {
 	currentPage: number;
 	lastPage: number;
-	url: { prev?: string; next?: string };
+	url: { current?: string; prev?: string; next?: string };
 }
 
 interface Props {
@@ -16,6 +16,31 @@ interface Props {
 
 const { page, lang } = Astro.props;
 const t = useTranslations(lang);
+
+// paginate() 只给 prev/next，页码 URL 自己按「当前页 URL 去掉末尾数字段」推导：
+//   /zh/2/            → 基址 /zh            → /zh/、/zh/2/、/zh/3/ …
+//   /zh/tags/web3/2/  → 基址 /zh/tags/web3  → …/web3/、…/web3/2/ …
+const currentPath = (page.url.current ?? Astro.url.pathname).replace(/\/+$/, '');
+const segments = currentPath.split('/').filter(Boolean);
+if (segments.length > 1 && /^\d+$/.test(segments[segments.length - 1])) segments.pop();
+const basePath = '/' + segments.join('/');
+const pageUrl = (n: number) => (n === 1 ? `${basePath}/` : `${basePath}/${n}/`);
+
+// 页码列表：页数少时全显示；多时显示「1 … c-1 c c+1 … last」窗口
+type Item = number | '…';
+function pageItems(cur: number, last: number): Item[] {
+	if (last <= 7) return Array.from({ length: last }, (_, i) => i + 1);
+	const nums = [...new Set([1, last, cur - 1, cur, cur + 1])]
+		.filter((n) => n >= 1 && n <= last)
+		.sort((a, b) => a - b);
+	const items: Item[] = [];
+	nums.forEach((n, i) => {
+		if (i > 0 && n - nums[i - 1] > 1) items.push('…');
+		items.push(n);
+	});
+	return items;
+}
+const items = pageItems(page.currentPage, page.lastPage);
 ---
 
 {
@@ -27,7 +52,17 @@ const t = useTranslations(lang);
 				<span class="page-btn disabled" aria-disabled="true">{t.pagination.prev}</span>
 			)}
 
-			<span class="page-info">{t.pagination.page(page.currentPage, page.lastPage)}</span>
+			<span class="page-numbers">
+				{items.map((item) =>
+					item === '…' ? (
+						<span class="ellipsis">…</span>
+					) : item === page.currentPage ? (
+						<span class="page-num current" aria-current="page">{item}</span>
+					) : (
+						<a class="page-num" href={pageUrl(item)}>{item}</a>
+					)
+				)}
+			</span>
 
 			{page.url.next ? (
 				<a class="page-btn" href={page.url.next}>{t.pagination.next}</a>
@@ -43,7 +78,8 @@ const t = useTranslations(lang);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 1rem;
+		flex-wrap: wrap;
+		gap: 0.6rem 1rem;
 		margin-top: 2.5rem;
 	}
 
@@ -71,9 +107,50 @@ const t = useTranslations(lang);
 		cursor: not-allowed;
 	}
 
-	.page-info {
+	/* 页码列表 */
+	.page-numbers {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		font-family: var(--font-mono);
 		font-size: 0.85rem;
+	}
+
+	.page-num {
+		min-width: 2rem;
+		padding: 0.35rem 0.5rem;
+		border: 1px solid transparent;
+		border-radius: 8px;
+		text-align: center;
 		color: var(--text-soft);
-		white-space: nowrap;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	a.page-num:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+		text-decoration: none;
+	}
+
+	.page-num.current {
+		color: var(--accent);
+		border-color: var(--accent);
+		background: var(--accent-soft);
+		font-weight: 600;
+	}
+
+	.ellipsis {
+		padding: 0.35rem 0.2rem;
+		color: var(--text-soft);
+	}
+
+	@media (max-width: 620px) {
+		.page-num {
+			min-width: 1.7rem;
+			padding: 0.3rem 0.35rem;
+		}
 	}
 </style>
