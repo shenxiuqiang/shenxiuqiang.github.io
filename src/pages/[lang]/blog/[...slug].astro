@@ -8,7 +8,6 @@ import { getPosts } from '../../../utils/posts';
 /**
  * Astro 是静态站点生成器：构建时这里会为每篇文章执行一次，
  * 生成对应的 /<lang>/blog/<文件名>/index.html。
- *
  * 译文配对靠文件名：中英文目录下同名的文件被视为同一篇文章。
  */
 export async function getStaticPaths() {
@@ -22,13 +21,15 @@ export async function getStaticPaths() {
 		const posts = lang === 'zh' ? zhPosts : enPosts;
 		const other: Lang = lang === 'zh' ? 'en' : 'zh';
 
-		return posts.map((post) => ({
+		return posts.map((post, i) => ({
 			params: { lang, slug: post.id },
 			props: {
 				lang,
 				post,
-				// 有译文就链到译文；还没翻译就退到对方的文章列表，
-				// 避免语言切换器指向一个 404
+				// posts 按时间倒序：i-1 是更新的（下一篇），i+1 是更旧的（上一篇）
+				prev: posts[i + 1],
+				next: posts[i - 1],
+				// 有译文就链到译文；还没翻译就退到对方的文章列表
 				altUrl: slugs[other].has(post.id)
 					? localizePath(other, `/blog/${post.id}`)
 					: localizePath(other, '/blog'),
@@ -37,16 +38,20 @@ export async function getStaticPaths() {
 	});
 }
 
-const { lang, post, altUrl } = Astro.props as {
-	lang: Lang;
-	post: Awaited<ReturnType<typeof getPosts>>[number];
-	altUrl: string;
-};
+const { lang, post, altUrl, prev, next } = Astro.props;
 
-// render() 把 Markdown 编译成可以直接渲染的 <Content /> 组件
-const { Content } = await render(post);
+// render() 把 Markdown 编译成 <Content />，并给出 headings 用于生成目录
+const { Content, headings } = await render(post);
 ---
 
-<BlogPost lang={lang} {...post.data} body={post.body} altUrl={altUrl}>
+<BlogPost
+	lang={lang}
+	{...post.data}
+	body={post.body}
+	altUrl={altUrl}
+	headings={headings}
+	prev={prev}
+	next={next}
+>
 	<Content />
 </BlogPost>

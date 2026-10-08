@@ -71,6 +71,23 @@ const zh = {
 		page: (cur: number, total: number) => `第 ${cur} / ${total} 页`,
 	},
 
+	post: {
+		toc: '本文目录',
+		characters: '字符数',
+		readingTime: '预估耗时',
+		minutes: (n: number) => `约 ${n} 分钟`,
+		words: (n: number) => `${n} 字`,
+		prevPost: '上一篇',
+		nextPost: '下一篇',
+		backToTop: '返回顶部',
+		share: '分享链接',
+		copy: '复制',
+		copied: '已复制',
+		authorRole: '作者',
+		authorBio: '聚焦 AI Agent、分布式系统与前端架构实践。',
+		publishedOn: '发布于',
+	},
+
 	footer: {
 		builtWith: () =>
 			`由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> 构建，托管于 <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a>`,
@@ -118,6 +135,23 @@ const en: typeof zh = {
 		prev: '← Previous',
 		next: 'Next →',
 		page: (cur: number, total: number) => `Page ${cur} of ${total}`,
+	},
+
+	post: {
+		toc: 'On this page',
+		characters: 'Characters',
+		readingTime: 'Reading time',
+		minutes: (n: number) => `${n} min read`,
+		words: (n: number) => `${n} chars`,
+		prevPost: 'Previous',
+		nextPost: 'Next',
+		backToTop: 'Back to top',
+		share: 'Copy link',
+		copy: 'Copy',
+		copied: 'Copied!',
+		authorRole: 'Author',
+		authorBio: 'Working on AI agents, distributed systems, and frontend architecture.',
+		publishedOn: 'Published',
 	},
 
 	footer: {

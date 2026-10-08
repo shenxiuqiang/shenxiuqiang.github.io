@@ -1,0 +1,99 @@
+---
+// 上一篇 / 下一篇 导航
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+import type { BlogPost } from '../utils/posts';
+
+interface Props {
+	lang: Lang;
+	prev?: BlogPost; // 时间上更早的一篇
+	next?: BlogPost; // 时间上更晚的一篇
+}
+
+const { lang, prev, next } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{
+	(prev || next) && (
+		<nav class="prevnext" aria-label="Adjacent articles">
+			{prev ? (
+				<a class="pn prev" href={localizePath(lang, `/blog/${prev.id}`)}>
+					<span class="dir">← {t.post.prevPost}</span>
+					<span class="title">{prev.data.title}</span>
+				</a>
+			) : (
+				<span />
+			)}
+			{next ? (
+				<a class="pn next" href={localizePath(lang, `/blog/${next.id}`)}>
+					<span class="dir">{t.post.nextPost} →</span>
+					<span class="title">{next.data.title}</span>
+				</a>
+			) : (
+				<span />
+			)}
+		</nav>
+	)
+}
+
+<style>
+	.prevnext {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+
+	.pn {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		padding: 1rem 1.2rem;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		transition:
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.pn:hover {
+		border-color: var(--accent);
+		background: var(--surface-overlay);
+		text-decoration: none;
+	}
+
+	.pn.next {
+		text-align: right;
+	}
+
+	.dir {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--text-soft);
+	}
+
+	.title {
+		font-family: var(--font-head);
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--text);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.pn:hover .title {
+		color: var(--accent);
+	}
+
+	@media (max-width: 560px) {
+		.prevnext {
+			grid-template-columns: 1fr;
+		}
+		.pn.next {
+			text-align: left;
+		}
+	}
+</style>

@@ -1,0 +1,116 @@
+---
+// 文末作者卡
+import { AUTHOR, GITHUB_URL } from '../consts';
+import { type Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const initial = AUTHOR.slice(0, 2).toUpperCase();
+---
+
+<div class="author-card">
+	<div class="avatar" aria-hidden="true">{initial}</div>
+	<div class="info">
+		<div class="name-row">
+			<span class="name">{AUTHOR}</span>
+			<span class="role">{t.post.authorRole}</span>
+		</div>
+		<p class="bio">{t.post.authorBio}</p>
+	</div>
+	<a class="follow" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+		GitHub
+	</a>
+</div>
+
+<style>
+	.author-card {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.25rem 1.4rem;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+	}
+
+	.avatar {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		background: var(--accent);
+		color: var(--on-accent);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-head);
+		font-weight: 700;
+		font-size: 1.05rem;
+		flex-shrink: 0;
+	}
+
+	.info {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.name-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.2rem;
+	}
+
+	.name {
+		font-family: var(--font-head);
+		font-weight: 600;
+		color: var(--text);
+		font-size: 0.95rem;
+	}
+
+	.role {
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--accent2);
+		background: var(--accent2-soft);
+		border-radius: var(--radius-sm);
+		padding: 0.1rem 0.45rem;
+	}
+
+	.bio {
+		margin: 0;
+		font-size: 0.85rem;
+		color: var(--text-body);
+	}
+
+	.follow {
+		flex-shrink: 0;
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		font-weight: 500;
+		padding: 0.45rem 0.9rem;
+		border-radius: var(--radius-sm);
+		background: var(--accent);
+		color: var(--on-accent);
+		transition: opacity 0.15s ease;
+	}
+
+	.follow:hover {
+		opacity: 0.85;
+		text-decoration: none;
+	}
+
+	@media (max-width: 560px) {
+		.author-card {
+			flex-wrap: wrap;
+		}
+		.follow {
+			width: 100%;
+			text-align: center;
+		}
+	}
+</style>

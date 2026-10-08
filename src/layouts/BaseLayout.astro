@@ -14,9 +14,11 @@ interface Props {
 	/** 另一种语言下这个页面的地址 */
 	altUrl: string;
 	image?: string;
+	/** 宽外壳（正文 + 侧栏两列），文章详情页用 */
+	wide?: boolean;
 }
 
-const { lang, title, description, altUrl, image } = Astro.props;
+const { lang, title, description, altUrl, image, wide = false } = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -33,7 +35,7 @@ const t = useTranslations(lang);
 	</head>
 	<body>
 		<Header lang={lang} altUrl={altUrl} />
-		<main>
+		<main class:list={[{ wide }]}>
 			<slot />
 		</main>
 		<Footer lang={lang} />
