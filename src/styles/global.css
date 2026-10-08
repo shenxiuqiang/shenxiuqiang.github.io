@@ -20,6 +20,9 @@
 	/* 列表 hover：浅一点的淡蓝，不要太灰 */
 	--surface-hover: #f1f6fe;
 
+	/* 代码块底色（浅色页用 GitHub-light 代码底色，不用深色） */
+	--code-bg: #f6f8fa;
+
 	--text: #1f2328;          /* 高对比：标题 */
 	--text-body: #444c56;     /* 正文 */
 	--text-soft: #6e7781;     /* 弱：说明/时间 */
@@ -58,6 +61,9 @@
 	--bg-soft: #161b22;
 	/* 列表 hover：轻微提亮偏蓝 */
 	--surface-hover: #182230;
+
+	/* 代码块底色（深色页，github-dark 代码底色） */
+	--code-bg: #161b22;
 
 	--text: #f0f6fc;
 	--text-body: #c9d1d9;
@@ -205,13 +211,14 @@ pre code {
 	color: inherit;
 }
 
-/* 代码块外层容器（由脚本包一层，加简洁标题栏） */
+/* 代码块外层容器（由脚本包一层，加简洁标题栏）。
+   标题栏不单独设色，继承容器 --code-bg，与代码区背景保持一致。 */
 .code-block {
 	margin: 0 0 1.5em;
 	border: 1px solid var(--border);
 	border-radius: var(--radius);
 	overflow: hidden;
-	background: var(--surface);
+	background: var(--code-bg);
 }
 
 .code-block .code-head {
@@ -225,6 +232,8 @@ pre code {
 	font-size: 0.72rem;
 	letter-spacing: 0.02em;
 	color: var(--text-soft);
+	/* 背景继承 .code-block（--code-bg），与代码区一致 */
+	background: transparent;
 }
 
 .code-block .code-copy {
@@ -250,6 +259,22 @@ pre code {
 	border-radius: 0;
 	/* 关键：给代码内容加内边距，左侧留更多 */
 	padding: 1rem 1rem 1rem 1.3rem;
+}
+
+/* Shiki 双主题（github-light / github-dark）：
+   构建时行内输出的是 light 色，同时附带 --shiki-dark* 变量。
+   这里统一用 --code-bg 覆盖 pre 行内底色（!important 压过行内 style），
+   深色页再把 token 颜色切换到 --shiki-dark 系列，跟随站点主题。 */
+pre.astro-code {
+	background-color: var(--code-bg) !important;
+}
+
+:root[data-theme='dark'] pre.astro-code,
+:root[data-theme='dark'] pre.astro-code span {
+	color: var(--shiki-dark) !important;
+	font-style: var(--shiki-dark-font-style) !important;
+	font-weight: var(--shiki-dark-font-weight) !important;
+	text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
 /* 引用/标注块：左侧 3px accent 描边 */

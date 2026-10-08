@@ -33,7 +33,14 @@ export default defineConfig({
 		// 代码块语法高亮。Astro 内置 Shiki，不需要额外装包，
 		// 构建时就生成好高亮 HTML，前端零 JS 开销。
 		shikiConfig: {
-			theme: 'github-dark',
+			// 双主题：浅色页用 github-light，深色页用 github-dark。
+			// Shiki 会为每个 token 同时输出默认色（light）和
+			// --shiki-dark 系列 CSS 变量，由 global.css 按
+			// data-theme 切换，跟随站点主题而不是固定深色。
+			themes: {
+				light: 'github-light',
+				dark: 'github-dark',
+			},
 			wrap: true,
 		},
 	},
