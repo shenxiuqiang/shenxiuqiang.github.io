@@ -373,9 +373,10 @@ li > ol {
 }
 
 .post-list .thumb {
-	width: 190px;
-	aspect-ratio: 16 / 10;
-	object-fit: cover;
+	width: 200px;
+	aspect-ratio: 16 / 9;
+	object-fit: contain; /* 完整显示整张图，不裁剪 */
+	background: var(--bg-soft); /* 留白处衬底 */
 	border-radius: var(--radius-sm);
 	flex-shrink: 0;
 	border: 1px solid var(--border);
@@ -456,7 +457,9 @@ li > ol {
 
 	.post-list a.has-cover .thumb {
 		width: 100%;
-		aspect-ratio: 16 / 8;
+		aspect-ratio: 16 / 9;
+		object-fit: contain;
+		background: var(--bg-soft);
 		order: -1;
 	}
 }
