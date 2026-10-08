@@ -14,11 +14,13 @@ interface Props {
 	/** 另一种语言下这个页面的地址 */
 	altUrl: string;
 	image?: string;
+	/** og:type，文章页传 article */
+	type?: 'website' | 'article';
 	/** 宽外壳（正文 + 侧栏两列），文章详情页用 */
 	wide?: boolean;
 }
 
-const { lang, title, description, altUrl, image, wide = false } = Astro.props;
+const { lang, title, description, altUrl, image, type, wide = false } = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -31,6 +33,7 @@ const t = useTranslations(lang);
 			description={description ?? t.siteDescription}
 			altUrl={altUrl}
 			image={image}
+			type={type}
 		/>
 	</head>
 	<body>

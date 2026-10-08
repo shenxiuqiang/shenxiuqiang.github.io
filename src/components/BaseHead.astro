@@ -11,11 +11,13 @@ interface Props {
 	description?: string;
 	/** 另一种语言下这个页面的地址，用于输出 hreflang */
 	altUrl: string;
-	/** 社交分享图，传 public/ 下的绝对路径 */
+	/** 社交分享图，传 public/ 下的绝对路径；不传则用默认封面 */
 	image?: string;
+	/** og:type，文章页传 article */
+	type?: 'website' | 'article';
 }
 
-const { lang, title, description, altUrl, image } = Astro.props;
+const { lang, title, description, altUrl, image, type = 'website' } = Astro.props;
 const t = useTranslations(lang);
 
 // 规范链接（canonical）：这个页面的唯一地址
@@ -66,15 +68,20 @@ const urlByLang = {
 <title>{pageTitle}</title>
 <meta name="description" content={desc} />
 
-<meta property="og:type" content="website" />
+<meta property="og:type" content={type} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={desc} />
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:locale" content={HTML_LANG[lang].replace('-', '_')} />
-{image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+{/* 分享图：文章封面优先，没有封面时用默认封面，保证 X/微信等总能出卡片 */}
+<meta property="og:image" content={new URL(image ?? '/images/og-default.png', Astro.site)} />
 
+{/* X (Twitter) 卡片：大图样式；标题/描述/图显式声明，不依赖 og: 回退 */}
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={desc} />
+<meta name="twitter:image" content={new URL(image ?? '/images/og-default.png', Astro.site)} />
 
 {/* Google Analytics 4（仅在 consts.ts 填了 GA_MEASUREMENT_ID 时加载） */}
 {

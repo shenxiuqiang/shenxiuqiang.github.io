@@ -55,7 +55,7 @@ const wordCount = lang === 'zh' ? cjkCount : (body.match(/[a-zA-Z0-9]+/g) ?? [])
 const initial = AUTHOR.slice(0, 2).toUpperCase();
 ---
 
-<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={cover} wide>
+<BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={cover} type="article" wide>
 	<!-- 阅读进度条 -->
 	<div class="read-progress" aria-hidden="true"><i id="read-progress-bar"></i></div>
 
@@ -95,9 +95,18 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 				</div>
 			</div>
 			<div class="actions">
-				<button class="ghost-btn" id="share-btn" type="button">
-					<span class="share-label">{t.post.share}</span>
-				</button>
+				<div class="share">
+					<button class="ghost-btn" id="share-btn" type="button" aria-haspopup="true" aria-expanded="false">
+						<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/></svg>
+						<span class="share-label">{t.post.share}</span>
+					</button>
+					<div class="share-menu" id="share-menu" hidden>
+						<a data-share="x" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+						<a data-share="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+						<button data-share="copy" type="button">{t.post.copyLink}</button>
+						<button data-share="native" type="button" hidden>{t.post.shareNative}</button>
+					</div>
+				</div>
 				<a class="ghost-btn icon" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" title="GitHub">
 					<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
 				</a>
@@ -158,17 +167,57 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	});
 
-	// 分享（复制链接）
+	// 分享菜单：X / LinkedIn / 复制链接 / 系统分享（支持 Web Share API 的设备）
 	const shareBtn = document.getElementById('share-btn');
-	shareBtn?.addEventListener('click', async () => {
-		const label = shareBtn.querySelector('.share-label');
-		const orig = label?.textContent;
-		try {
-			await navigator.clipboard.writeText(window.location.href);
-			if (label) label.textContent = '✓';
-			setTimeout(() => { if (label && orig) label.textContent = orig; }, 1600);
-		} catch {}
-	});
+	const shareMenu = document.getElementById('share-menu');
+	if (shareBtn && shareMenu) {
+		const pageUrl = window.location.href;
+		const pageTitle = document.title;
+		const xLink = shareMenu.querySelector('[data-share="x"]');
+		const liLink = shareMenu.querySelector('[data-share="linkedin"]');
+		const copyBtn = shareMenu.querySelector('[data-share="copy"]');
+		const nativeBtn = shareMenu.querySelector('[data-share="native"]');
+
+		// X/Twitter：带标题和链接，卡片封面由 og:/twitter: 元数据提供
+		xLink?.setAttribute('href',
+			`https://twitter.com/intent/tweet?text=${encodeURIComponent(pageTitle)}&url=${encodeURIComponent(pageUrl)}`);
+		liLink?.setAttribute('href',
+			`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`);
+
+		// 支持 Web Share API 的设备（多为移动端）显示「系统分享」
+		if (navigator.share && nativeBtn) nativeBtn.hidden = false;
+
+		const closeMenu = () => {
+			shareMenu.hidden = true;
+			shareBtn.setAttribute('aria-expanded', 'false');
+		};
+		shareBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			const opening = shareMenu.hidden;
+			shareMenu.hidden = !opening;
+			shareBtn.setAttribute('aria-expanded', String(opening));
+		});
+		document.addEventListener('click', (e) => {
+			if (!shareMenu.hidden && !shareMenu.contains(e.target)) closeMenu();
+		});
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') closeMenu();
+		});
+		shareMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+
+		copyBtn?.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(pageUrl);
+				const orig = copyBtn.textContent;
+				copyBtn.textContent = '✓';
+				setTimeout(() => { copyBtn.textContent = orig; closeMenu(); }, 1200);
+			} catch {}
+		});
+		nativeBtn?.addEventListener('click', async () => {
+			closeMenu();
+			try { await navigator.share({ title: pageTitle, url: pageUrl }); } catch {}
+		});
+	}
 
 	// 返回列表：优先回到进入文章前所在的列表页（含页码 / 标签过滤），
 	// 由列表页的 SaveListUrl 组件写入 sessionStorage；没有记录时回退到列表首页。
@@ -377,6 +426,51 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 
 	.ghost-btn.icon {
 		padding: 0.4rem 0.55rem;
+	}
+
+	/* 分享菜单：跟随 ghost-btn 风格的下拉 */
+	.share {
+		position: relative;
+	}
+
+	.share-menu {
+		position: absolute;
+		top: calc(100% + 6px);
+		right: 0;
+		z-index: 40;
+		min-width: 150px;
+		display: flex;
+		flex-direction: column;
+		padding: 0.3rem;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	}
+
+	.share-menu a,
+	.share-menu button {
+		display: block;
+		width: 100%;
+		padding: 0.45rem 0.7rem;
+		border: none;
+		border-radius: var(--radius-sm);
+		background: none;
+		color: var(--text-body);
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		text-align: left;
+		cursor: pointer;
+		transition:
+			color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.share-menu a:hover,
+	.share-menu button:hover {
+		color: var(--accent);
+		background: var(--accent-soft);
+		text-decoration: none;
 	}
 
 	.cover {
