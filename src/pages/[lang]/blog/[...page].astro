@@ -6,14 +6,14 @@ import TagFilter from '../../../components/TagFilter.astro';
 import { LOCALES, type Lang } from '../../../i18n/ui';
 import { localizePath, useTranslations } from '../../../i18n/utils';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getAllTags, getPosts, warnMissingTranslations, type BlogPost } from '../../../utils/posts';
+import { getAllTags, getPosts, PAGE_SIZE, warnMissingTranslations, type BlogPost } from '../../../utils/posts';
 
 // 用 paginate() 做静态分页：每种语言生成 /blog/、/blog/2/、/blog/3/ …
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 	const paths = [];
 	for (const lang of LOCALES) {
 		const posts = await getPosts(lang);
-		paths.push(...paginate(posts, { pageSize: 20, params: { lang } }));
+		paths.push(...paginate(posts, { pageSize: PAGE_SIZE, params: { lang } }));
 	}
 	return paths;
 }

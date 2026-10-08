@@ -7,6 +7,9 @@ export type BlogPost = CollectionEntry<'blogZh'> | CollectionEntry<'blogEn'>;
 /** 开发时能看见草稿，构建上线时自动过滤掉 draft: true 的文章 */
 const includeDrafts = !import.meta.env.PROD;
 
+/** 列表每页文章数（文章列表 / 标签页 / 首页共用） */
+export const PAGE_SIZE = 10;
+
 /**
  * 取某个语言的已发布文章，按发布日期倒序排列。
  */

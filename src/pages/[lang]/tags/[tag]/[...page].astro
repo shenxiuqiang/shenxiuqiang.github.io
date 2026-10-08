@@ -6,7 +6,7 @@ import TagFilter from '../../../../components/TagFilter.astro';
 import { LOCALES, type Lang } from '../../../../i18n/ui';
 import { localizePath, useTranslations } from '../../../../i18n/utils';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import { getAllTags, getPostsByTag, tagSlug, type BlogPost } from '../../../../utils/posts';
+import { getAllTags, getPostsByTag, PAGE_SIZE, tagSlug, type BlogPost } from '../../../../utils/posts';
 
 // 每个标签生成自己的分页列表：/tags/<tag>/、/tags/<tag>/2/ …
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
@@ -17,7 +17,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 			const posts = await getPostsByTag(lang, tag);
 			paths.push(
 				...paginate(posts, {
-					pageSize: 20,
+					pageSize: PAGE_SIZE,
 					params: { lang, tag: tagSlug(tag) }, // URL 用安全 slug
 					props: { tag, tags: tagInfos }, // 页面用原始标签显示/过滤
 				}),
