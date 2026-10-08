@@ -1,6 +1,6 @@
 ---
 title: '去中心化电商（Decentralized Commerce）产品需求文档（PRD）'
-description: '日期： 2025-11-16'
+description: '去中心化电商的产品需求文档：基于 DID 身份与链上结算的开放电商协议，覆盖商品、订单、支付与分账。'
 pubDate: '2025-11-16'
 tags: ['Blocklet', 'Web3']
 cover: '/images/covers/decentralized-commerce-prd.jpg'

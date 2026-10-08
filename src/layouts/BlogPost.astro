@@ -26,6 +26,8 @@ const t = useTranslations(lang);
 
 <BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={cover}>
 	<article>
+		<a class="back-top" href={localizePath(lang, '/blog')}>{t.blog.backToList}</a>
+
 		<header class="post-header">
 			<h1>{title}</h1>
 			<p class="meta">
@@ -74,6 +76,26 @@ const t = useTranslations(lang);
 <style>
 	.post-header {
 		margin-bottom: 2rem;
+	}
+
+	.back-top {
+		display: inline-flex;
+		align-items: center;
+		margin-bottom: 1.5rem;
+		padding: 0.35rem 0.85rem;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		font-size: 0.85rem;
+		color: var(--text-soft);
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+
+	.back-top:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+		text-decoration: none;
 	}
 
 	.post-header h1 {

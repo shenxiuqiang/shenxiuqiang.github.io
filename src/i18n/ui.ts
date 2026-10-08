@@ -65,6 +65,12 @@ const zh = {
 		updatedOn: '更新于',
 	},
 
+	pagination: {
+		prev: '← 上一页',
+		next: '下一页 →',
+		page: (cur: number, total: number) => `第 ${cur} / ${total} 页`,
+	},
+
 	footer: {
 		builtWith: () =>
 			`由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> 构建，托管于 <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a>`,
@@ -106,6 +112,12 @@ const en: typeof zh = {
 		backToList: '← Back to all posts',
 		minutes: (n: number) => `${n} min read`,
 		updatedOn: 'Updated',
+	},
+
+	pagination: {
+		prev: '← Previous',
+		next: 'Next →',
+		page: (cur: number, total: number) => `Page ${cur} of ${total}`,
 	},
 
 	footer: {

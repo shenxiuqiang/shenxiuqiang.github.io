@@ -1,6 +1,6 @@
 ---
 title: 'Node ↔ Hub Sync Protocol (NHSP) 去中心化 Node 网络 + 聚合型 Hub 的标准数据同步协议'
-description: 'Version: 1.0'
+description: 'Node ↔ Hub Sync Protocol（NHSP）：去中心化 Node 网络与聚合型 Hub 之间的标准数据同步协议设计。'
 pubDate: '2026-01-15'
 tags: ['GLOFTER', 'Web3']
 cover: '/images/covers/nhsp-node-hub-sync.jpg'

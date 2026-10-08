@@ -1,6 +1,6 @@
 ---
 title: '去中心化相册（Decentralized Album）产品需求文档（PRD）'
-description: '日期：2025-11-16'
+description: '去中心化相册的产品需求文档：让用户真正拥有自己的照片，基于去中心化存储、DID 身份与 P2P 分享的完整设计。'
 pubDate: '2025-11-15'
 tags: ['Blocklet', '去中心化相册']
 cover: '/images/covers/decentralized-album-prd.jpg'

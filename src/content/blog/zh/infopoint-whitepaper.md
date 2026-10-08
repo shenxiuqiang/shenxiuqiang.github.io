@@ -1,6 +1,6 @@
 ---
 title: 'InfoPoint 白皮书 - 面向 AI 原生时代的空间感知与语义检索基础设施'
-description: '版本：0.9 Draft'
+description: 'InfoPoint 是一套面向 AI 原生互联网的空间发现与语义检索基础设施。'
 pubDate: '2026-05-22'
 tags: ['Blocklet', 'InfoPoint', 'DID', 'AI']
 cover: '/images/covers/infopoint-whitepaper.jpg'

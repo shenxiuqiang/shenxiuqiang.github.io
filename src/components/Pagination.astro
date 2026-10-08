@@ -1,0 +1,79 @@
+---
+import { type Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+// paginate() 传入的 page 对象的最小结构
+interface PageLike {
+	currentPage: number;
+	lastPage: number;
+	url: { prev?: string; next?: string };
+}
+
+interface Props {
+	page: PageLike;
+	lang: Lang;
+}
+
+const { page, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{
+	page.lastPage > 1 && (
+		<nav class="pagination" aria-label="分页">
+			{page.url.prev ? (
+				<a class="page-btn" href={page.url.prev}>{t.pagination.prev}</a>
+			) : (
+				<span class="page-btn disabled" aria-disabled="true">{t.pagination.prev}</span>
+			)}
+
+			<span class="page-info">{t.pagination.page(page.currentPage, page.lastPage)}</span>
+
+			{page.url.next ? (
+				<a class="page-btn" href={page.url.next}>{t.pagination.next}</a>
+			) : (
+				<span class="page-btn disabled" aria-disabled="true">{t.pagination.next}</span>
+			)}
+		</nav>
+	)
+}
+
+<style>
+	.pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 2.5rem;
+	}
+
+	.page-btn {
+		padding: 0.45rem 1rem;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		font-size: 0.9rem;
+		color: var(--text-soft);
+		background: var(--bg);
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	a.page-btn:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+		text-decoration: none;
+	}
+
+	.page-btn.disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
+
+	.page-info {
+		font-size: 0.85rem;
+		color: var(--text-soft);
+		white-space: nowrap;
+	}
+</style>
