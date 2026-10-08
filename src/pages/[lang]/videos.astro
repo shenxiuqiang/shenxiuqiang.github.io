@@ -1,0 +1,245 @@
+---
+// 视频频道页：展示 YouTube 频道的最近视频。
+// 数据在构建时从 YouTube RSS feed 拉取（见 src/utils/videos.ts），
+// 页面是纯静态的，前端零请求；重新部署即可刷新列表。
+import FormattedDate from '../../components/FormattedDate.astro';
+import { LOCALES, type Lang } from '../../i18n/ui';
+import { localizePath, useTranslations } from '../../i18n/utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getChannelVideos, YOUTUBE_CHANNEL_URL } from '../../utils/videos';
+
+export function getStaticPaths() {
+	return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+const videos = await getChannelVideos();
+
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const altUrl = localizePath(other, '/videos');
+---
+
+<BaseLayout lang={lang} title={t.videos.title} description={t.videos.description} altUrl={altUrl} wide>
+	<div class="page-head">
+		<div class="head-text">
+			<h1>{t.videos.title}</h1>
+			<p class="desc">{t.videos.description}</p>
+			{videos.length > 0 && <p class="count">{t.videos.count(videos.length)}</p>}
+		</div>
+		<a class="subscribe" href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer">
+			<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+				<path
+					fill="currentColor"
+					d="M15.8 4.8a2 2 0 0 0-1.4-1.4C13.2 3 8 3 8 3s-5.2 0-6.4.4A2 2 0 0 0 .2 4.8 20.8 20.8 0 0 0 0 8a20.8 20.8 0 0 0 .2 3.2 2 2 0 0 0 1.4 1.4C2.8 13 8 13 8 13s5.2 0 6.4-.4a2 2 0 0 0 1.4-1.4A20.8 20.8 0 0 0 16 8a20.8 20.8 0 0 0-.2-3.2zM6.4 10.4V5.6L10.6 8l-4.2 2.4z"
+				></path>
+			</svg>
+			{t.videos.subscribe}
+		</a>
+	</div>
+
+	{
+		videos.length > 0 ? (
+			<ul class="video-grid">
+				{videos.map((v) => (
+					<li>
+						<a class="card" href={v.url} target="_blank" rel="noopener noreferrer">
+							<div class="thumb-wrap">
+								<img src={v.thumbnail} alt={v.title} loading="lazy" />
+								<span class="play" aria-hidden="true">▶</span>
+							</div>
+							<div class="card-body">
+								<h2>{v.title}</h2>
+								<p class="meta">
+									<FormattedDate date={v.published} lang={lang} />
+									{v.views !== undefined && (
+										<>
+											<span class="sep">·</span>
+											<span>{t.videos.views(v.views)}</span>
+										</>
+									)}
+								</p>
+							</div>
+						</a>
+					</li>
+				))}
+			</ul>
+		) : (
+			<p class="empty">
+				{t.videos.empty}{' '}
+				<a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer">
+					{YOUTUBE_CHANNEL_URL}
+				</a>
+			</p>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.page-head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.page-head h1 {
+		margin: 0 0 0.5rem;
+	}
+
+	.desc {
+		margin: 0 0 0.4rem;
+		color: var(--text-soft);
+		font-size: 0.95rem;
+	}
+
+	.count {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		color: var(--text-soft);
+	}
+
+	.subscribe {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.5rem 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		background: var(--surface);
+		color: var(--text-soft);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		flex-shrink: 0;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+
+	.subscribe:hover {
+		color: #ff4e45;
+		border-color: #ff4e45;
+		text-decoration: none;
+	}
+
+	/* 视频卡片网格：宽屏 3 列，平板 2 列，手机 1 列 */
+	.video-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.video-grid li {
+		margin: 0;
+	}
+
+	.card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		overflow: hidden;
+		color: inherit;
+		transition:
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.card:hover {
+		text-decoration: none;
+		background: var(--surface-hover);
+		border-color: var(--border-strong);
+	}
+
+	.thumb-wrap {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		background: var(--bg-soft);
+		border-bottom: 1px solid var(--border);
+		overflow: hidden;
+	}
+
+	.thumb-wrap img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* hqdefault 是 4:3，裁掉上下黑边填满 16:9 */
+		border-radius: 0;
+		display: block;
+	}
+
+	.play {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.4rem;
+		color: #fff;
+		background: rgba(0, 0, 0, 0.28);
+		opacity: 0;
+		transition: opacity 0.15s ease;
+	}
+
+	.card:hover .play {
+		opacity: 1;
+	}
+
+	.card-body {
+		padding: 0.85rem 1rem 1rem;
+	}
+
+	.card-body h2 {
+		margin: 0 0 0.5rem;
+		font-size: 0.95rem;
+		font-weight: 600;
+		line-height: 1.45;
+		color: var(--text);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color 0.15s ease;
+	}
+
+	.card:hover h2 {
+		color: var(--accent);
+	}
+
+	.meta {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--text-soft);
+	}
+
+	.meta .sep {
+		color: var(--border-strong);
+	}
+
+	.empty {
+		color: var(--text-soft);
+	}
+
+	@media (max-width: 1024px) {
+		.video-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 620px) {
+		.video-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

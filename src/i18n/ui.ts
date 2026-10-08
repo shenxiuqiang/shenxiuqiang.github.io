@@ -40,6 +40,7 @@ const zh = {
 	nav: {
 		home: '首页',
 		blog: '文章',
+		videos: '视频',
 		about: '关于',
 	},
 
@@ -55,6 +56,15 @@ const zh = {
 		all: '全部',
 		taggedWith: (tag: string) => `#${tag}`,
 		taggedCount: (tag: string, n: number) => `标签 #${tag} · 共 ${n} 篇`,
+	},
+
+	videos: {
+		title: '视频',
+		description: '我在 YouTube 频道发布的视频，点击跳转到 YouTube 观看。',
+		subscribe: '在 YouTube 订阅',
+		count: (n: number) => `最近 ${n} 个视频`,
+		views: (n: number) => `${n} 次观看`,
+		empty: '暂时拉取不到视频列表，请直接访问 YouTube 频道。',
 	},
 
 	home: {
@@ -119,6 +129,7 @@ const en: typeof zh = {
 	nav: {
 		home: 'Home',
 		blog: 'Writing',
+		videos: 'Videos',
 		about: 'About',
 	},
 
@@ -133,6 +144,15 @@ const en: typeof zh = {
 		all: 'All',
 		taggedWith: (tag: string) => `#${tag}`,
 		taggedCount: (tag: string, n: number) => `#${tag} · ${n} ${n === 1 ? 'post' : 'posts'}`,
+	},
+
+	videos: {
+		title: 'Videos',
+		description: 'Videos from my YouTube channel. Click to watch on YouTube.',
+		subscribe: 'Subscribe on YouTube',
+		count: (n: number) => `Latest ${n} ${n === 1 ? 'video' : 'videos'}`,
+		views: (n: number) => `${n} views`,
+		empty: 'Could not load the video list. Please visit the YouTube channel directly.',
 	},
 
 	home: {
