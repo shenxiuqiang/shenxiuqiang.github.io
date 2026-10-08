@@ -1,7 +1,7 @@
 ---
 // <head> 里的所有元信息。global.css 在这里引入，所以全站只加载一次。
 import '../styles/global.css';
-import { SITE_TITLE } from '../consts';
+import { ADSENSE_CLIENT_ID, GA_MEASUREMENT_ID, SITE_TITLE } from '../consts';
 import { HTML_LANG, LOCALES, type Lang } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
 
@@ -75,3 +75,31 @@ const urlByLang = {
 {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
 
 <meta name="twitter:card" content="summary_large_image" />
+
+{/* Google Analytics 4（仅在 consts.ts 填了 GA_MEASUREMENT_ID 时加载） */}
+{
+	GA_MEASUREMENT_ID && (
+		<>
+			<script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
+			<script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+				window.dataLayer = window.dataLayer || [];
+				function gtag() {
+					dataLayer.push(arguments);
+				}
+				gtag('js', new Date());
+				gtag('config', GA_MEASUREMENT_ID);
+			</script>
+		</>
+	)
+}
+
+{/* Google AdSense Auto Ads（仅在 consts.ts 填了 ADSENSE_CLIENT_ID 时加载） */}
+{
+	ADSENSE_CLIENT_ID && (
+		<script
+			async
+			src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+			crossorigin="anonymous"
+		/>
+	)
+}
