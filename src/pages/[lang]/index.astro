@@ -24,7 +24,7 @@ const other: Lang = lang === 'zh' ? 'en' : 'zh';
 const altUrl = localizePath(other, '/');
 ---
 
-<BaseLayout lang={lang} title={SITE_TITLE} description={t.siteDescription} altUrl={altUrl}>
+<BaseLayout lang={lang} title={SITE_TITLE} description={t.siteDescription} altUrl={altUrl} wide>
 	<section class="intro">
 		<h1>{t.home.greeting} {SITE_TITLE} 👋</h1>
 		<p set:html={t.home.intro('https://astro.build')} />
@@ -45,6 +45,7 @@ const altUrl = localizePath(other, '/');
 <style>
 	.intro {
 		margin-bottom: 3rem;
+		max-width: 680px; /* 宽布局下限制导语行长，保持可读性 */
 	}
 
 	.intro h1 {

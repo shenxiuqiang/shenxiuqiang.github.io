@@ -346,9 +346,21 @@ li > ol {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: 1fr;
 	gap: 1rem;
+}
+
+/* 宽版页面（首页 / 文章列表）排成两列，充分利用宽度 */
+@media (min-width: 1024px) {
+	main.wide .post-list {
+		grid-template-columns: 1fr 1fr;
+		align-items: stretch;
+	}
+}
+
+main.wide .post-list a {
+	height: 100%;
 }
 
 .post-list li {
