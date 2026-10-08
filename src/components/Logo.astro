@@ -21,11 +21,17 @@ const { lang } = Astro.props;
 
 <style>
 	.logo {
-		display: inline-flex;
+		/* 正方形（紧凑精细版） */
+		width: 46px;
+		height: 46px;
+		aspect-ratio: 1 / 1;
+		box-sizing: border-box;
+
+		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		gap: 3px;
-		padding: 8px 10px;
+		gap: 2px;
+		padding: 6px 8px;
 
 		/* 直角 + 真 1px 边框 */
 		border: 1px solid var(--border-strong);
@@ -46,7 +52,7 @@ const { lang } = Astro.props;
 		text-align: left;
 		font-family: var(--font-mono);
 		font-weight: 500;
-		font-size: 13.5px;
+		font-size: 10.5px;
 		letter-spacing: 0.05em;
 		color: var(--text);
 		white-space: nowrap;
