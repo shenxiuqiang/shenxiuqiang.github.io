@@ -53,6 +53,11 @@ const minutes = getReadingTime(body, lang);
 const cjkCount = (body.match(/[\u4e00-\u9fa5]/g) ?? []).length;
 const wordCount = lang === 'zh' ? cjkCount : (body.match(/[a-zA-Z0-9]+/g) ?? []).length;
 const initial = AUTHOR.slice(0, 2).toUpperCase();
+
+// 分享链接在构建时直接生成（渐进增强：不依赖 JS，脚本加载前点击也有效）
+const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
+const xShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
+const linkedinShareHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 ---
 
 <BaseLayout lang={lang} title={title} description={description} altUrl={altUrl} image={cover} type="article" wide>
@@ -101,8 +106,8 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 						<span class="share-label">{t.post.share}</span>
 					</button>
 					<div class="share-menu" id="share-menu" hidden>
-						<a data-share="x" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
-						<a data-share="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+						<a data-share="x" href={xShareHref} target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+						<a data-share="linkedin" href={linkedinShareHref} target="_blank" rel="noopener noreferrer">LinkedIn</a>
 						<button data-share="copy" type="button">{t.post.copyLink}</button>
 						<button data-share="native" type="button" hidden>{t.post.shareNative}</button>
 					</div>
@@ -167,22 +172,15 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	});
 
-	// 分享菜单：X / LinkedIn / 复制链接 / 系统分享（支持 Web Share API 的设备）
+	// 分享菜单：X / LinkedIn 链接已在构建时写入 href，
+	// 这里只处理菜单开合、复制链接、系统分享（支持 Web Share API 的设备）
 	const shareBtn = document.getElementById('share-btn');
 	const shareMenu = document.getElementById('share-menu');
 	if (shareBtn && shareMenu) {
 		const pageUrl = window.location.href;
 		const pageTitle = document.title;
-		const xLink = shareMenu.querySelector('[data-share="x"]');
-		const liLink = shareMenu.querySelector('[data-share="linkedin"]');
 		const copyBtn = shareMenu.querySelector('[data-share="copy"]');
 		const nativeBtn = shareMenu.querySelector('[data-share="native"]');
-
-		// X/Twitter：带标题和链接，卡片封面由 og:/twitter: 元数据提供
-		xLink?.setAttribute('href',
-			`https://twitter.com/intent/tweet?text=${encodeURIComponent(pageTitle)}&url=${encodeURIComponent(pageUrl)}`);
-		liLink?.setAttribute('href',
-			`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`);
 
 		// 支持 Web Share API 的设备（多为移动端）显示「系统分享」
 		if (navigator.share && nativeBtn) nativeBtn.hidden = false;
@@ -446,6 +444,12 @@ const initial = AUTHOR.slice(0, 2).toUpperCase();
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	}
+
+	/* 上面的 display:flex 会压过 UA 的 [hidden] 规则，必须显式补回，
+	   否则菜单会一直处于展开状态 */
+	.share-menu[hidden] {
+		display: none;
 	}
 
 	.share-menu a,
