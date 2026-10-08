@@ -34,6 +34,20 @@ const urlByLang = {
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- 主题：在首帧渲染前设置 data-theme，避免明暗闪烁（FOUC）。
+     读 localStorage 的手动选择；没有则跟随系统。 -->
+<script is:inline>
+	(function () {
+		try {
+			var stored = localStorage.getItem('theme');
+			var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			var theme = stored === 'dark' || stored === 'light' ? stored : sysDark ? 'dark' : 'light';
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) {}
+	})();
+</script>
+
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 <link

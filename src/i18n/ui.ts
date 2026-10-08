@@ -46,6 +46,10 @@ const zh = {
 	/** 语言切换器上指向另一种语言的名字 */
 	langSwitch: 'English',
 
+	theme: {
+		toggle: '切换明暗主题',
+	},
+
 	home: {
 		greeting: '你好，我是',
 		intro: (astroUrl: string) =>
@@ -111,6 +115,10 @@ const en: typeof zh = {
 	},
 
 	langSwitch: '中文',
+
+	theme: {
+		toggle: 'Toggle dark mode',
+	},
 
 	home: {
 		greeting: "Hi, I'm",

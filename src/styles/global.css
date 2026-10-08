@@ -45,28 +45,28 @@
 	--font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-/* 深色（设计稿主色：GitHub-dark 编辑风） */
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bg: #0d1117;
-		--surface: #161b22;
-		--surface-raised: #161b22;
-		--surface-overlay: #21262d;
-		--bg-soft: #161b22;
+/* 深色（设计稿主色：GitHub-dark 编辑风）。
+   用 data-theme 属性驱动（支持手动切换 + localStorage 记忆），
+   属性由 BaseHead 里的内联脚本在首帧前设置（默认跟随系统）。 */
+:root[data-theme='dark'] {
+	--bg: #0d1117;
+	--surface: #161b22;
+	--surface-raised: #161b22;
+	--surface-overlay: #21262d;
+	--bg-soft: #161b22;
 
-		--text: #f0f6fc;
-		--text-body: #c9d1d9;
-		--text-soft: #8b949e;
+	--text: #f0f6fc;
+	--text-body: #c9d1d9;
+	--text-soft: #8b949e;
 
-		--accent: #58a6ff;
-		--accent2: #38bdf8;
-		--accent-soft: rgba(88, 166, 255, 0.12);
-		--accent2-soft: rgba(56, 189, 248, 0.12);
+	--accent: #58a6ff;
+	--accent2: #38bdf8;
+	--accent-soft: rgba(88, 166, 255, 0.12);
+	--accent2-soft: rgba(56, 189, 248, 0.12);
 
-		--border: #30363d;
-		--border-strong: #444c56;
-		--on-accent: #0d1117;
-	}
+	--border: #30363d;
+	--border-strong: #444c56;
+	--on-accent: #0d1117;
 }
 
 *,
