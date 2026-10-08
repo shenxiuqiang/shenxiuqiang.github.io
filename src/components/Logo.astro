@@ -1,7 +1,7 @@
 ---
-// 字符 Logo：SHENXIU / QIANG 组成直角正方形徽章，S/X/Q 加粗高亮。
-// 1px 直角边框；hover 只变色不变粗。两行 space-between 左右两端对齐；
-// QIANG 字母少，加大字号 + 拉宽间距与第一行对齐。
+// 字符 Logo：SHEN / XIU / QIANG 三行左对齐，S/X/Q 加粗高亮。
+// 三个关键字母正好都落在最左列，形成一条竖向强调。
+// 1px 直角边框；hover 只变色不变粗。
 import { SITE_TITLE } from '../consts';
 import { type Lang } from '../i18n/ui';
 import { localizePath } from '../i18n/utils';
@@ -14,32 +14,25 @@ const { lang } = Astro.props;
 ---
 
 <a class="logo" href={localizePath(lang, '/')} aria-label={SITE_TITLE} title={SITE_TITLE}>
-	<span class="row row1"
-		><span class="k">S</span><span>H</span><span>E</span><span>N</span><span class="k">X</span><span>I</span
-		><span>U</span></span
-	>
-	<span class="row row2"><span class="k">Q</span><span>I</span><span>A</span><span>N</span><span>G</span></span>
+	<span class="row"><span class="k">S</span>HEN</span>
+	<span class="row"><span class="k">X</span>IU</span>
+	<span class="row"><span class="k">Q</span>IANG</span>
 </a>
 
 <style>
 	.logo {
-		/* 正方形 */
-		width: 58px;
-		height: 58px;
-		aspect-ratio: 1 / 1;
-		box-sizing: border-box;
-
-		display: flex;
+		display: inline-flex;
 		flex-direction: column;
-		justify-content: space-between; /* 两行贴顶/贴底 */
-		padding: 8px 9px;
+		justify-content: center;
+		gap: 3px;
+		padding: 8px 10px;
 
 		/* 直角 + 真 1px 边框 */
 		border: 1px solid var(--border-strong);
 		border-radius: 0;
 
 		text-decoration: none;
-		line-height: 1;
+		line-height: 1.15;
 		transition: border-color 0.15s ease;
 	}
 
@@ -49,24 +42,14 @@ const { lang } = Astro.props;
 	}
 
 	.row {
-		display: flex;
-		justify-content: space-between; /* 左右两端对齐 */
-		width: 100%;
+		display: block; /* 左对齐，不再 space-between */
+		text-align: left;
 		font-family: var(--font-mono);
 		font-weight: 500;
+		font-size: 13.5px;
+		letter-spacing: 0.05em;
 		color: var(--text);
-		line-height: 1;
-	}
-
-	/* 第一行 SHENXIU：7 个字母，字号保证全部收进框内 */
-	.row1 {
-		font-size: 10.5px;
-	}
-
-	/* 第二行 QIANG：字母少，字号略大 + 加间距，与第一行同宽对齐 */
-	.row2 {
-		font-size: 12px;
-		letter-spacing: 0.06em;
+		white-space: nowrap;
 	}
 
 	.row .k {
