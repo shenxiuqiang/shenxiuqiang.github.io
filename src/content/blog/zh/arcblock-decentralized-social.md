@@ -3,6 +3,7 @@ title: '构建去中心化社交网络：基于ArcBlock的聚合页面与P2P实�
 description: '传统社交网络依赖中心化服务器，用户数据被平台掌控，导致隐私泄露和不透明审查问题频发。去中心化社交网络则通过区块链和去中心化身份（DID）技术，让用户完全控制自己的数据和内容，摆脱中间商的束缚，同时提供抗审查和高安全性的体验。基于ArcBlock平台的解决方案可以解决以下核心需求：'
 pubDate: '2025-07-08'
 tags: ['Blocklet', 'NFT', 'DID', 'Web3']
+cover: '/images/covers/arcblock-decentralized-social.jpg'
 ---
 
 > 本文基于个人想法，由 AI 生成，仅作讨论参考

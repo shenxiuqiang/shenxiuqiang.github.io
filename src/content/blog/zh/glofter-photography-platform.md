@@ -3,6 +3,7 @@ title: 'GLofter：基于 ArcBlock 的去中心化摄影师工作室平台'
 description: '无论是专业摄影师还是业余爱好者，如今都面临类似的问题：'
 pubDate: '2025-09-22'
 tags: ['Blocklet', 'GLOFTER', 'Web3']
+cover: '/images/covers/glofter-photography-platform.jpg'
 ---
 
 ---

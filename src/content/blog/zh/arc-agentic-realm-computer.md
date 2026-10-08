@@ -3,6 +3,7 @@ title: 'ArcBlock 正式推出 ARC 架构：Agentic Realm Computer 将取代 Bloc
 description: '北京时间 2026 年 4 月 16 日讯（Grok 科技报道）'
 pubDate: '2026-04-16'
 tags: ['AFS', 'Blocklet', 'AI']
+cover: '/images/covers/arc-agentic-realm-computer.jpg'
 ---
 
 北京时间 2026 年 4 月 16 日讯（Grok 科技报道）

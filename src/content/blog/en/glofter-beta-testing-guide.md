@@ -3,6 +3,7 @@ title: 'GLofter Beta Testing Guide'
 description: 'GLofter is a decentralized photography studio platform built on ArcBlock Blocklets.'
 pubDate: '2026-03-25'
 tags: ['Blocklet', 'GLOFTER', 'DID', 'DID Wallet']
+cover: '/images/covers/glofter-beta-testing-guide.jpg'
 ---
 
 ## 1. Product overview

@@ -3,6 +3,7 @@ title: 'InfoPoint Whitepaper - A DID-Native Spatial Discovery and AI Retrieval I
 description: 'Version 0.9 Draft'
 pubDate: '2026-05-22'
 tags: ['Blocklet', 'InfoPoint', 'DID', 'AI']
+cover: '/images/covers/infopoint-whitepaper-en.jpg'
 ---
 
 Version 0.9 Draft

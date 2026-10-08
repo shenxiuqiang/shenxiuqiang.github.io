@@ -3,6 +3,7 @@ title: '从零到一：OCAP Playground 完全指南 - 掌握 DID Wallet 开发�
 description: 'OCAP Playground 是一个功能丰富的演示项目，展示了如何使用 ArcBlock 的 OCAP（Open Chain Access Protocol）和 DID Wallet V2 构建去中心化应用。它包含了 60+ 个实际场景示例，涵盖了：'
 pubDate: '2025-12-31'
 tags: ['Blocklet', 'NFT', 'DID', 'OCAP']
+cover: '/images/covers/ocap-playground-guide.jpg'
 ---
 
 > **OCAP Playground** 是 ArcBlock 官方提供的 DID Wallet 和 OCAP SDK 综合演示项目。通过声明式配置模式，开发者可以快速实现各种认证场景，包括用户信息获取、数字签名、可验证凭证（VC）、NFT 资产等。本教程将带你从零开始，深入理解这个强大的开发模式。

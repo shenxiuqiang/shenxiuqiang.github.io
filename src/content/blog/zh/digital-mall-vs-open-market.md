@@ -3,6 +3,7 @@ title: '数字商城 VS 开放集市 互联网的未来'
 description: '开放集市模式对传统平台垄断格局的潜在冲击，主要体现在降低中介依赖、削弱网络效应锁定、转移数据与交易主权，并加速从“人找货”向“意图即交付”的范式转变。'
 pubDate: '2026-09-03'
 tags: ['Blocklet', 'Web3']
+cover: '/images/covers/digital-mall-vs-open-market.jpg'
 ---
 
 [https://www.youtube.com/watch?v=WUE91lGlZIM](https://www.youtube.com/watch?v=WUE91lGlZIM)

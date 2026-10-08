@@ -3,6 +3,7 @@ title: 'Exploring the Future DApp Ecosystem with ArcBlock Blocklet Technology'
 description: 'This is a long-form opinion and architecture roadmap piece. ArcSphere, NFT Factory, node staking, MCP, UI XML, and economic parameters are n…'
 pubDate: '2026-04-12'
 tags: ['Blocklet', 'NFT', 'Web3', 'ArcSphere']
+cover: '/images/covers/blocklet-dapp-ecosystem.jpg'
 ---
 
 ## Reader Notice

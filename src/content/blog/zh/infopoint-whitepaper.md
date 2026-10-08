@@ -3,6 +3,7 @@ title: 'InfoPoint 白皮书 - 面向 AI 原生时代的空间感知与语义检�
 description: '版本：0.9 Draft'
 pubDate: '2026-05-22'
 tags: ['Blocklet', 'InfoPoint', 'DID', 'AI']
+cover: '/images/covers/infopoint-whitepaper.jpg'
 ---
 
 版本：0.9 Draft

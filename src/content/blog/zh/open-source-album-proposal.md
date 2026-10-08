@@ -3,6 +3,7 @@ title: '建议 ArcBlock 开源一个去中心化相册（Decentralized Album）�
 description: 'ArcBlock 团队投入了大量资源开发 Aistro。我认为 Aistro 是一个不错的 AI 应用，也展示了 ArcBlock 在 AI Agent、AI Workflow 等方向的能力。'
 pubDate: '2026-06-19'
 tags: ['Blocklet', 'GLOFTER', 'DID', 'AI']
+cover: '/images/covers/open-source-album-proposal.jpg'
 ---
 
 ArcBlock 团队投入了大量资源开发 Aistro。我认为 Aistro 是一个不错的 AI 应用，也展示了 ArcBlock 在 AI Agent、AI Workflow 等方向的能力。

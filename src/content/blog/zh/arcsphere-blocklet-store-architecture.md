@@ -3,6 +3,7 @@ title: '优化去中心化应用体验：基于ArcSphere与Blocklet Store的去�
 description: '去中心化应用（DApps）凭借区块链技术赋予用户数据主权和隐私保护，正逐渐成为互联网未来的重要组成部分。然而，去中心化带来的节点分散性却导致了“节点孤岛”问题——用户难以便捷地触达和访问应用的每一个节点。这种现象不仅增加了运营复杂度，也使得DApps的用户体验与传统互联网应用相比…'
 pubDate: '2025-07-03'
 tags: ['Blocklet', 'DID', 'Web3', 'AI']
+cover: '/images/covers/arcsphere-blocklet-store-architecture.jpg'
 ---
 
 ## **引言**

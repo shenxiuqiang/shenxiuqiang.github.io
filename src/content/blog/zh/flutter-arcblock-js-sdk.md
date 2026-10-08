@@ -3,6 +3,7 @@ title: 'Flutter与JS的优雅共舞：在Flutter应用中无缝集成ArcBlock JS
 description: '在移动应用开发的世界里，Flutter 以其卓越的跨平台能力和惊艳的 UI 表现力，赢得了无数开发者的青睐。而 ArcBlock 作为领先的区块链开发平台，其强大的 JS SDK 为开发者构建去中心化应用提供了坚实的基础。当这两种优秀的技术相遇，一个现实的问题摆在了我们面前：如何…'
 pubDate: '2025-06-18'
 tags: ['AI']
+cover: '/images/covers/flutter-arcblock-js-sdk.jpg'
 ---
 
 在移动应用开发的世界里，Flutter 以其卓越的跨平台能力和惊艳的 UI 表现力，赢得了无数开发者的青睐。而 ArcBlock 作为领先的区块链开发平台，其强大的 JS SDK 为开发者构建去中心化应用提供了坚实的基础。当这两种优秀的技术相遇，一个现实的问题摆在了我们面前：如何在 Flutter 项目中，优雅地调用和集成功能丰富的 ArcBlock JS SDK？

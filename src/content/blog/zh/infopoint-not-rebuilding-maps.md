@@ -3,6 +3,7 @@ title: 'InfoPoint 并不是“重构世界地图”：关于空间 Runtime、渐
 description: '最近发布了 InfoPoint 白皮书后，收到不少反馈。'
 pubDate: '2026-05-23'
 tags: ['InfoPoint', 'DID', 'Web3', 'AI']
+cover: '/images/covers/infopoint-not-rebuilding-maps.jpg'
 ---
 
 最近发布了 InfoPoint 白皮书后，收到不少反馈。

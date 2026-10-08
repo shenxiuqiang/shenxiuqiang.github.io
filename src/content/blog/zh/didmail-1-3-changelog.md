@@ -3,6 +3,7 @@ title: 'DIDMail 1.3 即将上线更新日志概览'
 description: '🎯 主要版本：v1.3.0 (2025-10-19)'
 pubDate: '2025-10-19'
 tags: ['Blocklet', 'DIDMail', 'DID']
+cover: '/images/covers/didmail-1-3-changelog.jpg'
 ---
 
 > **DIDMail 1.3 即将上线，预览：https://github.com/shenxiuqiang/didmail-chrome-extension/releases/tag/1.3**

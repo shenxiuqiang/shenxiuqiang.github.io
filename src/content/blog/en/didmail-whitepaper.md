@@ -3,6 +3,7 @@ title: 'DIDMail Technical White Paper: A Decentralized, Secure, and User-Control
 description: 'Traditional email, a relic of a centralized internet, operates on a model of custodial trust that is no longer tenable. Its architecture is…'
 pubDate: '2025-11-12'
 tags: ['DIDMail', 'DID']
+cover: '/images/covers/didmail-whitepaper.jpg'
 ---
 
 [https://www.youtube.com/watch?v=x2If7Ncrrc0](https://www.youtube.com/watch?v=x2If7Ncrrc0)

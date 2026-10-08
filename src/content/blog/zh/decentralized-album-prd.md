@@ -3,6 +3,7 @@ title: '去中心化相册（Decentralized Album）产品需求文档（PRD）'
 description: '日期：2025-11-16'
 pubDate: '2025-11-15'
 tags: ['Blocklet', '去中心化相册']
+cover: '/images/covers/decentralized-album-prd.jpg'
 ---
 
 **版本**：v1.0

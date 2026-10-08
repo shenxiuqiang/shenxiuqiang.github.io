@@ -3,6 +3,7 @@ title: 'Node ↔ Hub Sync Protocol (NHSP) 去中心化 Node 网络 + 聚合型 H
 description: 'Version: 1.0'
 pubDate: '2026-01-15'
 tags: ['GLOFTER', 'Web3']
+cover: '/images/covers/nhsp-node-hub-sync.jpg'
 ---
 
 **Version:** 1.0

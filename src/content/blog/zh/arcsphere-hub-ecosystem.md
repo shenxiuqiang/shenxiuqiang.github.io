@@ -3,6 +3,7 @@ title: 'ArcSphere：从 AI 浏览器到 Dapp 与节点的 Hub——一条可落�
 description: 'ArcSphere 不仅是 AI 浏览器，更可以成为 Dapp 与 Dapp 节点的统一入口，以及 AI 的 Skill 层。一条清晰的链路是：在链上发现 Dapp → 用户通过节点运行 Dapp → ArcSphere 的 AI 通过 MCP 调用 Dapp 能力。下面从四个方…'
 pubDate: '2026-01-31'
 tags: ['Blocklet', 'NFT', 'DID', 'Web3']
+cover: '/images/covers/arcsphere-hub-ecosystem.jpg'
 ---
 
 ArcSphere 不仅是 AI 浏览器，更可以成为 **Dapp 与 Dapp 节点的统一入口**，以及 **AI 的 Skill 层**。一条清晰的链路是：在链上发现 Dapp → 用户通过节点运行 Dapp → ArcSphere 的 AI 通过 MCP 调用 Dapp 能力。下面从四个方向给出可落地的建议。

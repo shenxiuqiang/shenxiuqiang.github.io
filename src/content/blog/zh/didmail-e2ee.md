@@ -3,6 +3,7 @@ title: 'DIDMail 端到端加密（E2EE）原理与安全说明'
 description: '端到端加密（E2EE）是一种通信安全模型：'
 pubDate: '2025-10-19'
 tags: ['DIDMail', 'DID']
+cover: '/images/covers/didmail-e2ee.jpg'
 ---
 
 ## 一、什么是端到端加密（End-to-End Encryption）

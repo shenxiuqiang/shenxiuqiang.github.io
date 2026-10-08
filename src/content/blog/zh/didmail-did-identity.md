@@ -3,6 +3,7 @@ title: 'DIDMail采用去中心化身份（DID）'
 description: 'DID（Decentralized Identifiers）是由 W3C 标准化的去中心化标识符规范，用于在不依赖中心化注册机构的情况下，唯一标识一个实体（个人、组织、设备、应用等）。DID 强调控制权归属实体自身，支持可验证的数字身份。'
 pubDate: '2025-10-20'
 tags: ['DIDMail', 'DID']
+cover: '/images/covers/didmail-did-identity.jpg'
 ---
 
 # 去中心化身份（DID）

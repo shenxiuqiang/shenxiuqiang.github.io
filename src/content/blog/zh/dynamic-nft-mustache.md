@@ -3,6 +3,7 @@ title: '在 ArcBlock 平台上实现动态 NFT 显示的最佳实践：使用 Mu
 description: '在 ArcBlock 平台上开发 NFT 应用时，我们面临一个常见挑战：如何让 NFT 的显示内容随着数据的变化而动态更新？传统方案依赖第三方服务，存在可用性风险。在 GLofter Hub 项目中，我们探索并实现了一种基于 Mustache 模板的解决方案，通过更新 NFT 的…'
 pubDate: '2026-01-08'
 tags: ['Blocklet', 'GLOFTER', 'NFT']
+cover: '/images/covers/dynamic-nft-mustache.jpg'
 ---
 
 ## 前言

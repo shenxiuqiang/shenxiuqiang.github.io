@@ -3,6 +3,7 @@ title: 'InfoPoint 白皮书 V1.0'
 description: '版本：1.0 Draft'
 pubDate: '2026-05-22'
 tags: ['Blocklet', 'InfoPoint', 'DID', 'AI']
+cover: '/images/covers/infopoint-whitepaper-v1.jpg'
 ---
 
 # 面向 AI 原生时代的空间感知与语义检索基础设施

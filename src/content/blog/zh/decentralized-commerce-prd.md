@@ -3,6 +3,7 @@ title: '去中心化电商（Decentralized Commerce）产品需求文档（PRD�
 description: '日期： 2025-11-16'
 pubDate: '2025-11-16'
 tags: ['Blocklet', 'Web3']
+cover: '/images/covers/decentralized-commerce-prd.jpg'
 ---
 
 **版本：** 1.0

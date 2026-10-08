@@ -3,6 +3,7 @@ title: 'DIDMail 技术白皮书：去中心化、安全且用户自控的通信�
 description: '传统电子邮件是集中式互联网的遗留产物，其以“托管信任”为基础的架构已无法满足当代的隐私需求。此类架构不仅与现代的隐私理念背道而驰，更成为系统性安全隐患，用户的数据面临泄露、审查与监控的风险。用户被迫将完整的通信历史托付给服务商，从而失去了对自身数据的掌控权。'
 pubDate: '2025-11-12'
 tags: ['DIDMail', 'DID']
+cover: '/images/covers/didmail-whitepaper.jpg'
 ---
 
 [https://www.youtube.com/watch?v=x2If7Ncrrc0](https://www.youtube.com/watch?v=x2If7Ncrrc0)

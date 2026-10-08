@@ -3,6 +3,7 @@ title: '从个人节点到 Hub：一种更具生命力的 ArcBlock 去中心化�
 description: '在我之前提出的两个项目——「去中心化相册」与「GLofter 摄影师平台」中，我逐渐意识到：'
 pubDate: '2026-01-14'
 tags: ['Blocklet', 'GLOFTER', 'Web3', '去中心化相册']
+cover: '/images/covers/node-to-hub-paradigm.jpg'
 ---
 
 # 

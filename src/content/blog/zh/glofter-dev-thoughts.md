@@ -3,6 +3,7 @@ title: '我在 GLofter 开发中遇到的几个问题，以及一些不成熟的
 description: '如果你还不了解 GLofter 项目，建议先看看这个介绍，这样理解起来会更容易一些。'
 pubDate: '2026-01-05'
 tags: ['Blocklet', 'GLOFTER', 'Web3']
+cover: '/images/covers/glofter-dev-thoughts.jpg'
 ---
 
 > 作者：GLofter 项目开发者（个人开发者）

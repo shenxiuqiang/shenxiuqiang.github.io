@@ -3,6 +3,7 @@ title: '去中心化应用的未来：基于ArcBlock平台聚合页面的实现'
 description: '去中心化应用（DApps）凭借其在隐私保护、数据安全和用户控制权方面的优势，正逐步成为互联网发展的前沿方向。ArcBlock作为一个专注于DApps开发的平台，通过其blocklet组件和ArcSphere浏览器，为开发者与用户提供了一个高效的生态系统。本文聚焦于在ArcBloc…'
 pubDate: '2025-07-07'
 tags: ['Blocklet', 'DID', 'Web3', 'AI']
+cover: '/images/covers/arcblock-aggregated-pages.jpg'
 ---
 
 > **本文章基于个人想法，结合 AI 生成，仅作参考和讨论基础**

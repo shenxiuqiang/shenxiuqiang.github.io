@@ -3,6 +3,7 @@ title: 'Identity & Data Spaces 从入门到实战：理解 ARC 的身份、DID S
 description: '在传统 Web 应用中，用户登录后通常得到一个 userId，应用再根据这个 ID 查询数据库：'
 pubDate: '2026-09-22'
 tags: ['AFS', 'DID']
+cover: '/images/covers/identity-data-spaces-intro.jpg'
 ---
 
 在传统 Web 应用中，用户登录后通常得到一个 `userId`，应用再根据这个 ID 查询数据库：

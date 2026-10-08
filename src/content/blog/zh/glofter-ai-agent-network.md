@@ -3,6 +3,7 @@ title: '当 GLOFTER 遇见 AI Agent：构想一个 AI 原生的去中心化摄�
 description: '过去一段时间，我一直在思考 GLOFTER 应该如何发展。'
 pubDate: '2026-07-29'
 tags: ['Blocklet', 'GLOFTER', 'NFT', 'DID']
+cover: '/images/covers/glofter-ai-agent-network.jpg'
 ---
 
 过去一段时间，我一直在思考 GLOFTER 应该如何发展。

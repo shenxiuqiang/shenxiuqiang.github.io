@@ -3,6 +3,7 @@ title: '基于 ArcBlock Blocklet 技术的未来 DApp 生态发展探讨'
 description: '本文为观点与架构推演类长文。ArcSphere、NFT Factory、节点质押、MCP、UI XML 及经济参数等并非对现行商业产品或链上合约的逐项承诺；费用、强制步骤、支持的链与合约语言、运维与可观测能力均以 ArcBlock 各时期官方文档与 SDK 为准（文档入口：htt…'
 pubDate: '2026-04-12'
 tags: ['Blocklet', 'NFT', 'DID', 'Web3']
+cover: '/images/covers/blocklet-dapp-ecosystem.jpg'
 ---
 
 ## 阅读说明

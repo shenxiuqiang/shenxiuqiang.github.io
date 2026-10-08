@@ -3,6 +3,7 @@ title: '去中心化即去运营化：Web3成本结构革命'
 description: '在Web3里，我们经常听到“去中心化”，但很多人只把它理解成“没有中心服务器”或“代币投票”。'
 pubDate: '2026-09-05'
 tags: ['Web3']
+cover: '/images/covers/web3-cost-structure-revolution.jpg'
 ---
 
 在Web3里，我们经常听到“去中心化”，但很多人只把它理解成“没有中心服务器”或“代币投票”。

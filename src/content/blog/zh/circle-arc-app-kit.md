@@ -3,6 +3,7 @@ title: 'Circle Arc App Kit 快速入门'
 description: '官方文档入口：Arc App Kits 官方文档。目前 App Kits 的核心能力是 Send、Bridge、Swap、Unified Balance，并通过统一的类型安全接口屏蔽底层 CCTP、Gateway 等协议细节。'
 pubDate: '2026-09-16'
 tags: ['USDC']
+cover: '/images/covers/circle-arc-app-kit.jpg'
 ---
 
 官方文档入口：[Arc App Kits 官方文档](https://docs.arc.io/app-kit?utm_source=chatgpt.com)。目前 App Kits 的核心能力是 **Send、Bridge、Swap、Unified Balance**，并通过统一的类型安全接口屏蔽底层 CCTP、Gateway 等协议细节。

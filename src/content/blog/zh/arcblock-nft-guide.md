@@ -3,6 +3,7 @@ title: 'ArcBlock NFT 创建与管理：开发者实践指南'
 description: '欢迎来到 ArcBlock NFT 开发的世界。在 ArcBlock 平台，我们将 NFT（非同质化代币）与 Asset（资产）视为同义词，其核心本质是任何需要在链上记录的有价值的数据。这种广义的定义赋予了 NFT 无限的可能性，使其不仅仅局限于数字艺术品或收藏品。本指南旨在为开…'
 pubDate: '2025-11-24'
 tags: ['NFT', 'DID']
+cover: '/images/covers/arcblock-nft-guide.jpg'
 ---
 
 ## 1.0 ArcBlock NFT 核心概念解析

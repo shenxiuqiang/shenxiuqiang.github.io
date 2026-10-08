@@ -3,6 +3,7 @@ title: 'DIDMail 是什么'
 description: 'DIDMail 是基于去中心化身份（DID）端到端加密解密去中心化的邮箱服务，为用户提供安全、私密、自主可控的邮件通信服务。'
 pubDate: '2025-10-19'
 tags: ['Blocklet', 'DIDMail', 'NFT', 'DID']
+cover: '/images/covers/what-is-didmail.jpg'
 ---
 
 > **DIDMail 1.3 即将上线，预览：https://github.com/shenxiuqiang/didmail-chrome-extension/releases/tag/1.3**

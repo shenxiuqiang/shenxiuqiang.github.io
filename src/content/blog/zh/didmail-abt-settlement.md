@@ -3,6 +3,7 @@ title: 'DIDMail 采用ABT原生代币结算'
 description: 'ABT（ArcBlock Token） 是 ArcBlock 生态系统的核心实用代币，旨在简化去中心化应用（DApps）的构建、部署和运营。ABT 的总供应量为 186,000,000 枚。ABT 最初作为 ERC-20 代币在 Ethereum 网络发行，用于 ICO 和早期交…'
 pubDate: '2025-10-20'
 tags: ['DIDMail', 'NFT', 'DID', 'Web3']
+cover: '/images/covers/didmail-abt-settlement.jpg'
 ---
 
 # ABT代币

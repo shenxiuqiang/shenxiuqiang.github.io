@@ -3,6 +3,7 @@ title: '基于法币定价的稳定订阅支付机制'
 description: '在 ArcBlock 生态中，目前链上还没有发行稳定币（如 USDT）。因此，Dapp 需要使用原生代币 ABT（ArcBlock Token）作为支付手段。然而，ABT 作为非稳定币，其价格存在波动，这为服务的定价和支付带来了挑战。'
 pubDate: '2026-01-12'
 tags: ['Blocklet', 'GLOFTER', 'NFT', 'Web3']
+cover: '/images/covers/fiat-priced-subscription.jpg'
 ---
 
 ## 引言
