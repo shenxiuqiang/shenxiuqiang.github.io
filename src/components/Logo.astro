@@ -1,0 +1,58 @@
+---
+// 字符 Logo：SHENXIU / QIANG 两行方块徽章，S/X/Q 加粗高亮。
+// 直角等宽字符（JetBrains Mono），细边框方块，契合「精密编辑」设计语言。
+import { SITE_TITLE } from '../consts';
+import { type Lang } from '../i18n/ui';
+import { localizePath } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<a class="logo" href={localizePath(lang, '/')} aria-label={SITE_TITLE} title={SITE_TITLE}>
+	<span class="row"
+		><span class="k">S</span><span>H</span><span>E</span><span>N</span><span class="k">X</span><span>I</span
+		><span>U</span></span
+	>
+	<span class="row"><span class="k">Q</span><span>I</span><span>A</span><span>N</span><span>G</span></span>
+</a>
+
+<style>
+	.logo {
+		display: inline-flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 3px;
+		padding: 6px 8px;
+		border: 1.5px solid var(--border-strong);
+		border-radius: var(--radius-sm);
+		text-decoration: none;
+		line-height: 1;
+		transition:
+			border-color 0.15s ease,
+			box-shadow 0.15s ease;
+	}
+
+	.logo:hover {
+		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
+	}
+
+	.row {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 12.5px;
+		color: var(--text);
+	}
+
+	.row .k {
+		font-weight: 800;
+		color: var(--accent);
+	}
+</style>

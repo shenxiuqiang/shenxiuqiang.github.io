@@ -1,9 +1,10 @@
 ---
-import { GITHUB_URL, SITE_TITLE } from '../consts';
+import { GITHUB_URL } from '../consts';
 import { type Lang } from '../i18n/ui';
 import { localizePath, useTranslations } from '../i18n/utils';
 import HeaderLink from './HeaderLink.astro';
 import LangSwitch from './LangSwitch.astro';
+import Logo from './Logo.astro';
 
 interface Props {
 	lang: Lang;
@@ -23,7 +24,7 @@ const links = [
 
 <header>
 	<nav>
-		<a class="brand" href={localizePath(lang, '/')}>{SITE_TITLE}</a>
+		<Logo lang={lang} />
 
 		<div class="right">
 			<div class="links">
@@ -65,18 +66,6 @@ const links = [
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-	}
-
-	.brand {
-		font-weight: 700;
-		color: var(--text);
-		font-size: 1rem;
-		white-space: nowrap;
-	}
-
-	.brand:hover {
-		text-decoration: none;
-		color: var(--accent);
 	}
 
 	.right {
@@ -127,23 +116,15 @@ const links = [
 	}
 
 	@media (max-width: 620px) {
-		.brand {
-			font-size: 0.95rem;
-		}
-
 		.links :global(a) {
 			padding: 0.35rem 0.4rem;
 			font-size: 0.86rem;
 		}
 	}
 
-	/* 320~400px 的窄屏：站点名 + 3 个导航 + 语言切换已经占满，
+	/* 320~400px 的窄屏：logo + 3 个导航 + 语言切换已经占满，
 	   GitHub 图标让位隐藏（页脚里仍有 GitHub 入口） */
 	@media (max-width: 400px) {
-		.brand {
-			font-size: 0.9rem;
-		}
-
 		.icon {
 			display: none;
 		}
