@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 每天定时重新构建一次，刷新文章访问量（GA4 数据在构建时拉取）
+  schedule:
+    - cron: '17 0 * * *' # UTC 00:17 ≈ 北京时间 08:17
 
 # 允许 job 读取仓库内容、写入 Pages、以及用 OIDC token 部署
 permissions:
@@ -30,6 +33,11 @@ jobs:
       # 它会读取 package-lock.json 判断用 npm（所以 lockfile 必须提交）
       - name: Install, build, and upload site
         uses: withastro/action@v6
+        env:
+          # GA4 数字媒体资源 ID（不是 G- 开头的测量 ID），
+          # 以及能读取该媒体资源的 Service Account 密钥 JSON
+          GA_PROPERTY_ID: ${{ secrets.GA_PROPERTY_ID }}
+          GA_SERVICE_ACCOUNT_KEY: ${{ secrets.GA_SERVICE_ACCOUNT_KEY }}
 
   deploy:
     name: Deploy

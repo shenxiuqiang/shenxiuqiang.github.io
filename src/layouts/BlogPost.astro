@@ -8,6 +8,7 @@ import TableOfContents from '../components/TableOfContents.astro';
 import { AUTHOR, GITHUB_URL } from '../consts';
 import { type Lang } from '../i18n/ui';
 import { localizePath, useTranslations } from '../i18n/utils';
+import { getPageViews } from '../utils/pageViews';
 import { getReadingTime, type BlogPost } from '../utils/posts';
 import BaseLayout from './BaseLayout.astro';
 
@@ -55,6 +56,8 @@ const ogImage = cover ?? (slug ? `/og/${lang}--${slug}.png` : undefined);
 
 const t = useTranslations(lang);
 const minutes = getReadingTime(body, lang);
+// 访问量：构建时从 GA4 拉取；新文章或未配置 GA 时不显示
+const views = slug ? getPageViews(lang, slug) : undefined;
 // 字数：中文按字符、英文按词
 const cjkCount = (body.match(/[\u4e00-\u9fa5]/g) ?? []).length;
 const wordCount = lang === 'zh' ? cjkCount : (body.match(/[a-zA-Z0-9]+/g) ?? []).length;
@@ -84,6 +87,12 @@ const linkedinShareHref = `https://www.linkedin.com/sharing/share-offsite/?url=$
 			<span>{t.post.minutes(minutes)}</span>
 			<span class="sep">·</span>
 			<span>{t.post.words(wordCount)}</span>
+			{views !== undefined && (
+				<>
+					<span class="sep">·</span>
+					<span>{t.post.views(views)}</span>
+				</>
+			)}
 		</span>
 	</div>
 
