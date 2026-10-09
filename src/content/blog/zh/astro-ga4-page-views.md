@@ -3,6 +3,7 @@ title: '给 Astro 静态博客加上每篇文章的阅读量（GA4 Data API + �
 description: 'Google Analytics 只收集数据、不提供前端读取接口。本文介绍如何在构建时通过 GA4 Data API 拉取每篇文章的访问量，静态渲染到页面上，并用 GitHub Actions 定时刷新。零服务器、零第三方计数服务。'
 pubDate: '2026-10-09'
 tags: ['Astro', 'Google Analytics', 'GitHub Pages']
+cover: '/images/posts/astro-ga4-page-views.webp'
 ---
 
 很多博客都接了 Google Analytics，但 GA 的面板只有站长自己能看。如果想让读者在文章页直接看到「本文被阅读了多少次」，事情就没那么简单了：GA4 的 `gtag.js` **只负责上报数据，不提供任何浏览器端的读取接口**。
