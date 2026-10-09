@@ -14,31 +14,41 @@ const year = new Date().getFullYear();
 ---
 
 <footer>
-	<p>&copy; {year} {AUTHOR} · <span set:html={t.footer.builtWith()} /></p>
-	<p class="links">
-		<a href={localizePath(lang, '/rss.xml')}>RSS</a>
-		<span aria-hidden="true">·</span>
-		<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
-		<span aria-hidden="true">·</span>
-		<a href="/sitemap-index.xml">Sitemap</a>
-	</p>
+	<div class="inner">
+		<p>&copy; {year} {AUTHOR} · <span set:html={t.footer.builtWith()} /></p>
+		<p class="links">
+			<a href={localizePath(lang, '/rss.xml')}>RSS</a>
+			<span aria-hidden="true">·</span>
+			<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
+			<span aria-hidden="true">·</span>
+			<a href="/sitemap-index.xml">Sitemap</a>
+		</p>
+	</div>
 </footer>
 
 <style>
 	footer {
 		border-top: 1px solid var(--border);
-		padding: 2rem 1.25rem;
-		text-align: center;
+		padding: 1.5rem 0;
 		font-size: 0.85rem;
 		color: var(--text-soft);
 	}
 
-	footer p {
-		margin: 0 0 0.4rem;
+	/* 与 header 同宽的一行布局：版权信息居左，链接居右；
+	   空间不够时（窄屏）自动折行，链接仍靠右 */
+	.inner {
+		width: var(--wide-width);
+		max-width: calc(100% - 2.5rem);
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0.4rem 1.5rem;
 	}
 
-	footer p:last-child {
-		margin-bottom: 0;
+	footer p {
+		margin: 0;
 	}
 
 	footer a {
@@ -53,7 +63,7 @@ const year = new Date().getFullYear();
 
 	.links {
 		display: flex;
-		justify-content: center;
 		gap: 0.5rem;
+		margin-left: auto;
 	}
 </style>
