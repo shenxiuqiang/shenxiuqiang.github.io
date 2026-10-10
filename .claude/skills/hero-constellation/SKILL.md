@@ -22,7 +22,7 @@ description: 维护博客首页的「知识星图」SVG Hero（标签为星、�
 其他相关文件：
 
 - `src/pages/[lang]/[...page].astro` —— 只在第 1 页渲染 `<HeroConstellation lang={lang} />`
-- `src/i18n/ui.ts` —— `home.heroTitle` / `home.heroHint` 星图文案（中英两份，结构必须一致，TS 会检查）
+- `src/i18n/ui.ts` —— `home.heroTitle` 星图的 aria-label 文案（中英两份；星图上方已无任何文字区块，要加回文案需改组件模板）
 - `src/utils/posts.ts` —— `getPosts` / `tagSlug`（标签 URL 会把空格和 `/` 换成 `-`）
 
 ## 数据流（重要：标签和连线不需要手工维护）

@@ -68,11 +68,7 @@ const zh = {
 	},
 
 	home: {
-		greeting: '你好，我是',
-		intro: (astroUrl: string) =>
-			`这里是我的个人博客。用 Markdown 写内容，由 <a href="${astroUrl}" target="_blank" rel="noopener noreferrer">Astro</a> 在构建时生成静态页面，再通过 GitHub Actions 自动发布到 GitHub Pages。`,
 		heroTitle: '知识星图：标签为星，共现为线',
-		heroHint: '// 移动鼠标扰动星空，点击星球进入对应的文章合集',
 	},
 
 	blog: {
@@ -159,11 +155,7 @@ const en: typeof zh = {
 	},
 
 	home: {
-		greeting: "Hi, I'm",
-		intro: (astroUrl: string) =>
-			`This is my personal blog. I write in Markdown, <a href="${astroUrl}" target="_blank" rel="noopener noreferrer">Astro</a> turns it into static pages at build time, and GitHub Actions publishes it to GitHub Pages.`,
 		heroTitle: 'Knowledge constellation: tags as stars, co-occurrence as links',
-		heroHint: '// move your cursor to stir the stars, click one to explore its posts',
 	},
 
 	blog: {
