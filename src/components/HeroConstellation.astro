@@ -108,7 +108,14 @@ const edges = [...cooc.entries()]
 	.sort((x, y) => y.w - x.w)
 	.slice(0, MAX_EDGES);
 
-const nodeData = nodes.map(({ tag, count, x, y, url }) => ({ tag, count, x, y, url }));
+const nodeData = nodes.map(({ tag, count, x, y, r, url }) => ({
+	tag,
+	count,
+	x,
+	y,
+	url,
+	hit: Math.max(r + 14, 26), // 命中圈半径：与模板里的 .hit 保持一致
+}));
 ---
 
 <section class="hero" aria-label={t.home.heroTitle}>
@@ -185,6 +192,8 @@ const nodeData = nodes.map(({ tag, count, x, y, url }) => ({ tag, count, x, y, u
 						aria-label={`${n.tag} (${n.count})`}
 					>
 						{n.big && <circle class="halo" cx={n.x} cy={n.y} r={n.r * 2.6} />}
+						{/* 不可见命中圈：扩大 hover/点击热区，小星球也好选中 */}
+						<circle class="hit" cx={n.x} cy={n.y} r={Math.max(n.r + 14, 26)} />
 						<circle class="ring" cx={n.x} cy={n.y} r={n.r} />
 						<circle class="core" cx={n.x} cy={n.y} r={n.r * 0.45} />
 						<text class="lbl" x={n.x} y={n.y - n.r - 9} font-size={n.fs}>
@@ -355,7 +364,9 @@ const nodeData = nodes.map(({ tag, count, x, y, url }) => ({ tag, count, x, y, u
 				const ddx = px - mx;
 				const ddy = py - my;
 				const dist = Math.hypot(ddx, ddy);
-				if (dist < R && dist > 0.01) {
+				// 死区：光标已在本节点命中圈内时不再避让，
+				// 否则小球会一直"逃跑"，永远点不中
+				if (dist < R && dist > nodeData[i].hit && dist > 0.01) {
 					const f = Math.pow(1 - dist / R, 2) * PUSH;
 					tx = (ddx / dist) * f;
 					ty = (ddy / dist) * f;
@@ -484,6 +495,12 @@ const nodeData = nodes.map(({ tag, count, x, y, url }) => ({ tag, count, x, y, u
 		fill: var(--bg);
 		stroke: var(--accent);
 		stroke-width: 1.4;
+	}
+
+	/* 不可见命中圈：transparent（而非 none）才能接收指针事件 */
+	.nd .hit {
+		fill: transparent;
+		stroke: none;
 	}
 
 	.nd .core {

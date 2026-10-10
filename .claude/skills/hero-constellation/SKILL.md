@@ -102,6 +102,11 @@ frontmatter「可调参数」区：
 5. 无鼠标设备（触屏）3 秒无 pointermove 自动进入巡航模式
    （虚拟引力点走李萨如曲线），不要删掉这段，移动端靠它"活"起来
 6. 滚出视口用 IntersectionObserver 暂停 rAF，省电
+7. **命中圈 `.hit`**：每个节点有一个 `fill: transparent` 的隐形大圆
+   （半径 `max(r + 14, 26)`，模板和 frontmatter 的 `nodeData.hit` 各有一份，改动要同步），
+   解决小星球难 hover/点击；`transparent` 能接收指针事件，`none` 不能
+8. **斥力死区**：光标进入某节点命中圈后（`dist < nodeData[i].hit`），
+   该节点不再被鼠标推开——否则小球会一直"逃跑"永远点不中
 
 ## 验证流程（每次修改后必做）
 
