@@ -1,0 +1,582 @@
+---
+/**
+ * 知识星图 Hero：标签为星、共现关系为线的可交互星座图。
+ *
+ * 【如何修改内容】
+ * 1. 标签和连线不需要手工维护 —— 构建时自动扫描当前语言全部文章的
+ *    frontmatter，按文章数取前 MAX_NODES 个标签，按「同一篇文章共现」生成连线。
+ * 2. 新标签会自动落在环形的空位上；如果想精调构图，在下面的 PIN 表里
+ *    加一行 `标签名: [x, y]`（0-100 归一化坐标，原点在左上）。
+ * 3. 视觉参数（节点大小、连线数、动效强度）见下方「可调参数」区。
+ */
+import { SITE_TITLE } from '../consts';
+import type { Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+import { getPosts, tagSlug } from '../utils/posts';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// ---- 可调参数 ----
+const MAX_NODES = 16; // 星图上最多显示多少个标签
+const MAX_EDGES = 34; // 最多保留多少条连线（按共现次数取 top）
+const VB_W = 1200; // viewBox 宽
+const VB_H = 560; // viewBox 高
+
+// ---- 手工精调的构图（可选）：标签 → [x, y]，0-100 归一化坐标 ----
+const PIN: Record<string, [number, number]> = {
+	Blocklet: [50, 47],
+	Web3: [69, 27],
+	DID: [33, 29],
+	AI: [63, 69],
+	NFT: [36, 71],
+	GLOFTER: [21, 57],
+	DIDMail: [17, 24],
+	AFS: [46, 14],
+	Astro: [84, 62],
+	AUP: [58, 9],
+	OpenAds: [80, 14],
+	InfoPoint: [11, 80],
+	USDC: [73, 85],
+	Agent: [53, 85],
+	'GitHub Pages': [91, 82],
+	OCAP: [24, 11],
+	Internet: [88, 40],
+	Markdown: [92, 24],
+	'CI/CD': [95, 55],
+	USDT: [76, 85],
+	去中心化相册: [12, 45],
+	写作: [30, 88],
+	自动化: [66, 88],
+	ARC: [40, 12],
+	OpenStay: [60, 28],
+	GoogleAnalytics: [88, 72],
+};
+
+// ---- 数据：标签计数 + 共现关系 ----
+const posts = await getPosts(lang);
+const counts = new Map<string, number>();
+const cooc = new Map<string, number>();
+for (const post of posts) {
+	const tags: string[] = post.data.tags;
+	for (const tag of tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+	for (let i = 0; i < tags.length; i++) {
+		for (let j = i + 1; j < tags.length; j++) {
+			const key = [tags[i], tags[j]].sort().join('');
+			cooc.set(key, (cooc.get(key) ?? 0) + 1);
+		}
+	}
+}
+
+const topTags = [...counts.entries()]
+	.sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+	.slice(0, MAX_NODES);
+
+// ---- 布局：PIN 优先，其余按黄金角落在椭圆环上 ----
+const used = new Set<string>();
+const nodes = topTags.map(([tag, count], i) => {
+	let pos = PIN[tag];
+	if (!pos) {
+		const k = i - Object.keys(PIN).length + 1;
+		const angle = k * 2.39996; // 黄金角
+		pos = [50 + 36 * Math.cos(angle), 50 + 30 * Math.sin(angle)];
+		pos = [Math.min(92, Math.max(8, pos[0])), Math.min(90, Math.max(12, pos[1]))];
+	}
+	used.add(tag);
+	const r = 6 + Math.sqrt(count) * 4.2;
+	return {
+		tag,
+		count,
+		x: (pos[0] / 100) * VB_W,
+		y: (pos[1] / 100) * VB_H,
+		r,
+		fs: Math.min(30, 12 + Math.sqrt(count) * 3.2),
+		url: localizePath(lang, `/tags/${tagSlug(tag)}`),
+		big: count >= 10,
+	};
+});
+const indexOf = new Map(nodes.map((n, i) => [n.tag, i]));
+
+const edges = [...cooc.entries()]
+	.map(([key, w]) => {
+		const [a, b] = key.split('');
+		return { a: indexOf.get(a), b: indexOf.get(b), w };
+	})
+	.filter((e): e is { a: number; b: number; w: number } => e.a !== undefined && e.b !== undefined)
+	.sort((x, y) => y.w - x.w)
+	.slice(0, MAX_EDGES);
+
+const nodeData = nodes.map(({ tag, count, x, y, url }) => ({ tag, count, x, y, url }));
+---
+
+<section class="hero" aria-label={t.home.heroTitle}>
+	<div class="hero-text">
+		<h1>{t.home.greeting} {SITE_TITLE} 👋</h1>
+		<p set:html={t.home.intro('https://astro.build')} />
+		<p class="hint">{t.home.heroHint}</p>
+	</div>
+
+	<svg
+		id="hero-constellation"
+		class="hc"
+		viewBox={`0 0 ${VB_W} ${VB_H}`}
+		role="img"
+		aria-label={t.home.heroTitle}
+		preserveAspectRatio="xMidYMid meet"
+	>
+		<defs>
+			<radialGradient id="hc-aurora-a">
+				<stop offset="0%" class="hc-aurora-a-in" />
+				<stop offset="100%" class="hc-aurora-out" />
+			</radialGradient>
+			<radialGradient id="hc-aurora-b">
+				<stop offset="0%" class="hc-aurora-b-in" />
+				<stop offset="100%" class="hc-aurora-out" />
+			</radialGradient>
+			<radialGradient id="hc-halo">
+				<stop offset="0%" class="hc-halo-in" />
+				<stop offset="45%" class="hc-halo-mid" />
+				<stop offset="100%" class="hc-halo-out" />
+			</radialGradient>
+			<radialGradient id="hc-vig" cx="50%" cy="50%" r="72%">
+				<stop offset="72%" class="hc-vig-in" />
+				<stop offset="100%" class="hc-vig-out" />
+			</radialGradient>
+			<pattern id="hc-grid" width="44" height="44" patternUnits="userSpaceOnUse">
+				<path d="M44 0H0V44" fill="none" class="hc-grid-line" />
+			</pattern>
+		</defs>
+
+		{/* 氛围层：网格 + 极光 */}
+		<rect width={VB_W} height={VB_H} fill="url(#hc-grid)" />
+		<ellipse class="aurora" cx="320" cy="140" rx="380" ry="220" fill="url(#hc-aurora-a)" />
+		<ellipse class="aurora" cx="920" cy="410" rx="420" ry="240" fill="url(#hc-aurora-b)" />
+
+		{/* 连线层 */}
+		<g class="links">
+			{
+				edges.map((e, i) => (
+					<line
+						class="lk"
+						data-i={i}
+						x1={nodes[e.a].x}
+						y1={nodes[e.a].y}
+						x2={nodes[e.b].x}
+						y2={nodes[e.b].y}
+						stroke-width={0.6 + Math.min(e.w, 4) * 0.2}
+						stroke-opacity={0.1 + Math.min(e.w, 5) * 0.035}
+					/>
+				))
+			}
+		</g>
+
+		{/* 数据脉冲（JS 驱动） */}
+		<circle class="pulse" r="2.4" opacity="0" />
+		<circle class="pulse" r="2.4" opacity="0" />
+
+		{/* 流星（JS 驱动） */}
+		<line class="meteor" opacity="0" stroke-linecap="round" />
+
+		{/* 节点层 */}
+		<g class="stars">
+			{
+				nodes.map((n, i) => (
+					<g
+						class:list={['nd', { big: n.big }]}
+						data-i={i}
+						role="link"
+						tabindex="0"
+						aria-label={`${n.tag} (${n.count})`}
+					>
+						{n.big && <circle class="halo" cx={n.x} cy={n.y} r={n.r * 2.6} />}
+						<circle class="ring" cx={n.x} cy={n.y} r={n.r} />
+						<circle class="core" cx={n.x} cy={n.y} r={n.r * 0.45} />
+						<text class="lbl" x={n.x} y={n.y - n.r - 9} font-size={n.fs}>
+							{n.tag}
+						</text>
+						<text class="cnt" x={n.x} y={n.y + n.r + 18}>
+							{t.blog.count(n.count)}
+						</text>
+					</g>
+				))
+			}
+		</g>
+
+		{/* 边缘渐隐，融入页面背景 */}
+		<rect width={VB_W} height={VB_H} fill="url(#hc-vig)" pointer-events="none" />
+	</svg>
+</section>
+
+<script define:vars={{ nodeData, edges }}>
+	(() => {
+		const svg = document.getElementById('hero-constellation');
+		if (!svg) return;
+
+		const VB_W = 1200;
+		const VB_H = 560;
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		const nodeEls = [...svg.querySelectorAll('.nd')];
+		const linkEls = [...svg.querySelectorAll('.lk')];
+		const pulseEls = [...svg.querySelectorAll('.pulse')];
+		const meteorEl = svg.querySelector('.meteor');
+
+		// 邻接表：hover 聚焦时用
+		const adj = nodeData.map(() => new Set());
+		for (const e of edges) {
+			adj[e.a].add(e.b);
+			adj[e.b].add(e.a);
+		}
+
+		// ---- 点击 / 键盘跳转 ----
+		const go = (i) => {
+			window.location.href = nodeData[i].url;
+		};
+		nodeEls.forEach((el, i) => {
+			el.addEventListener('click', () => go(i));
+			el.addEventListener('keydown', (ev) => {
+				if (ev.key === 'Enter' || ev.key === ' ') {
+					ev.preventDefault();
+					go(i);
+				}
+			});
+		});
+
+		// ---- hover 聚焦：高亮本节点 + 邻域，其余淡出 ----
+		let hovering = -1;
+		const applyFocus = () => {
+			const on = hovering >= 0;
+			svg.classList.toggle('focus', on);
+			nodeEls.forEach((el, i) => {
+				el.classList.toggle('on', on && (i === hovering || adj[hovering].has(i)));
+			});
+			linkEls.forEach((el, i) => {
+				const e = edges[i];
+				el.classList.toggle('on', on && (e.a === hovering || e.b === hovering));
+			});
+		};
+		nodeEls.forEach((el, i) => {
+			el.addEventListener('pointerenter', () => {
+				hovering = i;
+				applyFocus();
+			});
+			el.addEventListener('pointerleave', () => {
+				hovering = -1;
+				applyFocus();
+			});
+			el.addEventListener('focus', () => {
+				hovering = i;
+				applyFocus();
+			});
+			el.addEventListener('blur', () => {
+				hovering = -1;
+				applyFocus();
+			});
+		});
+
+		if (reduce) return; // 减弱动效：静态星图，仅保留交互跳转/聚焦
+
+		// ---- 动效状态 ----
+		const R = 170; // 鼠标引力场半径（viewBox 单位）
+		const PUSH = 34; // 最大推离距离
+		const states = nodeData.map(() => ({
+			phase: Math.random() * Math.PI * 2,
+			speed: 0.25 + Math.random() * 0.35,
+			amp: 5 + Math.random() * 8,
+			ox: 0, // 鼠标扰动位移（弹簧趋近目标值）
+			oy: 0,
+		}));
+		const cur = nodeData.map((n) => ({ x: n.x, y: n.y }));
+
+		// 鼠标（viewBox 坐标）；无鼠标设备进入巡航模式（虚拟引力点）
+		const mouse = { x: -9999, y: -9999, active: false };
+		let lastPointer = 0;
+		svg.addEventListener('pointermove', (ev) => {
+			if (ev.pointerType !== 'mouse') return;
+			const rect = svg.getBoundingClientRect();
+			mouse.x = ((ev.clientX - rect.left) / rect.width) * VB_W;
+			mouse.y = ((ev.clientY - rect.top) / rect.height) * VB_H;
+			mouse.active = true;
+			lastPointer = performance.now();
+		});
+		svg.addEventListener('pointerleave', () => {
+			mouse.active = false;
+		});
+
+		// 数据脉冲：沿随机边滑动的光点
+		const pulses = pulseEls.map((el) => ({ el, edge: -1, t0: 0, dur: 1200 }));
+		let nextPulse = performance.now() + 1200;
+		const firePulse = (now) => {
+			const p = pulses.find((p) => p.edge < 0);
+			if (!p || edges.length === 0) return;
+			p.edge = Math.floor(Math.random() * edges.length);
+			p.t0 = now;
+			p.dur = 900 + Math.random() * 900;
+			nextPulse = now + 2500 + Math.random() * 3500;
+		};
+
+		// 流星
+		const meteor = { t0: 0, dur: 1100, x1: 0, y1: 0, x2: 0, y2: 0, flying: false };
+		let nextMeteor = performance.now() + 4000 + Math.random() * 5000;
+		const fireMeteor = (now) => {
+			const angle = Math.PI * (0.55 + Math.random() * 0.25); // 斜向左下
+			const len = 120 + Math.random() * 120;
+			meteor.x1 = VB_W * (0.35 + Math.random() * 0.6);
+			meteor.y1 = VB_H * Math.random() * 0.3;
+			meteor.x2 = meteor.x1 - Math.cos(angle) * len * 2.4;
+			meteor.y2 = meteor.y1 + Math.sin(angle) * len;
+			meteor.t0 = now;
+			meteor.flying = true;
+			nextMeteor = now + 8000 + Math.random() * 8000;
+		};
+
+		let visible = true;
+		let raf = 0;
+		const frame = (now) => {
+			raf = visible ? requestAnimationFrame(frame) : 0;
+			const t = now / 1000;
+
+			// 巡航模式：鼠标 3s 没动（或触屏设备），虚拟引力点沿李萨如曲线游走
+			let mx = mouse.x;
+			let my = mouse.y;
+			const cruising = !mouse.active || now - lastPointer > 3000;
+			if (cruising) {
+				mx = VB_W / 2 + Math.sin(t * 0.21) * VB_W * 0.32;
+				my = VB_H / 2 + Math.sin(t * 0.13 + 1.3) * VB_H * 0.3;
+			}
+
+			// 节点：正弦漂浮 + 鼠标斥力（弹性趋近）
+			for (let i = 0; i < nodeData.length; i++) {
+				const n = nodeData[i];
+				const s = states[i];
+				const dx = Math.sin(t * s.speed + s.phase) * s.amp;
+				const dy = Math.cos(t * s.speed * 0.8 + s.phase * 1.7) * s.amp * 0.7;
+
+				let tx = 0;
+				let ty = 0;
+				const px = n.x + dx;
+				const py = n.y + dy;
+				const ddx = px - mx;
+				const ddy = py - my;
+				const dist = Math.hypot(ddx, ddy);
+				if (dist < R && dist > 0.01) {
+					const f = Math.pow(1 - dist / R, 2) * PUSH;
+					tx = (ddx / dist) * f;
+					ty = (ddy / dist) * f;
+				}
+				s.ox += (tx - s.ox) * 0.07;
+				s.oy += (ty - s.oy) * 0.07;
+
+				cur[i].x = n.x + dx + s.ox;
+				cur[i].y = n.y + dy + s.oy;
+				nodeEls[i].setAttribute(
+					'transform',
+					`translate(${(dx + s.ox).toFixed(2)},${(dy + s.oy).toFixed(2)})`,
+				);
+			}
+
+			// 连线跟随节点
+			for (let i = 0; i < edges.length; i++) {
+				const e = edges[i];
+				const el = linkEls[i];
+				el.setAttribute('x1', cur[e.a].x.toFixed(1));
+				el.setAttribute('y1', cur[e.a].y.toFixed(1));
+				el.setAttribute('x2', cur[e.b].x.toFixed(1));
+				el.setAttribute('y2', cur[e.b].y.toFixed(1));
+			}
+
+			// 脉冲
+			if (now > nextPulse) firePulse(now);
+			for (const p of pulses) {
+				if (p.edge < 0) continue;
+				const k = (now - p.t0) / p.dur;
+				if (k >= 1) {
+					p.edge = -1;
+					p.el.setAttribute('opacity', '0');
+					continue;
+				}
+				const e = edges[p.edge];
+				p.el.setAttribute('cx', (cur[e.a].x + (cur[e.b].x - cur[e.a].x) * k).toFixed(1));
+				p.el.setAttribute('cy', (cur[e.a].y + (cur[e.b].y - cur[e.a].y) * k).toFixed(1));
+				p.el.setAttribute('opacity', (Math.sin(k * Math.PI) * 0.9).toFixed(2));
+			}
+
+			// 流星
+			if (now > nextMeteor) fireMeteor(now);
+			if (meteor.flying && meteorEl) {
+				const k = (now - meteor.t0) / meteor.dur;
+				if (k >= 1) {
+					meteor.flying = false;
+					meteorEl.setAttribute('opacity', '0');
+				} else {
+					const hx = meteor.x1 + (meteor.x2 - meteor.x1) * k;
+					const hy = meteor.y1 + (meteor.y2 - meteor.y1) * k;
+					const tx = hx - (meteor.x2 - meteor.x1) * 0.14;
+					const ty = hy - (meteor.y2 - meteor.y1) * 0.14;
+					meteorEl.setAttribute('x1', hx.toFixed(1));
+					meteorEl.setAttribute('y1', hy.toFixed(1));
+					meteorEl.setAttribute('x2', tx.toFixed(1));
+					meteorEl.setAttribute('y2', ty.toFixed(1));
+					meteorEl.setAttribute('opacity', (Math.sin(k * Math.PI) * 0.55).toFixed(2));
+				}
+			}
+		};
+
+		// 滚出视口时暂停，省电
+		new IntersectionObserver((entries) => {
+			const vis = entries[0].isIntersecting;
+			if (vis && !visible) {
+				visible = true;
+				if (!raf) raf = requestAnimationFrame(frame);
+			} else if (!vis) {
+				visible = false;
+			}
+		}).observe(svg);
+
+		raf = requestAnimationFrame(frame);
+	})();
+</script>
+
+<style>
+	.hero {
+		margin-bottom: 3rem;
+	}
+
+	.hero-text {
+		max-width: 680px;
+		margin-bottom: 1.25rem;
+	}
+
+	.hero-text h1 {
+		font-size: 1.9rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.hero-text p {
+		color: var(--text-soft);
+		margin: 0 0 0.5rem;
+	}
+
+	.hint {
+		font-size: 0.85rem;
+		font-family: var(--font-mono);
+		color: var(--accent);
+		opacity: 0.85;
+	}
+
+	/* ---- 星图画布 ---- */
+	.hc {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 70vh;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background:
+			radial-gradient(ellipse 60% 50% at 28% 22%, var(--accent-soft), transparent),
+			radial-gradient(ellipse 60% 50% at 75% 75%, var(--accent2-soft), transparent);
+		touch-action: pan-y;
+	}
+
+	/* defs 里的渐变 stop 用 CSS 变量着色，自动跟随明暗主题 */
+	.hc-aurora-a-in { stop-color: var(--accent); stop-opacity: 0.14; }
+	.hc-aurora-b-in { stop-color: var(--accent2); stop-opacity: 0.12; }
+	.hc-aurora-out { stop-color: var(--accent); stop-opacity: 0; }
+	.hc-halo-in { stop-color: var(--accent); stop-opacity: 0.5; }
+	.hc-halo-mid { stop-color: var(--accent); stop-opacity: 0.16; }
+	.hc-halo-out { stop-color: var(--accent); stop-opacity: 0; }
+	.hc-vig-in { stop-color: var(--bg); stop-opacity: 0; }
+	.hc-vig-out { stop-color: var(--bg); stop-opacity: 0.85; }
+	.hc-grid-line {
+		stroke: var(--accent);
+		stroke-opacity: 0.06;
+		stroke-width: 1;
+	}
+
+	/* ---- 连线 ---- */
+	.lk {
+		stroke: var(--accent);
+		transition: stroke-opacity 0.3s;
+	}
+
+	/* ---- 节点 ---- */
+	.nd {
+		cursor: pointer;
+		transition: opacity 0.3s;
+		outline: none;
+	}
+
+	.nd .ring {
+		fill: var(--bg);
+		stroke: var(--accent);
+		stroke-width: 1.4;
+	}
+
+	.nd .core {
+		fill: var(--accent);
+	}
+
+	.nd .halo {
+		fill: url(#hc-halo);
+	}
+
+	.nd .lbl {
+		fill: var(--text);
+		text-anchor: middle;
+		font-weight: 500;
+		letter-spacing: 0.5px;
+		pointer-events: none;
+	}
+
+	.nd.big .lbl {
+		font-weight: 650;
+	}
+
+	.nd .cnt {
+		fill: var(--accent);
+		font-family: var(--font-mono);
+		font-size: 11px;
+		text-anchor: middle;
+		opacity: 0;
+		transition: opacity 0.25s;
+		pointer-events: none;
+	}
+
+	.nd:hover .cnt,
+	.nd:focus-visible .cnt {
+		opacity: 1;
+	}
+
+	.nd:hover .ring,
+	.nd:focus-visible .ring {
+		stroke-width: 2.2;
+	}
+
+	/* ---- hover 聚焦：无关元素淡出 ---- */
+	.hc.focus .nd { opacity: 0.15; }
+	.hc.focus .nd.on { opacity: 1; }
+	.hc.focus .lk { stroke-opacity: 0.04 !important; }
+	.hc.focus .lk.on {
+		stroke: var(--accent);
+		stroke-opacity: 0.75 !important;
+	}
+
+	/* ---- 脉冲 & 流星 ---- */
+	.pulse {
+		fill: var(--accent);
+	}
+
+	.meteor {
+		stroke: var(--text-soft);
+		stroke-width: 1.2;
+	}
+
+	@media (max-width: 640px) {
+		.hc {
+			max-height: none;
+		}
+	}
+</style>

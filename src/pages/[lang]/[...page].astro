@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPathsOptions, Page } from 'astro';
+import HeroConstellation from '../../components/HeroConstellation.astro';
 import Pagination from '../../components/Pagination.astro';
 import PostList from '../../components/PostList.astro';
 import SaveListUrl from '../../components/SaveListUrl.astro';
@@ -31,15 +32,8 @@ const altUrl = localizePath(other, '/');
 ---
 
 <BaseLayout lang={lang} title={SITE_TITLE} description={t.siteDescription} altUrl={altUrl} wide>
-	{/* 简介只在第 1 页显示 */}
-	{
-		isFirstPage && (
-			<section class="intro">
-				<h1>{t.home.greeting} {SITE_TITLE} 👋</h1>
-				<p set:html={t.home.intro('https://astro.build')} />
-			</section>
-		)
-	}
+	{/* 知识星图 Hero 只在第 1 页显示 */}
+	{isFirstPage && <HeroConstellation lang={lang} />}
 
 	<section>
 		<div class="section-head">
@@ -53,20 +47,6 @@ const altUrl = localizePath(other, '/');
 </BaseLayout>
 
 <style>
-	.intro {
-		margin-bottom: 3rem;
-		max-width: 680px; /* 宽布局下限制导语行长，保持可读性 */
-	}
-
-	.intro h1 {
-		font-size: 1.9rem;
-		margin-bottom: 1rem;
-	}
-
-	.intro p {
-		color: var(--text-soft);
-	}
-
 	.section-head {
 		display: flex;
 		align-items: baseline;
