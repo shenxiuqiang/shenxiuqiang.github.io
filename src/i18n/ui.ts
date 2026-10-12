@@ -69,6 +69,8 @@ const zh = {
 
 	home: {
 		heroTitle: '知识星图：标签为星，共现为线',
+		featured: '置顶推荐',
+		featuredRead: '阅读全文',
 	},
 
 	blog: {
@@ -156,6 +158,8 @@ const en: typeof zh = {
 
 	home: {
 		heroTitle: 'Knowledge constellation: tags as stars, co-occurrence as links',
+		featured: 'Featured',
+		featuredRead: 'Read',
 	},
 
 	blog: {

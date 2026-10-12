@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPathsOptions, Page } from 'astro';
+import FeaturedPosts from '../../components/FeaturedPosts.astro';
 import HeroConstellation from '../../components/HeroConstellation.astro';
 import Pagination from '../../components/Pagination.astro';
 import PostList from '../../components/PostList.astro';
@@ -34,6 +35,9 @@ const altUrl = localizePath(other, '/');
 <BaseLayout lang={lang} title={SITE_TITLE} description={t.siteDescription} altUrl={altUrl} wide>
 	{/* 知识星图 Hero 只在第 1 页显示 */}
 	{isFirstPage && <HeroConstellation lang={lang} />}
+
+	{/* 置顶推荐：只在第 1 页、文章列表上方出现 */}
+	{isFirstPage && <FeaturedPosts posts={page.data} lang={lang} />}
 
 	<section>
 		<div class="section-head">
