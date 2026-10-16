@@ -222,15 +222,16 @@ const ogImage = d.cover ?? shots[0]?.src;
 </script>
 
 <style>
-	/* 文案块收窄到阅读列宽，图片网格用满宽外壳 —— 编辑刊物的常见做法 */
-	.head,
-	.tail {
-		max-width: 46rem;
-		margin: 0 auto;
-	}
-
+	/* 页头和页脚不设宽度，直接占满宽外壳，和下面的图片网格左右对齐 ——
+	   分隔线、数据条、筛选按钮都顶到同一条边；
+	   只有成段的长文字（导语 / 前言）收窄到阅读列宽，避免一行太长。 */
 	.tail {
 		margin-top: 3rem;
+	}
+
+	.lede,
+	.intro {
+		max-width: 54rem;
 	}
 
 	.crumbs {
