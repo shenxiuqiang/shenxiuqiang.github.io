@@ -1,0 +1,177 @@
+---
+// 图集卡片列表。图集列表页用。
+// 和文章列表（PostList.astro）的差异：图集的封面是主角，
+// 所以走「大图在上、文字在下」的网格卡片，而不是文章那种横向条目。
+import FormattedDate from './FormattedDate.astro';
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+import type { GalleryEntry } from '../utils/gallery';
+
+interface Props {
+	entries: GalleryEntry[];
+	lang: Lang;
+}
+
+const { entries, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{
+	entries.length === 0 ? (
+		<p>{t.gallery.empty}</p>
+	) : (
+		<ul class="gallery-list">
+			{entries.map((entry) => (
+				<li>
+					<a class="gallery-card" href={localizePath(lang, `/gallery/${entry.id}`)}>
+						<div class="thumb">
+							{entry.data.cover ? (
+								<img src={entry.data.cover} alt="" loading="lazy" />
+							) : (
+								<span class="placeholder" aria-hidden="true">
+									{entry.data.title.slice(0, 1)}
+								</span>
+							)}
+							{entry.data.images.length > 0 && (
+								<span class="badge">{t.gallery.coverCount(entry.data.images.length)}</span>
+							)}
+						</div>
+						<div class="card-body">
+							<h2>{entry.data.title}</h2>
+							<p class="excerpt">{entry.data.description}</p>
+							<p class="meta">
+								<FormattedDate date={entry.data.pubDate} lang={lang} />
+								{entry.data.tags.slice(0, 2).map((tag) => (
+									<span class="tag">#{tag}</span>
+								))}
+							</p>
+						</div>
+					</a>
+				</li>
+			))}
+		</ul>
+	)
+}
+
+<style>
+	.gallery-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+		gap: 1.25rem;
+	}
+
+	.gallery-card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		color: inherit;
+		transition:
+			border-color 0.15s ease,
+			background 0.15s ease,
+			transform 0.15s ease;
+	}
+
+	.gallery-card:hover {
+		text-decoration: none;
+		border-color: var(--border-strong);
+		background: var(--surface-hover);
+		transform: translateY(-2px);
+	}
+
+	.thumb {
+		position: relative;
+		background: var(--bg-soft);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.thumb img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		border-radius: 0;
+	}
+
+	.placeholder {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 16 / 10;
+		font-family: var(--font-head);
+		font-size: 2.5rem;
+		color: var(--text-soft);
+	}
+
+	.badge {
+		position: absolute;
+		right: 0.6rem;
+		bottom: 0.6rem;
+		padding: 0.15rem 0.55rem;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--bg) 80%, transparent);
+		border: 1px solid var(--border);
+		color: var(--text-soft);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		backdrop-filter: blur(4px);
+	}
+
+	.card-body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		padding: 1rem 1.15rem 1.15rem;
+	}
+
+	.gallery-card h2 {
+		font-family: var(--font-head);
+		margin: 0 0 0.4rem;
+		font-size: 1.05rem;
+		font-weight: 600;
+		color: var(--text);
+		letter-spacing: -0.01em;
+		transition: color 0.15s ease;
+	}
+
+	.gallery-card:hover h2 {
+		color: var(--accent);
+	}
+
+	.excerpt {
+		margin: 0 0 0.8rem;
+		font-size: 0.88rem;
+		color: var(--text-body);
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.meta {
+		margin: auto 0 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.02em;
+		color: var(--text-soft);
+	}
+
+	.tag {
+		color: var(--accent2);
+		/* 标签不换行：卡片窄的时候 "#Blender" 会被折成两行 */
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 9rem;
+	}
+</style>

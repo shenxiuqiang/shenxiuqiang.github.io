@@ -1,0 +1,533 @@
+---
+// 图集详情页 —— 一辑图集 = 页头 + 数据条 + 可选前言 + 可筛选的图片网格。
+//
+// 和文章详情页（BlogPost.astro）的区别：
+//   · 主体不是长文，而是 frontmatter 里的 images 数组渲染出的网格；
+//   · 网格点击开灯箱看原图，前缀用 group 分组做筛选；
+//   · 侧栏不放字数/阅读时长（对图集没意义），只在最前面放数据条。
+// 刻意保留了文章页的「返回列表」「作者卡」「上一篇 / 下一篇」，
+// 这样从文章列表点进图集不会觉得换了个网站。
+import AuthorCard from '../components/AuthorCard.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import PrevNext from '../components/PrevNext.astro';
+import { type Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+import { getGroups, type GalleryEntry } from '../utils/gallery';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+	lang: Lang;
+	entry: GalleryEntry;
+	altUrl: string;
+	/** 时间上更早的一辑 */
+	prev?: GalleryEntry;
+	/** 时间上更晚的一辑 */
+	next?: GalleryEntry;
+}
+
+const { lang, entry, altUrl, prev, next } = Astro.props;
+const d = entry.data;
+const t = useTranslations(lang);
+
+const groups = getGroups(entry);
+const shots = d.images;
+const count = shots.length;
+// 单张图的序号：001 → 01，用来在图注里对齐视觉节奏
+const pad = (n: number) => String(n).padStart(2, '0');
+
+// 分享图：封面优先，没写封面就用第一张图（图集一定有图）
+const ogImage = d.cover ?? shots[0]?.src;
+---
+
+<BaseLayout lang={lang} title={d.title} description={d.description} altUrl={altUrl} image={ogImage} type="article" wide>
+	<div class="head">
+		<div class="crumbs">
+			<a href={localizePath(lang, '/gallery')} data-back-list data-lang={lang}>
+				{t.gallery.backToList.replace('← ', '')}
+			</a>
+			{d.tags[0] && (
+				<>
+					<span class="sep">/</span>
+					<span class="crumb-tag">{d.tags[0]}</span>
+				</>
+			)}
+			<span class="crumb-meta">
+				<FormattedDate date={d.pubDate} lang={lang} />
+				<span class="sep">·</span>
+				<span>{t.gallery.coverCount(count)}</span>
+				{d.updatedDate && (
+					<>
+						<span class="sep">·</span>
+						<span>
+							{t.gallery.updatedOn} <FormattedDate date={d.updatedDate} lang={lang} />
+						</span>
+					</>
+				)}
+			</span>
+		</div>
+
+		<h1>{d.title}</h1>
+		<p class="lede">{d.description}</p>
+
+		{
+			d.facts.length > 0 && (
+				<ul class="facts">
+					{d.facts.map((fact) => (
+						<li>
+							<strong>{fact.value}</strong>
+							<span>{fact.label}</span>
+						</li>
+					))}
+				</ul>
+			)
+		}
+
+		<div class="intro">
+			<slot />
+		</div>
+
+		{
+			count > 0 && (
+				<div class="controls">
+					<div class="chips" role="group" aria-label={t.gallery.title}>
+						<button class="chip active" type="button" data-filter="__all__">
+							{t.gallery.filterAll(count)}
+						</button>
+						{groups.map((group) => (
+							<button class="chip" type="button" data-filter={group}>
+								{group}
+							</button>
+						))}
+					</div>
+					<p class="hint">{t.gallery.hint}</p>
+				</div>
+			)
+		}
+	</div>
+
+	{
+		count > 0 && (
+			<section class="shots" aria-label={d.title}>
+				{shots.map((shot, i) => (
+					<figure class="shot" data-group={shot.group}>
+						<a class="shot-open" href={shot.src} target="_blank" rel="noopener noreferrer">
+							<img src={shot.src} alt={shot.alt} width="1600" height="1248" loading={i < 2 ? 'eager' : 'lazy'} />
+							<span class="zoom" aria-hidden="true">⤢</span>
+						</a>
+						<figcaption>
+							<span class="idx">{pad(i + 1)}</span>
+							<h2>{shot.title}</h2>
+							<p>{shot.caption}</p>
+							<a class="full" href={shot.src} target="_blank" rel="noopener noreferrer">
+								{t.gallery.viewOriginal}
+							</a>
+						</figcaption>
+					</figure>
+				))}
+			</section>
+		)
+	}
+
+	<div class="head tail">
+		{d.tags.length > 0 && (
+			<ul class="tags post-tags">
+				{d.tags.map((tag) => (
+					<li class="tag">#{tag}</li>
+				))}
+			</ul>
+		)}
+
+		<AuthorCard lang={lang} />
+		<PrevNext lang={lang} prev={prev} next={next} base="/gallery" />
+	</div>
+
+	<!-- 灯箱：默认用 hidden 藏着，JS 打开。没有 JS 时图片链接直接新标签打开原图 -->
+	<div class="lightbox" id="lightbox" hidden>
+		<button class="lb-close" id="lightbox-close" type="button" aria-label="关闭">✕</button>
+		<figure>
+			<img id="lightbox-img" src="" alt="" />
+			<figcaption id="lightbox-caption"></figcaption>
+		</figure>
+	</div>
+</BaseLayout>
+
+<script>
+	// 分组筛选：按钮切换 active，网格里不匹配的 figure 直接隐藏。
+	// 没有 JS 时所有图片都显示 —— 只是少了个筛选，不影响阅读。
+	const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+	const shots = document.querySelectorAll<HTMLElement>('.shot');
+
+	chips.forEach((chip) => {
+		chip.addEventListener('click', () => {
+			const filter = chip.dataset.filter ?? '__all__';
+			chips.forEach((c) => c.classList.toggle('active', c === chip));
+			shots.forEach((shot) => {
+				shot.hidden = filter !== '__all__' && shot.dataset.group !== filter;
+			});
+		});
+	});
+
+	// 灯箱
+	const lightbox = document.getElementById('lightbox');
+	const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+	const lightboxCaption = document.getElementById('lightbox-caption');
+	const closeBtn = document.getElementById('lightbox-close');
+
+	const closeLightbox = () => {
+		if (!lightbox) return;
+		lightbox.hidden = true;
+		document.body.style.removeProperty('overflow');
+		if (lightboxImg) lightboxImg.src = '';
+	};
+
+	if (lightbox && lightboxImg) {
+		document.querySelectorAll<HTMLAnchorElement>('a.shot-open').forEach((link) => {
+			link.addEventListener('click', (event) => {
+				// 让「在新标签打开」仍然是默认行为，只在支持灯箱时接管
+				event.preventDefault();
+				const img = link.querySelector('img');
+				// 图注跟着图片走，方便大图模式下也知道自己在看哪一张
+				const figure = link.closest('figure');
+				const title = figure?.querySelector('h2')?.textContent ?? '';
+				const caption = figure?.querySelector('figcaption p')?.textContent ?? '';
+
+				lightboxImg.src = link.getAttribute('href') ?? '';
+				lightboxImg.alt = img?.alt ?? '';
+				if (lightboxCaption) {
+					lightboxCaption.textContent = caption ? `${title} — ${caption}` : title;
+				}
+				lightbox.hidden = false;
+				document.body.style.overflow = 'hidden';
+			});
+		});
+
+		closeBtn?.addEventListener('click', closeLightbox);
+		// 点背景关闭（点图片本身不关闭）
+		lightbox.addEventListener('click', (event) => {
+			if (event.target === lightbox) closeLightbox();
+		});
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && !lightbox.hidden) closeLightbox();
+		});
+	}
+
+	// 返回列表：优先回到进入这一辑之前所在的列表页（交给列表页的 SaveListUrl 写入）
+	const backLink = document.querySelector('[data-back-list]');
+	if (backLink) {
+		try {
+			const saved = sessionStorage.getItem('listUrl:' + backLink.getAttribute('data-lang'));
+			if (saved && saved.startsWith('/')) backLink.setAttribute('href', saved);
+		} catch {}
+	}
+</script>
+
+<style>
+	/* 文案块收窄到阅读列宽，图片网格用满宽外壳 —— 编辑刊物的常见做法 */
+	.head,
+	.tail {
+		max-width: 46rem;
+		margin: 0 auto;
+	}
+
+	.tail {
+		margin-top: 3rem;
+	}
+
+	.crumbs {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-soft);
+		margin-bottom: 1.75rem;
+	}
+
+	.crumbs a {
+		color: var(--text-soft);
+	}
+
+	.crumbs a:hover {
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.crumbs .sep {
+		color: var(--border-strong);
+	}
+
+	.crumb-tag {
+		color: var(--accent2);
+	}
+
+	.crumb-meta {
+		margin-left: auto;
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	h1 {
+		margin-bottom: 0.75rem;
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		color: var(--text-soft);
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+	}
+
+	/* 数据条：宅基地 / 坡度 / 门洞 / 天井 这类一眼能看完的数字 */
+	.facts {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+		gap: 0.9rem;
+		margin: 0 0 1.75rem;
+		padding: 1.1rem 0 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.facts li {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		min-width: 0;
+	}
+
+	.facts strong {
+		font-family: var(--font-head);
+		font-size: 1.35rem;
+		font-weight: 600;
+		color: var(--text);
+		letter-spacing: -0.01em;
+	}
+
+	.facts span {
+		font-size: 0.8rem;
+		color: var(--text-soft);
+	}
+
+	.intro {
+		margin-bottom: 1.5rem;
+	}
+
+	.intro :global(ul) {
+		font-size: 0.92rem;
+	}
+
+	/* 筛选按钮 + 操作提示 */
+	.controls {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0.75rem 1rem;
+		margin-top: 2rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.chip {
+		padding: 0.4rem 0.95rem;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		background: var(--surface-raised);
+		color: var(--text-soft);
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		cursor: pointer;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.chip:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.chip.active {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--on-accent);
+	}
+
+	.hint {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--text-soft);
+	}
+
+	/* 图片网格 */
+	.shots {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.5rem;
+		margin: 1.75rem 0 0;
+	}
+
+	.shot {
+		margin: 0;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.shot[hidden] {
+		display: none;
+	}
+
+	.shot-open {
+		display: block;
+		position: relative;
+		background: var(--bg-soft);
+		line-height: 0;
+	}
+
+	.shot-open img {
+		width: 100%;
+		aspect-ratio: 1600 / 1248;
+		object-fit: contain;
+		border-radius: 0;
+		display: block;
+	}
+
+	.shot-open .zoom {
+		position: absolute;
+		right: 0.6rem;
+		bottom: 0.6rem;
+		width: 1.9rem;
+		height: 1.9rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--bg) 78%, transparent);
+		border: 1px solid var(--border);
+		color: var(--text-soft);
+		font-size: 0.85rem;
+		line-height: 1;
+		opacity: 0;
+		transition: opacity 0.15s ease;
+	}
+
+	.shot-open:hover .zoom,
+	.shot-open:focus-visible .zoom {
+		opacity: 1;
+	}
+
+	.shot figcaption {
+		padding: 1rem 1.15rem 1.15rem;
+		display: grid;
+		gap: 0.3rem;
+	}
+
+	.shot .idx {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
+		color: var(--text-soft);
+	}
+
+	.shot h2 {
+		font-family: var(--font-head);
+		font-size: 1.05rem;
+		font-weight: 600;
+		margin: 0;
+		color: var(--text);
+	}
+
+	.shot p {
+		margin: 0;
+		font-size: 0.88rem;
+		color: var(--text-body);
+	}
+
+	.shot .full {
+		margin-top: 0.35rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--accent);
+	}
+
+	.post-tags {
+		margin: 0 0 1.5rem;
+	}
+
+	/* 灯箱 */
+	.lightbox {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2.5rem 1.5rem;
+		background: rgba(1, 4, 9, 0.92);
+	}
+
+	.lightbox[hidden] {
+		display: none;
+	}
+
+	.lightbox figure {
+		margin: 0;
+		max-width: 100%;
+		max-height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.lightbox img {
+		max-width: 100%;
+		max-height: calc(100vh - 9rem);
+		width: auto;
+		margin: 0 auto;
+		border-radius: var(--radius);
+	}
+
+	.lightbox figcaption {
+		text-align: center;
+		font-size: 0.85rem;
+		color: #c9d1d9;
+	}
+
+	.lb-close {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.25);
+		background: rgba(255, 255, 255, 0.08);
+		color: #f0f6fc;
+		font-size: 1rem;
+		cursor: pointer;
+	}
+
+	.lb-close:hover {
+		background: rgba(255, 255, 255, 0.18);
+	}
+
+	@media (max-width: 860px) {
+		.shots {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -62,6 +62,52 @@ draft: false               # 选填，true = 只在本地 dev 可见
 
 这时候英文页面的语言切换器会退到英文文章列表，而不是指向一个 404。
 
+## 写一辑新图集
+
+「图集」（`/zh/gallery/`、`/en/gallery/`）放的是游记、相册、渲染图册这类**以图为主**的内容。
+和文章的区别：文章的主体是 Markdown 正文，图集的主体是 frontmatter 里的 `images` 数组，
+正文只作为可选前言。同样靠文件名配对中英文：
+
+```
+src/content/gallery/zh/my-album.md   →  /zh/gallery/my-album/
+src/content/gallery/en/my-album.md   →  /en/gallery/my-album/
+public/images/gallery/my-album/*.webp # 图片放这里
+```
+
+```yaml
+---
+title: '双天井住宅 V6 渲染图册'
+description: '一句话摘要，用于列表卡片和 SEO'
+pubDate: '2026-10-16'
+tags: ['建筑', 'Blender']
+cover: '/images/gallery/my-album/cover.webp' # 列表缩略图 + 详情页 og:image
+facts: # 选填，页头的数据条
+  - { value: '20 × 21m', label: '宅基地' }
+groups: ['整体与庭院', '室内与天井'] # 选填，决定筛选按钮的顺序
+images: # 数组顺序 = 展示顺序
+  - src: '/images/gallery/my-album/01.webp'
+    alt: '给读屏软件和搜索引擎看的一句话'
+    title: '总体鸟瞰'
+    caption: '一句话图注'
+    group: '整体与庭院'
+---
+
+正文写在 frontmatter 之后，作为图集的前言（可留空）。
+```
+
+要点：
+
+- **图片格式**：统一用 WebP、宽度 1600px。一辑 12 张的 PNG 原图约 23MB，
+  转成 WebP 后只有 0.6MB，肉眼几乎无损：
+  ```bash
+  python3 -c "
+  from PIL import Image
+  Image.open('in.png').convert('RGB').save('out.webp', 'WEBP', quality=84, method=6)"
+  ```
+- **`group`**：同一辑里的图片分组，详情页顶部会按它生成筛选按钮（没有 JS 时全部显示）。
+- **点击图片**会打开灯箱看原图，`Esc` 或点背景关闭；没有 JS 时图片链接直接新标签打开原图。
+- 图集不进 RSS 也不生成标签页，标签只作展示。
+
 ## 目录结构
 
 ```
@@ -81,6 +127,8 @@ draft: false               # 选填，true = 只在本地 dev 可见
 │   ├── content/
 │   │   ├── blog/zh/               # ← 中文文章
 │   │   ├── blog/en/               # ← 英文文章
+│   │   ├── gallery/zh/            # ← 中文图集（游记 / 相册 / 渲染图册）
+│   │   ├── gallery/en/            # ← 英文图集
 │   │   ├── pages/zh/              # 独立页面（关于页）
 │   │   └── pages/en/
 │   ├── i18n/
@@ -88,15 +136,19 @@ draft: false               # 选填，true = 只在本地 dev 可见
 │   │   └── utils.ts               # 语言路径助手
 │   ├── layouts/
 │   │   ├── BaseLayout.astro       # 全站 HTML 外壳
-│   │   └── BlogPost.astro         # 文章页排版
+│   │   ├── BlogPost.astro         # 文章页排版
+│   │   └── GalleryPost.astro      # 图集页排版（图片网格 + 筛选 + 灯箱）
 │   ├── pages/
 │   │   ├── [lang]/                # 一个文件生成中英两份页面
 │   │   │   ├── index.astro        #   /zh/  /en/
 │   │   │   ├── about.astro        #   /zh/about/  /en/about/
 │   │   │   ├── rss.xml.js         #   /zh/rss.xml  /en/rss.xml
-│   │   │   └── blog/
-│   │   │       ├── index.astro    #   /zh/blog/  /en/blog/
-│   │   │       └── [...slug].astro#   /zh/blog/<文件名>/
+│   │   │   ├── blog/
+│   │   │   │   ├── index.astro    #   /zh/blog/  /en/blog/
+│   │   │   │   └── [...slug].astro#   /zh/blog/<文件名>/
+│   │   │   └── gallery/
+│   │   │       ├── [...page].astro#   /zh/gallery/  /en/gallery/
+│   │   │       └── [...slug].astro#   /zh/gallery/<文件名>/
 │   │   ├── index.astro            # 旧地址跳转：/ → /zh/
 │   │   ├── about.astro            # 旧地址跳转
 │   │   ├── blog/                  # 旧地址跳转
@@ -105,6 +157,7 @@ draft: false               # 选填，true = 只在本地 dev 可见
 │   ├── styles/global.css          # 全局样式与配色变量
 │   ├── utils/
 │   │   ├── posts.ts               # 取文章、阅读时长、缺译文告警
+│   │   ├── gallery.ts             # 取图集、分组顺序
 │   │   └── rss.ts                 # RSS 生成
 │   └── content.config.ts          # 内容集合 schema 校验
 └── astro.config.mjs
@@ -119,13 +172,14 @@ draft: false               # 选填，true = 只在本地 dev 可见
 | 配色、字体、间距 | `src/styles/global.css` 顶部的 CSS 变量 |
 | 「关于」页内容 | `src/content/pages/{zh,en}/about.md` |
 | 文章页排版 | `src/layouts/BlogPost.astro` |
+| 图集页排版（网格 / 筛选 / 灯箱） | `src/layouts/GalleryPost.astro` |
 | 代码块高亮主题 | `astro.config.mjs` 里的 `shikiConfig.theme` |
 | 加一种语言 | `src/i18n/ui.ts` 的 `LOCALES` + 补一份字典，TypeScript 会检查漏字段 |
 
 ## 双语实现要点
 
 - **URL 结构**：中文 `/zh/...`，英文 `/en/...`，两边完全对称。
-- **译文配对**：靠文件名。`blog/zh/foo.md` ↔ `blog/en/foo.md`。
+- **译文配对**：靠文件名。`blog/zh/foo.md` ↔ `blog/en/foo.md`，图集同理（`gallery/zh|en/`）。
 - **语言标注**：`<html lang>`、每页的 `<link rel="alternate" hreflang>`（含 `x-default`）都按语言输出，告诉搜索引擎这是同一内容的不同语言版本，不是重复内容。
 - **旧链接**：站点原先中文在根路径（`/blog/hello-astro/`），改成 `/zh/` 后这些地址会失效。`src/pages/{index,about,blog}` 下生成了带 `meta refresh` 和 `canonical` 的跳转页，老链接照样能打开。这些跳转页带 `noindex`，并且已从 sitemap 中排除。
 - **阅读时长**：中文按 400 字/分钟，英文按 200 词/分钟，分别计算。

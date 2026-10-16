@@ -1,0 +1,64 @@
+---
+// 图集列表页：/zh/gallery/、/en/gallery/（图集多了会分页成 /gallery/2/ …）
+import type { GetStaticPathsOptions, Page } from 'astro';
+import GalleryList from '../../../components/GalleryList.astro';
+import Pagination from '../../../components/Pagination.astro';
+import SaveListUrl from '../../../components/SaveListUrl.astro';
+import { LOCALES, type Lang } from '../../../i18n/ui';
+import { localizePath, useTranslations } from '../../../i18n/utils';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { GALLERY_PAGE_SIZE, getGalleryEntries, type GalleryEntry } from '../../../utils/gallery';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const paths = [];
+	for (const lang of LOCALES) {
+		const entries = await getGalleryEntries(lang);
+		paths.push(...paginate(entries, { pageSize: GALLERY_PAGE_SIZE, params: { lang } }));
+	}
+	return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const page = Astro.props.page as Page<GalleryEntry>;
+const t = useTranslations(lang);
+
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const altUrl = localizePath(other, '/gallery');
+---
+
+<BaseLayout lang={lang} title={t.gallery.title} description={t.gallery.description} altUrl={altUrl} wide>
+	<div class="page-head">
+		<h1>{t.gallery.title}</h1>
+		<p class="desc">{t.gallery.description}</p>
+		<p class="count">{t.gallery.count(page.total)}</p>
+	</div>
+
+	<GalleryList entries={page.data} lang={lang} />
+	<Pagination page={page} lang={lang} />
+
+	<!-- 记住列表页地址，详情页的「返回列表」才能回到正确的分页 -->
+	<SaveListUrl lang={lang} />
+</BaseLayout>
+
+<style>
+	.page-head {
+		margin-bottom: 2rem;
+	}
+
+	.page-head h1 {
+		margin-bottom: 0.4rem;
+	}
+
+	.desc {
+		color: var(--text-soft);
+		margin: 0 0 0.3rem;
+		max-width: 46rem;
+	}
+
+	.count {
+		color: var(--text-soft);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		margin: 0;
+	}
+</style>

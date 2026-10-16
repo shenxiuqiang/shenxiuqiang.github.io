@@ -32,6 +32,7 @@ export const DATE_LOCALE: Record<Lang, string> = {
 
 /** 语言 → 内容集合名，避免在页面里写一堆三元表达式 */
 export const BLOG_COLLECTION = { zh: 'blogZh', en: 'blogEn' } as const;
+export const GALLERY_COLLECTION = { zh: 'galleryZh', en: 'galleryEn' } as const;
 export const PAGES_COLLECTION = { zh: 'pagesZh', en: 'pagesEn' } as const;
 
 const zh = {
@@ -40,6 +41,7 @@ const zh = {
 	nav: {
 		home: '首页',
 		blog: '文章',
+		gallery: '图集',
 		videos: '视频',
 		about: '关于',
 	},
@@ -82,6 +84,22 @@ const zh = {
 		empty: '还没有文章。',
 		backToList: '← 返回文章列表',
 		minutes: (n: number) => `约 ${n} 分钟`,
+		updatedOn: '更新于',
+	},
+
+	gallery: {
+		title: '图集',
+		description: '游记、相册与渲染图册 —— 以图为主，文字作注。',
+		count: (n: number) => `共 ${n} 辑`,
+		coverCount: (n: number) => `${n} 张图`,
+		empty: '还没有图集。',
+		backToList: '← 返回图集列表',
+		/** 详情页顶部的筛选按钮：全部图片 */
+		filterAll: (n: number) => `全部 ${n} 张`,
+		/** 单张图下方的「查看原图」链接 */
+		viewOriginal: '查看原图 ↗',
+		/** 灯箱里的提示 */
+		hint: '点击图片可放大查看原图 · Esc 关闭',
 		updatedOn: '更新于',
 	},
 
@@ -130,6 +148,7 @@ const en: typeof zh = {
 	nav: {
 		home: 'Home',
 		blog: 'Writing',
+		gallery: 'Gallery',
 		videos: 'Videos',
 		about: 'About',
 	},
@@ -171,6 +190,19 @@ const en: typeof zh = {
 		empty: 'No posts yet.',
 		backToList: '← Back to all posts',
 		minutes: (n: number) => `${n} min read`,
+		updatedOn: 'Updated',
+	},
+
+	gallery: {
+		title: 'Gallery',
+		description: 'Travel notes, photo albums and render sets — pictures first, words as captions.',
+		count: (n: number) => `${n} ${n === 1 ? 'entry' : 'entries'}`,
+		coverCount: (n: number) => `${n} ${n === 1 ? 'image' : 'images'}`,
+		empty: 'No gallery entries yet.',
+		backToList: '← Back to the gallery',
+		filterAll: (n: number) => `All ${n}`,
+		viewOriginal: 'Open full size ↗',
+		hint: 'Click an image to open it full size · Esc to close',
 		updatedOn: 'Updated',
 	},
 

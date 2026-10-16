@@ -3,14 +3,20 @@
 import { type Lang } from '../i18n/ui';
 import { localizePath, useTranslations } from '../i18n/utils';
 import type { BlogPost } from '../utils/posts';
+import type { GalleryEntry } from '../utils/gallery';
+
+/** 文章和图集都长这样：有 id、有 data.title，所以导航组件可以共用 */
+type Neighbour = BlogPost | GalleryEntry;
 
 interface Props {
 	lang: Lang;
-	prev?: BlogPost; // 时间上更早的一篇
-	next?: BlogPost; // 时间上更晚的一篇
+	prev?: Neighbour; // 时间上更早的一篇
+	next?: Neighbour; // 时间上更晚的一篇
+	/** 详情页的路径前缀：文章是 /blog，图集是 /gallery */
+	base?: string;
 }
 
-const { lang, prev, next } = Astro.props;
+const { lang, prev, next, base = '/blog' } = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -18,7 +24,7 @@ const t = useTranslations(lang);
 	(prev || next) && (
 		<nav class="prevnext" aria-label="Adjacent articles">
 			{prev ? (
-				<a class="pn prev" href={localizePath(lang, `/blog/${prev.id}`)}>
+				<a class="pn prev" href={localizePath(lang, `${base}/${prev.id}`)}>
 					<span class="dir">← {t.post.prevPost}</span>
 					<span class="title">{prev.data.title}</span>
 				</a>
@@ -26,7 +32,7 @@ const t = useTranslations(lang);
 				<span />
 			)}
 			{next ? (
-				<a class="pn next" href={localizePath(lang, `/blog/${next.id}`)}>
+				<a class="pn next" href={localizePath(lang, `${base}/${next.id}`)}>
 					<span class="dir">{t.post.nextPost} →</span>
 					<span class="title">{next.data.title}</span>
 				</a>

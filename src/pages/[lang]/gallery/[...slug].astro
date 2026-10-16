@@ -1,0 +1,46 @@
+---
+// 图集详情页：/zh/gallery/<slug>/
+// 译文配对和文章一样靠文件名：中英文目录下同名的文件视为同一辑的两个语言版本。
+import { render } from 'astro:content';
+import { LOCALES, type Lang } from '../../../i18n/ui';
+import { localizePath } from '../../../i18n/utils';
+import GalleryPost from '../../../layouts/GalleryPost.astro';
+import { getGalleryEntries, getGallerySlugs } from '../../../utils/gallery';
+
+export async function getStaticPaths() {
+	const [zhEntries, enEntries] = await Promise.all([getGalleryEntries('zh'), getGalleryEntries('en')]);
+	const slugs = {
+		zh: await getGallerySlugs('zh'),
+		en: await getGallerySlugs('en'),
+	};
+
+	return LOCALES.flatMap((lang) => {
+		const entries = lang === 'zh' ? zhEntries : enEntries;
+		const other: Lang = lang === 'zh' ? 'en' : 'zh';
+
+		return entries.map((entry, i) => ({
+			params: { lang, slug: entry.id },
+			props: {
+				lang,
+				entry,
+				// entries 按日期倒序：i-1 是更新的（下一辑），i+1 是更早的（上一辑）
+				prev: entries[i + 1],
+				next: entries[i - 1],
+				// 有译文就链到译文；还没翻译就退到对方的图集列表
+				altUrl: slugs[other].has(entry.id)
+					? localizePath(other, `/gallery/${entry.id}`)
+					: localizePath(other, '/gallery'),
+			},
+		}));
+	});
+}
+
+const { lang, entry, altUrl, prev, next } = Astro.props;
+
+// 图集的正文只是可选前言，但走一遍 render() 才能拿到统一的 <Content />
+const { Content } = await render(entry);
+---
+
+<GalleryPost lang={lang} {entry} {altUrl} {prev} {next}>
+	<Content />
+</GalleryPost>
