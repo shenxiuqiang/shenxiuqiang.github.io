@@ -1,37 +1,33 @@
 ---
-title: '给 ARC 配置代理：从链查询超时到按进程分流'
-description: '用 v2rayN 和 HTTP_PROXY、HTTPS_PROXY 为 ARC 后台实例配置代理，保留本机服务直连，并验证 DIDMail 的链查询。'
+title: 'ARC 代理配置指南'
+description: '通过环境变量为 ARC 后台实例设置 HTTP 和 HTTPS 代理，配置本地地址例外，并验证实例的出站连接。'
 pubDate: '2026-11-11'
-tags: ['ARC', 'AFS', 'DIDMail', 'macOS']
+tags: ['ARC', 'Networking', 'macOS']
 ---
 
-在 macOS 上，浏览器能通过 v2rayN 访问链服务，ARC 后台的 DIDMail 仍可能报链查询超时。一次排查中，同一个 Beta 链 GraphQL 查询经本地代理约 0.6 秒返回，直连在 14 秒内没有收到响应。ARC 进程当时直接连接了链服务的公网地址。
-
-macOS 系统代理需要应用主动读取设置。v2rayN 的域名规则会处理进入代理客户端的连接。TUN 则可以通过虚拟网卡和系统路由接管更广的流量。只想调整 ARC 时，可以先给它的启动进程传入代理环境变量。以下命令在 macOS 和 ARC `2.0.0-beta.74` 上验证。 [Bun 代理环境变量](https://bun.com/guides/http/proxy#environment-variables) · [sing-box TUN 路由](https://sing-box.sagernet.org/configuration/inbound/tun/#auto_route)
+在启动 ARC 后台进程时传入 `HTTP_PROXY`、`HTTPS_PROXY` 和 `NO_PROXY`。前两个变量分别用于 HTTP 和 HTTPS 目标，`NO_PROXY` 指定保持直连的主机。变量的作用范围取决于发起请求的网络组件是否支持它们。 [代理环境变量参考](https://bun.com/guides/http/proxy#environment-variables)
 
 ## 1. 验证本地代理
 
-确认客户端的 HTTP 或混合代理监听端口。下面用 `127.0.0.1:10808` 举例。在 v2rayN 的活动路由中，`domain:abtnetwork.io` 的代理规则覆盖 `beta.abtnetwork.io`。使用其他客户端时，按相同的域名后缀配置分流。
+使用实际的 HTTP 代理地址和端口替换下面的示例。用一次 HTTPS 请求检查代理端口是否可用。
 
 ```sh
 curl --fail --silent --show-error --max-time 15 \
-  --noproxy '' --proxy http://127.0.0.1:10808 \
-  https://beta.abtnetwork.io/api/ \
-  -H 'Content-Type: application/json' \
-  --data '{"query":"{getChainInfo{code info{network}}}"}'
+  --noproxy '' --proxy http://127.0.0.1:3128 \
+  https://example.com/ -o /dev/null
 ```
 
-返回的 `getChainInfo.code` 应为 `OK`。如果这一步失败，先检查监听端口、活动节点和域名规则。
+命令退出码为 `0` 表示请求成功。连接失败时，检查代理地址、监听端口和代理是否允许连接目标地址。
 
 ## 2. 给一个 ARC 实例启用代理
 
-用 `arc service list` 找到实例名。以现有的 `didmail-server` 为例，保留已有的代理排除规则，并补上本机回环地址。重启会短暂断开该实例的连接，继续使用已记录的实例目录、端口和 Blocklet。 [ARC 服务命令](https://www.arcblock.io/en/docs/arc-cli/command-reference-service/)
+用 `arc service list` 找到要重启的实例，替换示例中的 `my-arc`。把需要直连的本机或内网主机加到 `NO_PROXY`。重启会短暂断开连接，继续使用已记录的实例目录、端口和 Blocklet。 [ARC 服务命令](https://www.arcblock.io/en/docs/arc-cli/command-reference-service/)
 
 ```sh
-instance=didmail-server
-proxy=http://127.0.0.1:10808
+instance=my-arc
+proxy=http://127.0.0.1:3128
 bypass="${no_proxy:-${NO_PROXY:-}}"
-bypass="${bypass:+$bypass,}localhost,127.0.0.1,::1,.localhost,didmail-server.localhost"
+bypass="${bypass:+$bypass,}localhost,127.0.0.1,::1,.localhost"
 
 HTTP_PROXY="$proxy" http_proxy="$proxy" \
 HTTPS_PROXY="$proxy" https_proxy="$proxy" \
@@ -47,7 +43,7 @@ NO_PROXY="$bypass" no_proxy="$bypass" \
 
 ```sh
 #!/bin/sh
-proxy=http://127.0.0.1:10808
+proxy=http://127.0.0.1:3128
 http_proxy=${http_proxy:-${HTTP_PROXY:-$proxy}}
 https_proxy=${https_proxy:-${HTTPS_PROXY:-$proxy}}
 HTTP_PROXY=$http_proxy
@@ -67,14 +63,12 @@ exec "$HOME/.arc/current/arc" "$@"
 
 要撤销这项默认设置，移除新增的 PATH 行，并从没有代理变量的环境重新启动受影响的实例。保留 `~/.arc/current/arc`，以便 ARC 升级后继续使用同一个启动入口。
 
-## 4. 验证后台查询和本机服务
+## 4. 验证实例和出站连接
 
 ```sh
-instance=didmail-server
+instance=my-arc
 arc service status --instance "$instance"
-time arc afs read /dev/chain/beta/config --instance "$instance" --json >/dev/null
+arc afs ls / --instance "$instance"
 ```
 
-请按实例实际挂载的网络替换 `beta`。在查询期间，可以用 `lsof -nP -a -p ARC_PID -iTCP` 查看实例进程是否连接了本地代理。用 `arc service status` 输出的 PID 替换 `ARC_PID`。DIDMail 还应检查部署地址下的 `/api/health`，确认服务仍可直接访问。 [ARC AFS 命令](https://www.arcblock.io/en/docs/arc-cli/command-reference-afs/)
-
-进程环境变量覆盖遵循它们的网络组件。实测确认了 ARC 通过本地代理建立 Beta 链 HTTPS 隧道，也观察到 ARC 进程仍有通向链公网地址的连接。判断某类请求是否提速时，以该请求的结果和实际连接为准。
+上述命令验证 ARC 后台实例和本机 AFS 连接。要验证代理，从该实例读取一个会触发远程 HTTP 请求的 AFS 资源。在请求进行时，用 `lsof -nP -a -p ARC_PID -iTCP` 检查后台进程是否连接了代理端口。将 `ARC_PID` 替换为 `arc service status` 输出的 PID。 [ARC AFS 命令](https://www.arcblock.io/en/docs/arc-cli/command-reference-afs/)

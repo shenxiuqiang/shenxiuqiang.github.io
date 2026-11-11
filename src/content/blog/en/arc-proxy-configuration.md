@@ -1,37 +1,33 @@
 ---
-title: 'Configure a proxy for ARC background services'
-description: 'Route ARC through v2rayN with HTTP_PROXY and HTTPS_PROXY, keep local services reachable, and verify DIDMail chain reads.'
+title: 'Configure an HTTP proxy for ARC'
+description: 'Set HTTP and HTTPS proxy variables for ARC background instances, configure local exclusions, and verify outbound connections.'
 pubDate: '2026-11-11'
-tags: ['ARC', 'AFS', 'DIDMail', 'macOS']
+tags: ['ARC', 'Networking', 'macOS']
 ---
 
-On macOS, a browser may reach a chain endpoint through v2rayN while DIDMail still reports a chain read timeout. In one comparison, the same Beta-chain GraphQL query took about 0.6 seconds through the local proxy and received no response within 14 seconds over the direct route. The ARC daemon was connecting to the chain's public addresses directly.
-
-Apps have to honor the macOS system proxy setting. v2rayN applies its domain rules to connections that reach the proxy client. TUN can capture a wider range of traffic through a virtual interface and system routing. To change ARC's behavior, start with proxy variables on the ARC process. The commands below were verified on macOS with ARC `2.0.0-beta.74`. [Bun proxy environment variables](https://bun.com/guides/http/proxy#environment-variables) · [sing-box TUN routing](https://sing-box.sagernet.org/configuration/inbound/tun/#auto_route)
+Set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` when starting an ARC background process. The first two variables apply to HTTP and HTTPS destinations respectively. `NO_PROXY` lists hosts to reach directly. These variables apply to the network components that honor them. [Proxy environment variable reference](https://bun.com/guides/http/proxy#environment-variables)
 
 ## 1. Check the local proxy
 
-Confirm the HTTP or mixed proxy listener in your client. This example uses `127.0.0.1:10808`. In v2rayN, an active proxy rule for `domain:abtnetwork.io` covers `beta.abtnetwork.io`. Configure the same domain suffix if you use a different client.
+Replace the example address and port with your HTTP proxy listener. Use an HTTPS request to check that the listener works.
 
 ```sh
 curl --fail --silent --show-error --max-time 15 \
-  --noproxy '' --proxy http://127.0.0.1:10808 \
-  https://beta.abtnetwork.io/api/ \
-  -H 'Content-Type: application/json' \
-  --data '{"query":"{getChainInfo{code info{network}}}"}'
+  --noproxy '' --proxy http://127.0.0.1:3128 \
+  https://example.com/ -o /dev/null
 ```
 
-Expect `getChainInfo.code` to be `OK`. If this check fails, check the listener port, selected proxy server, and active domain rules.
+An exit status of `0` indicates success. If the command fails, check the proxy address, listener port, and whether the proxy allows connections to the target.
 
 ## 2. Proxy a named ARC instance
 
-Use `arc service list` to find the instance. This example targets an existing `didmail-server` instance, keeps existing proxy exclusions, and adds loopback destinations. The restart briefly interrupts the instance and reuses its recorded home, port, and Blocklets. [ARC service commands](https://www.arcblock.io/en/docs/arc-cli/command-reference-service/)
+Use `arc service list` to find the instance to restart and replace `my-arc` in the example. Add local or internal hosts that require direct access to `NO_PROXY`. The restart briefly interrupts connections and reuses the recorded home, port, and Blocklets. [ARC service commands](https://www.arcblock.io/en/docs/arc-cli/command-reference-service/)
 
 ```sh
-instance=didmail-server
-proxy=http://127.0.0.1:10808
+instance=my-arc
+proxy=http://127.0.0.1:3128
 bypass="${no_proxy:-${NO_PROXY:-}}"
-bypass="${bypass:+$bypass,}localhost,127.0.0.1,::1,.localhost,didmail-server.localhost"
+bypass="${bypass:+$bypass,}localhost,127.0.0.1,::1,.localhost"
 
 HTTP_PROXY="$proxy" http_proxy="$proxy" \
 HTTPS_PROXY="$proxy" https_proxy="$proxy" \
@@ -47,7 +43,7 @@ If the ARC installer placed the real launcher at `$HOME/.arc/current/arc`, creat
 
 ```sh
 #!/bin/sh
-proxy=http://127.0.0.1:10808
+proxy=http://127.0.0.1:3128
 http_proxy=${http_proxy:-${HTTP_PROXY:-$proxy}}
 https_proxy=${https_proxy:-${HTTPS_PROXY:-$proxy}}
 HTTP_PROXY=$http_proxy
@@ -67,14 +63,12 @@ For zsh, add `export PATH="$HOME/.arc/bin:$PATH"` after any ARC path setup in `~
 
 To remove this default, remove the added PATH lines and restart the affected instances from an environment without proxy variables. Keep `$HOME/.arc/current/arc` so the wrapper can continue to follow ARC upgrades when used.
 
-## 4. Verify daemon reads and local access
+## 4. Verify the instance and outbound connections
 
 ```sh
-instance=didmail-server
+instance=my-arc
 arc service status --instance "$instance"
-time arc afs read /dev/chain/beta/config --instance "$instance" --json >/dev/null
+arc afs ls / --instance "$instance"
 ```
 
-Use the network mounted by your instance if it differs from `beta`. During a query, run `lsof -nP -a -p ARC_PID -iTCP` with the PID from `arc service status` and look for a connection to the local proxy. For DIDMail, check `/api/health` at the configured app origin to verify local access. [ARC AFS commands](https://www.arcblock.io/en/docs/arc-cli/command-reference-afs/)
-
-Process proxy variables apply to network components that honor them. Testing confirmed that ARC opened Beta-chain HTTPS tunnels through the local proxy. The daemon also opened connections to public chain addresses directly. Use the result and observed connection for the request you are diagnosing.
+The commands above verify the ARC daemon and its local AFS connection. To check the proxy, read an AFS resource on that instance that makes a remote HTTP request. While the request runs, use `lsof -nP -a -p ARC_PID -iTCP` to look for a connection from the daemon to the proxy port. Replace `ARC_PID` with the PID from `arc service status`. [ARC AFS commands](https://www.arcblock.io/en/docs/arc-cli/command-reference-afs/)
