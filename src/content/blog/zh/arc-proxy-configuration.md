@@ -3,6 +3,7 @@ title: 'ARC 代理配置指南'
 description: '通过环境变量为 ARC 后台实例设置 HTTP 和 HTTPS 代理，配置本地地址例外，并验证实例的出站连接。'
 pubDate: '2026-11-11'
 tags: ['ARC', 'Networking', 'macOS']
+cover: '/images/covers/arc-proxy-configuration.jpg'
 ---
 
 在启动 ARC 后台进程时传入 `HTTP_PROXY`、`HTTPS_PROXY` 和 `NO_PROXY`。前两个变量分别用于 HTTP 和 HTTPS 目标，`NO_PROXY` 指定保持直连的主机。变量的作用范围取决于发起请求的网络组件是否支持它们。 [代理环境变量参考](https://bun.com/guides/http/proxy#environment-variables)

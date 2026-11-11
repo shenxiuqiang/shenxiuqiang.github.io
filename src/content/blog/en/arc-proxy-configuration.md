@@ -3,6 +3,7 @@ title: 'Configure an HTTP proxy for ARC'
 description: 'Set HTTP and HTTPS proxy variables for ARC background instances, configure local exclusions, and verify outbound connections.'
 pubDate: '2026-11-11'
 tags: ['ARC', 'Networking', 'macOS']
+cover: '/images/covers/arc-proxy-configuration.jpg'
 ---
 
 Set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` when starting an ARC background process. The first two variables apply to HTTP and HTTPS destinations respectively. `NO_PROXY` lists hosts to reach directly. These variables apply to the network components that honor them. [Proxy environment variable reference](https://bun.com/guides/http/proxy#environment-variables)
