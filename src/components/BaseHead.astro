@@ -13,11 +13,13 @@ interface Props {
 	altUrl: string;
 	/** 社交分享图，传 public/ 下的绝对路径；不传则用默认封面 */
 	image?: string;
+	/** 分享图的替代文字，默认用页面标题 */
+	imageAlt?: string;
 	/** og:type，文章页传 article */
 	type?: 'website' | 'article';
 }
 
-const { lang, title, description, altUrl, image, type = 'website' } = Astro.props;
+const { lang, title, description, altUrl, image, imageAlt, type = 'website' } = Astro.props;
 const t = useTranslations(lang);
 
 // 规范链接（canonical）：这个页面的唯一地址
@@ -32,6 +34,18 @@ const urlByLang = {
 	[lang]: canonicalURL.href,
 	[other]: new URL(altUrl, Astro.site).href,
 } as Record<Lang, string>;
+
+// 分享图：文章封面优先，没有封面时用默认封面，保证 X/微信等总能出卡片。
+// 站内所有分享图统一 1200×630（封面图和构建时生成的 /og/*.png 都是这个尺寸），
+// 下面把尺寸、类型、替代文字一并声明出来：有的抓取器不会自己去探测图片尺寸，
+// 显式给全了，卡片才稳定按大图（summary_large_image）渲染。
+const shareImage = new URL(image ?? '/images/og-default.png', Astro.site).href;
+const shareImageType = shareImage.endsWith('.png')
+	? 'image/png'
+	: shareImage.endsWith('.webp')
+		? 'image/webp'
+		: 'image/jpeg';
+const shareImageAlt = imageAlt ?? title;
 ---
 
 <meta charset="utf-8" />
@@ -75,13 +89,18 @@ const urlByLang = {
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:locale" content={HTML_LANG[lang].replace('-', '_')} />
 {/* 分享图：文章封面优先，没有封面时用默认封面，保证 X/微信等总能出卡片 */}
-<meta property="og:image" content={new URL(image ?? '/images/og-default.png', Astro.site)} />
+<meta property="og:image" content={shareImage} />
+<meta property="og:image:type" content={shareImageType} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={shareImageAlt} />
 
 {/* X (Twitter) 卡片：大图样式；标题/描述/图显式声明，不依赖 og: 回退 */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={desc} />
-<meta name="twitter:image" content={new URL(image ?? '/images/og-default.png', Astro.site)} />
+<meta name="twitter:image" content={shareImage} />
+<meta name="twitter:image:alt" content={shareImageAlt} />
 
 {/* Google Analytics 4（仅在 consts.ts 填了 GA_MEASUREMENT_ID 时加载） */}
 {
