@@ -3,6 +3,7 @@ title: 'The New Global Trade: Where Does an Ordinary Person’s First Million Co
 description: 'Exporting has gone through five generations of business models — capacity, cross-border e-commerce, social selling, AI-run trade, and local operations abroad. You can start with one country, one kind of buyer, and one product.'
 pubDate: '2026-11-28'
 tags: ['Foreign Trade', 'Global Markets', 'AI', 'Entrepreneurship']
+cover: '/images/covers/new-foreign-trade-going-global-en.jpg'
 ---
 
 A friend of mine has worked in foreign trade for more than a decade. At dinner the other day he put it bluntly: over the next few years, if an ordinary young person wants to earn their first million, the opportunity he is most optimistic about is the new wave of Chinese exporters going global.
